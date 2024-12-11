@@ -1,0 +1,19 @@
+
+// have segments disappear randomly or go into place randomly
+
+// keep timer running in the background
+
+// if title show times < 3 doesn't show it
+
+// last frame of scroll animation seems to skip ahead 1
+
+// time game choose a color and the average is stored with it, allowing for three profiles
+
+// tests - button closure time while pressed, glitchyness etc., timing of millis
+
+// options for idle time
+
+// setting for clock speed
+
+// the clock should look different in idle mode so you know it's ok not to use a long press (or in idle mode long press to exit)
+

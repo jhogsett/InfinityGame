@@ -1,32 +1,16 @@
-#ifndef __PROMPTS_H__
-#define __PROMPTS_H__
 
-typedef void (*voidFuncPtr)(void);
-
-// Billboard display related
-#define HOME_TIMES 5
-#define BLANKING_TIME 600
-
-// Prompt related
-#define TITLE_SHOW_TIMES 3
-
-// display handling
-#define DISPLAY_SHOW_TIME 700
-#define DISPLAY_SCROLL_TIME 90
-#define OPTION_FLIP_SCROLL_TIME 100
-
-#define NUM_BILLBOARDS 6
-const char template0[] PROGMEM = "InfinityGame";
-const char template1[] PROGMEM = "Press Any Button to Play";
-const char template2[] PROGMEM = "Play Silly Slots";
-const char template3[] PROGMEM = "Play The TimeGame";
-const char template4[] PROGMEM = "%s";
-const char template5[] PROGMEM = "LONG PRESS for OPTIONS";
-const char *const templates[] PROGMEM = { template0, template1, template2, template3, template4, template5 };
+#include <Arduino.h>
+#include "billboards_handler.h"
+#include "buffers.h"
+#include "leds.h"
+#include "displays.h"
+#include "buttons.h"
+#include "timeouts.h"
+#include "utils.h"
+#include "play_data.h"
+#include "prompts.h"
 
 BillboardsHandler billboards_handler(display_buffer, NUM_BILLBOARDS, (const char **)templates, BLANKING_TIME, HOME_TIMES, false, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
-
-// argument types are: (char [71], int, const char *const [6], int, int, bool, int, int)
 
 void run_billboard(char *data) {
   unsigned long time = millis();
@@ -76,7 +60,7 @@ void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr
 
 // prompt with text and cycle waiting for a button response
 // returns -1=timed out, 0=long press, button ID otherwise
-int button_led_prompt(char *prompt, bool *states = NULL) {
+int button_led_prompt(char *prompt, bool *states) {
   unsigned long time;
   unsigned long timeout_time = millis() + PROMPT_TIMEOUT;
 
@@ -116,7 +100,7 @@ int button_led_prompt(char *prompt, bool *states = NULL) {
 
 // prompt with text showing, no cycle waiting for a response
 // but cancelable with a button press
-void title_prompt(char *title, byte times = 1, int show_panel_leds = false) {
+void title_prompt(char *title, byte times, int show_panel_leds) {
   all_leds.deactivate_leds(true);
   display.begin_scroll_loop(times);
   if (show_panel_leds)
@@ -160,7 +144,7 @@ int panel_led_prompt() {
 
 // TODO button_led_prompt() blocks, so the loop here might not be needed (would be if there were LEDS or the display to run here)
 // returns if timed out waiting for input
-void branch_prompt(char *prompt, voidFuncPtr on_option_1, voidFuncPtr on_option_2, voidFuncPtr on_option_3, voidFuncPtr on_long_press = NULL, bool *states = NULL) {
+void branch_prompt(char *prompt, voidFuncPtr on_option_1, voidFuncPtr on_option_2, voidFuncPtr on_option_3, voidFuncPtr on_long_press, bool *states) {
   unsigned long prompt_timeout = millis() + PROMPT_TIMEOUT;
   unsigned long time;
 
@@ -265,13 +249,13 @@ long time_in_seconds() {
   return time_in_ms / 1000L;
 }
 
-void increment_timer(byte &second, byte &minute, byte &hour, byte seconds = 1, byte minutes = 0, byte hours = 0) {
+void increment_timer(byte &second, byte &minute, byte &hour, byte seconds, byte minutes, byte hours) {
   long total_seconds = time_to_seconds(second, minute, hour);
   total_seconds += time_to_seconds(seconds, minutes, hours);
   seconds_to_time(total_seconds, second, minute, hour);
 }
 
-bool decrement_timer(byte &second, byte &minute, byte &hour, int seconds = 1, int minutes = 0, int hours = 0) {
+bool decrement_timer(byte &second, byte &minute, byte &hour, int seconds, int minutes, int hours) {
   long total_seconds = time_to_seconds(second, minute, hour);
   total_seconds -= time_to_seconds(seconds, minutes, hours);
   if (total_seconds < 0)
@@ -280,7 +264,7 @@ bool decrement_timer(byte &second, byte &minute, byte &hour, int seconds = 1, in
   return total_seconds > 0;
 }
 
-void increment_time_basis(byte &second, byte &minute, byte &hour, byte seconds = 1, byte minutes = 0, byte hours = 0) {
+void increment_time_basis(byte &second, byte &minute, byte &hour, byte seconds, byte minutes, byte hours) {
   long total_seconds = time_basis / 1000L;
   total_seconds += time_to_seconds(seconds, minutes, hours);
   seconds_to_time(total_seconds, second, minute, hour);
@@ -313,7 +297,7 @@ void render_clock_string(byte seconds, byte minutes, byte hours) {
     sprintf(display_buffer, load_f_string(F("  %2d %02d %02d  ")), effective_hours, minutes, seconds);
 }
 
-void clock_prompt(byte seconds, byte minutes, byte hours, byte settable = true) {
+void clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
   // unsigned long next_second = millis() + 1000;
   clock_hour = hours;
   clock_minute = minutes;
@@ -375,7 +359,7 @@ void render_timer_string(byte seconds, byte minutes, byte hours, bool running) {
   }
 }
 
-void timer_prompt(byte seconds = 0, byte minutes = 0, byte hours = 0) {
+void timer_prompt(byte seconds, byte minutes, byte hours) {
   unsigned long next_second = millis() + 1000;
   timer_hour = hours;
   timer_minute = minutes;
@@ -429,4 +413,3 @@ void timer_prompt(byte seconds = 0, byte minutes = 0, byte hours = 0) {
     }
   }
 }
-#endif

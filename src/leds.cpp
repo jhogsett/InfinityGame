@@ -1,6 +1,4 @@
-#ifndef __LEDS_H__
-#define __LEDS_H__
-
+#include "leds.h"
 #include "hardware.h"
 #include "led_handler.h"
 
@@ -15,9 +13,7 @@
 #define TITLE_PANEL_LEDS_BLANK_TIME    0
 #define TITLE_PANEL_LEDS_STYLE (LEDHandler::STYLE_PLAIN)
 
-static const int led_intensities[] = {0, 0, 0, 32, 40, 40};
+const int led_intensities[] = {0, 0, 0, LED_INTENSITY1, LED_INTENSITY2, LED_INTENSITY3};
 LEDHandler all_leds(FIRST_LED, 6, led_intensities);
 LEDHandler panel_leds(FIRST_PANEL_LED, 3, led_intensities + 3);
 LEDHandler button_leds(FIRST_BUTTON_LED, 3, led_intensities);
-
-#endif

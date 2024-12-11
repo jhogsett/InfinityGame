@@ -1,7 +1,9 @@
-#ifndef HT16K33Disp_h
-#define HT16K33Disp_h
+#ifndef HT16K33Disp__H__
+#define HT16K33Disp__H__
+
 // some code borrowed from https://github.com/akuzechie/HT16K33-Display-Library
 
+#include <Arduino.h>
 #include <Wire.h>
 
 #define DEFAULT_ADDRESS_ 0x70
@@ -122,10 +124,10 @@ const uint16_t HT16K33Disp_FourteenSegmentASCII[96] = {
 class HT16K33Disp
 {
 public:
-    HT16K33Disp(int address = 0, int num_displays = 1);
-    void set_address(int address, int num_displays);
+    HT16K33Disp(byte address = 0, byte num_displays = 1);
+    void set_address(byte address, byte num_displays);
 
-    void write(int digit, unsigned int data);
+    void write(byte digit, unsigned int data);
     void segments_test();
     void clear();
     int string_length(const char * string);
@@ -141,7 +143,7 @@ public:
 
     uint16_t char_to_segments(char c, bool decimal_point = false);
 
-    void init(const int *brightLevels);
+    void init(const byte *brightLevels);
 
     static const int DEFAULT_ADDRESS = DEFAULT_ADDRESS_;
 
@@ -177,4 +179,5 @@ private:
     * all copies or substantial portions of the Software.
     */
 };
+
 #endif

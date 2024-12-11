@@ -1,28 +1,9 @@
-#ifndef __BUTTON_HANDLER_H__
-#define __BUTTON_HANDLER_H__
-
-// button handling
-#define ANY_COLOR_ID 0
-#define FIRST_COLOR_ID 1
-#define LAST_COLOR_ID 3
-#define NUM_COLOR_IDS 3
-#define GREEN_ID 1
-#define AMBER_ID 2
-#define RED_ID 3
-#define NO_COLOR_ID -1
-
-// #define DEBOUNCE_TIME 10
-// #define LONG_PRESS_TIME 1500
-// #define PROMPT_TIMEOUT 20000
-// // #define SLEEP_TIMEOUT 300000
-// #define SLEEP_TIMEOUT 30000
+#include <Arduino.h>
+#include "hardware.h"
+#include "buttons.h"
 
 volatile bool button_states[NUM_BUTTONS];
 volatile unsigned long press_time;
-
-/////////////////////////////////////
-// LOW-LEVEL BUTTON HAHDLING
-/////////////////////////////////////
 
 // interupt if any button is pressed
 // saves the time pressed for debouncing, long press etc
@@ -55,7 +36,7 @@ bool button_pressed(){
   // int count = 0, hits = 0;
   // while(millis() < debounce_timeout)
   // {
-  //   count++;    
+  //   count++;
   //   hits += digitalRead(ANY_BUTTON) == HIGH ? 1 : 0;
   // }
 
@@ -99,7 +80,3 @@ int wait_on_long_press(){
       return -1;
   }
 }
-
-
-
-#endif

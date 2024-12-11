@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <Wire.h>
-#include "HT16K33Disp.h"
-#include "random_seed.h"
+#include <HT16K33Disp.h>
+#include <random_seed.h>
 #include "billboard.h"
 #include "billboards_handler.h"
 #include "led_handler.h"
@@ -19,14 +19,8 @@
 #include "time_game.h"
 #include "slot_game.h"
 
-// #define USE_SERIAL
-
 #define RANDOM_SEED_PIN A1
 static RandomSeed<RANDOM_SEED_PIN> randomizer;
-
-/////////////////////////////////////
-// INITIALIZATION
-/////////////////////////////////////
 
 void setup_display(){
   Wire.begin();
@@ -71,9 +65,6 @@ void setup(){
 
   attachInterrupt(digitalPinToInterrupt(ANY_BUTTON), button_pressed_i, RISING);
   button_states[ANY_COLOR_ID] = false;
-
-  // display.show_string(load_f_string(F("Version 0.0")));
-  // delay(1000);
 }
 
 void sleep_mode(){
@@ -156,22 +147,3 @@ void loop()
   while(button_pressed());
   billboard_prompt(idle_mode, main_menu, options_mode);
 }
-
-// have segments disappear randomly or go into place randomly
-
-// keep timer running in the background
-
-// if title show times < 3 doesn't show it
-
-// last frame of scroll animation seems to skip ahead 1
-
-// time game choose a color and the average is stored with it, allowing for three profiles
-
-// tests - button closure time while pressed, glitchyness etc., timing of millis
-
-// options for idle time
-
-// setting for clock speed
-
-// the clock should look different in idle mode so you know it's ok not to use a long press (or in idle mode long press to exit)
-

@@ -1,12 +1,13 @@
-#ifndef __TIME_GAME_H
-#define __TIME_GAME_H
-
-
-// TIME GAME related
-#define MIN_DELAY 1500
-#define MAX_DELAY 5000
-#define ROUNDS 3
-#define TIME_WIN 1000
+#include <Arduino.h>
+#include "prompts.h"
+#include "utils.h"
+#include "displays.h"
+#include "leds.h"
+#include "play_data.h"
+#include "buffers.h"
+#include "play_views.h"
+#include "buttons.h"
+#include "time_game.h"
 
 void time_game(){
   title_prompt(load_f_string(F("The TimeGame")), TITLE_SHOW_TIMES, true);
@@ -74,5 +75,3 @@ void time_game(){
   }
   while(button_led_prompt(display_buffer) == -1);
 }
-
-#endif

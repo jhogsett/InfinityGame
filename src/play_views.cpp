@@ -1,6 +1,14 @@
 #ifndef __PLAY_VIEW_H
 #define __PLAY_VIEW_H
 
+#include <Arduino.h>
+#include "buffers.h"
+#include "play_data.h"
+#include "prompts.h"
+#include "utils.h"
+#include "betting.h"
+#include "play_views.h"
+
 // Game Play Displays
 
 void display_purse(){

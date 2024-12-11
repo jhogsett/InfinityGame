@@ -1,5 +1,6 @@
-#ifndef __UTILS_H__
-#define __UTILS_H__
+#include <Arduino.h>
+#include "buffers.h"
+#include "utils.h"
 
 char * load_f_string(const __FlashStringHelper* f_string){
   const char *p = (const char PROGMEM *)f_string;
@@ -12,5 +13,3 @@ void micros_to_ms(char * buffer, unsigned long micros){
   ms_frac = micros % 1000;
   sprintf(buffer, "%u.%04u", ms_dec, ms_frac);
 }
-
-#endif

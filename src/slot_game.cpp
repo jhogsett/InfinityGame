@@ -1,23 +1,20 @@
-#ifndef __SLOT_GAME_H__
-#define __SLOT_GAME_H__
+#include <Arduino.h>
+#include "displays.h"
+#include "utils.h"
+#include "prompts.h"
+#include "timeouts.h"
+#include "betting.h"
+#include "play_data.h"
+#include "displays.h"
+#include "buffers.h"
+#include "play_views.h"
+#include "buttons.h"
+#include "slot_game.h"
 
-#define SLOTS_SHOW_TIME   20
-#define SLOTS_SCROLL_TIME 20
+byte choice1, choice2, choice3;
 
-#define WIN_TRIPLE 5
-#define WIN_DOUBLE 2
-#define WIN_WORD  1
-#define WIN_WORD_CUTOFF 1
-#define DEFAULT_BET 10
-#define WIN_WORD_BONUS 2
-#define WIN_JACKPOT 100
-
-// SLOT game
-
-#define NUM_WORDS 10
 const char *rude_words[NUM_WORDS] = {"FUCK", "SHIT", "CUNT", "COCK", "PISS", "TITS", "FART", "POOP", "DICK", "BOOB"};
 const char *nice_words[NUM_WORDS] = {"WEED", "VAPE", "BEER", "WINE", "TACO", "GOLD", "MINT", "GIFT", "JADE", "CAKE"};
-byte choice1, choice2, choice3;
 
 void slots_round(bool rude){
   disp1.begin_scroll_loop(1);
@@ -184,5 +181,3 @@ void slots_game(){
     display_purse();
   }
 }
-
-#endif

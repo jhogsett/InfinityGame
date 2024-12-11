@@ -6,8 +6,8 @@
 #define FSTRING_BUFFER 71
 #define COPY_BUFFER 71
 
-char display_buffer[DISPLAY_BUFFER];
-char fstring_buffer[FSTRING_BUFFER];
-char copy_buffer[COPY_BUFFER];
+extern char display_buffer[DISPLAY_BUFFER];
+extern char fstring_buffer[FSTRING_BUFFER];
+extern char copy_buffer[COPY_BUFFER];
 
 #endif
