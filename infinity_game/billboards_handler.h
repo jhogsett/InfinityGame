@@ -1,21 +1,21 @@
 #ifndef __BILLBOARDS_HANDLER_H__
 #define __BILLBOARDS_HANDLER_H__
-#include <HT16K33Disp.h>
+#include "HT16K33Disp.h"
 #include "billboard.h"
 
 class BillboardsHandler
 {
-public:  
+public:
   BillboardsHandler(char * buffer, byte num_templates, char ** templates, int blanking_time, byte home_times, bool random=true, int show_delay=0, int frame_delay=0);
   void update_buffer(char *string);
   void run(unsigned long time, HT16K33Disp * display, char *string);
-  void reset();  
+  void reset();
   bool handle_blanking(HT16K33Disp * display, unsigned long time);
   bool terminate_blanking(unsigned long time);
   void process_display(HT16K33Disp * display, char *string);
   void process_billboard_switch();
   byte run_times();
-  
+
 private:
   char *_buffer;
   byte _num_billboards;
@@ -24,7 +24,7 @@ private:
   int _blanking_time;
   byte _home_times;
   bool _random;
-  
+
   bool _running;
   byte _n_current_template;
   byte _n_next_template;
@@ -42,7 +42,7 @@ BillboardsHandler::BillboardsHandler(char * buffer, byte num_templates, char ** 
   _home_times = home_times;
   _random = random;
 
-  reset();  
+  reset();
 }
 
 void BillboardsHandler::reset(){
