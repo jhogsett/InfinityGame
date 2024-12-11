@@ -1,5 +1,7 @@
 # InfinityGame
 
+![20241203_151358R](https://github.com/user-attachments/assets/be32cdc8-5c24-4461-9863-0d2bd3c998e3)
+
 The "Infinity Game" it is the beginning of an infinity of possible Arduino-based games. With a colorful alphanumeric display, arcade-style buttons, bright LEDs, sound and a vibrator, any number of fun games are possible based on the Arduino architecture.
 
 The idea started as “The Reaction Time Game”. It was meant to be a digital version of the in-person game where one person holds a dollar bill vertically, and challenges another person to keep the bill if they can catch it when suddenly dropped. The game would provide a stimulus - a light, sound, vibration, word etc. - and then you would press a button as fast as you could, only after the stimulus occurred.
