@@ -1,6 +1,6 @@
 #ifndef __BILLBOARD_H__
 #define __BILLBOARD_H__
-#include <HT16K33Disp.h>
+#include "HT16K33Disp.h"
 
 // todo billboard types: static, scroll, blink
 
@@ -15,7 +15,7 @@ public:
   char * _buffer;
   int _show_delay;
   int _frame_delay;
-  
+
 private:
   int _frames;
   int _num_times;
