@@ -1,3 +1,4 @@
+#include <Arduino.h>
 #include <Wire.h>
 #include "HT16K33Disp.h"
 #include "random_seed.h"
@@ -29,10 +30,10 @@ static RandomSeed<RANDOM_SEED_PIN> randomizer;
 
 void setup_display(){
   Wire.begin();
-  display.init(display_brightnesses); 
+  display.init(display_brightnesses);
   /* the duplicated displays do not need reinitialization
-  disp1.init(brightness+0); 
-  disp2.init(brightness+1); 
+  disp1.init(brightness+0);
+  disp2.init(brightness+1);
   disp3.init(brightness+2); */
   display.clear();
 }
@@ -61,11 +62,11 @@ void setup(){
   Serial.begin(115200);
 #endif
   randomizer.randomize();
- 
+
   setup_leds();
   setup_display();
   setup_buttons();
-  
+
   load_save_data();
 
   attachInterrupt(digitalPinToInterrupt(ANY_BUTTON), button_pressed_i, RISING);
@@ -75,17 +76,17 @@ void setup(){
   // delay(1000);
 }
 
+void sleep_mode(){
+  display.clear();
+  while(panel_led_prompt() == -1);
+}
+
 void idle_mode(){
   all_leds.deactivate_leds(true);
   if(option_clock_on_idle)
     clock_prompt(0, 0, 12, false);
   else
     sleep_mode();
-}
-
-void sleep_mode(){
-  display.clear();
-  while(panel_led_prompt() == -1);
 }
 
 void clock_mode(){
@@ -97,7 +98,7 @@ void timer_mode(){
 }
 
 void options_menu(){
-  char *labels[] = {"Off", "On", "12H", "24H", "SLP", "CLK"};
+  const char *labels[] = {"Off", "On", "12H", "24H", "SLP", "CLK"};
   option_sound = toggle_prompt(load_f_string(F("SOUND   %s")), labels, option_sound ? 1 : 0, 3, 2) ? true : false;
   option_vibrate = toggle_prompt(load_f_string(F("VIBRATE %s")), labels, option_vibrate ? 1 : 0, 3, 2) ? true : false;
   option_clock_24h = toggle_prompt(load_f_string(F("CLOCK   %s")), labels+2, option_clock_24h ? 1 : 0, 3, 2) ? true : false;
@@ -113,7 +114,7 @@ void tools_menu(){
       clock_mode();
       return;
   }
-    
+
   switch(button_led_prompt(load_f_string(F("TIMER   Go  ")))){
     case -1:
       return;
@@ -121,7 +122,7 @@ void tools_menu(){
       timer_mode();
       return;
   }
-    
+
   switch(button_led_prompt(load_f_string(F("SLEEP   Go  ")))){
     case -1:
       return;

@@ -122,37 +122,36 @@ const uint16_t HT16K33Disp_FourteenSegmentASCII[96] = {
 class HT16K33Disp
 {
 public:
-    HT16K33Disp(byte address = 0, byte num_displays = 1);
-    void set_address(byte address, byte num_displays);
+    HT16K33Disp(int address = 0, int num_displays = 1);
+    void set_address(int address, int num_displays);
 
-    void write(byte digit, unsigned int data);
+    void write(int digit, unsigned int data);
     void segments_test();
     void clear();
-    int string_length(char * string);
-    void show_string(char * string, bool pad_blanks = true, bool right_justify = false);
-    void simple_show_string(char * string);
+    int string_length(const char * string);
+    void show_string(const char * string, bool pad_blanks = true, bool right_justify = false);
+    void simple_show_string(const char * string);
 
-    void scroll_string(char * string, int show_delay = 0, int scroll_delay = 0);
-    int begin_scroll_string(char * string, int show_delay = 0, int scroll_delay = 0);
+    void scroll_string(const char * string, int show_delay = 0, int scroll_delay = 0);
+    int begin_scroll_string(const char * string, int show_delay = 0, int scroll_delay = 0);
     bool step_scroll_string(unsigned long time);
 
     void begin_scroll_loop(int times=-1);
-    bool loop_scroll_string(unsigned long time, char * string, int show_delay = 0, int scroll_delay = 0);
+    bool loop_scroll_string(unsigned long time, const char * string, int show_delay = 0, int scroll_delay = 0);
 
     uint16_t char_to_segments(char c, bool decimal_point = false);
-    uint16_t convertdp(int);
 
-    void init(byte *brightLevels);
+    void init(const int *brightLevels);
 
-    static const byte DEFAULT_ADDRESS = DEFAULT_ADDRESS_;
+    static const int DEFAULT_ADDRESS = DEFAULT_ADDRESS_;
 
 private:
-    byte _address;
-    byte _num_displays;
-    byte _num_digits;
+    int _address;
+    int _num_displays;
+    int _num_digits;
     int _frames;
     int _frame;
-    char * _string;
+    const char * _string;
     int _show_delay;
     int _scroll_delay;
     unsigned long _next_frame;

@@ -6,7 +6,7 @@
 class BillboardsHandler
 {
 public:
-  BillboardsHandler(char * buffer, byte num_templates, char ** templates, int blanking_time, byte home_times, bool random=true, int show_delay=0, int frame_delay=0);
+  BillboardsHandler(char * buffer, int num_templates, const char *const *templates, int blanking_time, int home_times, bool random=true, int show_delay=0, int frame_delay=0);
   void update_buffer(char *string);
   void run(unsigned long time, HT16K33Disp * display, char *string);
   void reset();
@@ -18,9 +18,9 @@ public:
 
 private:
   char *_buffer;
-  byte _num_billboards;
+  int _num_billboards;
   Billboard *_billboard;
-  char ** _templates;
+  const char * const* _templates;
   int _blanking_time;
   byte _home_times;
   bool _random;
@@ -33,7 +33,7 @@ private:
   unsigned long _blanking_until;
 };
 
-BillboardsHandler::BillboardsHandler(char * buffer, byte num_templates, char ** templates, int blanking_time, byte home_times, bool random=true, int show_delay=0, int frame_delay=0){
+BillboardsHandler::BillboardsHandler(char * buffer, int num_templates, const char *const *templates, int blanking_time, int home_times, bool random, int show_delay, int frame_delay){
   _buffer = buffer;
   _num_billboards = num_templates;
   _billboard = new Billboard(buffer, show_delay, frame_delay);

@@ -21,7 +21,7 @@ private:
   int _num_times;
 };
 
-Billboard::Billboard(char * buffer, int show_delay=0, int frame_delay=0){
+Billboard::Billboard(char * buffer, int show_delay, int frame_delay){
   _buffer = buffer;
   _show_delay = show_delay;
   _frame_delay = frame_delay;

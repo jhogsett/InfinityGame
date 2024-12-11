@@ -15,8 +15,8 @@
 // SLOT game
 
 #define NUM_WORDS 10
-static const char *rude_words[NUM_WORDS] = {"FUCK", "SHIT", "CUNT", "COCK", "PISS", "TITS", "FART", "POOP", "DICK", "BOOB"};
-static const char *nice_words[NUM_WORDS] = {"WEED", "VAPE", "BEER", "WINE", "TACO", "GOLD", "MINT", "GIFT", "JADE", "CAKE"};
+const char *rude_words[NUM_WORDS] = {"FUCK", "SHIT", "CUNT", "COCK", "PISS", "TITS", "FART", "POOP", "DICK", "BOOB"};
+const char *nice_words[NUM_WORDS] = {"WEED", "VAPE", "BEER", "WINE", "TACO", "GOLD", "MINT", "GIFT", "JADE", "CAKE"};
 byte choice1, choice2, choice3;
 
 void slots_round(bool rude){
@@ -25,11 +25,11 @@ void slots_round(bool rude){
   disp3.begin_scroll_loop(3);
 
   char * text;
-  char **words;
+  const char **words;
   if(rude){
     text = load_f_string(F("    FUCK  SHIT  CUNT  COCK  PISS  TITS  FART  POOP  DICK  BOOB"));
     words = rude_words;
-  } else {  
+  } else {
     text = load_f_string(F("    WEED  VAPE  BEER  WINE  TACO  GOLD  MINT  GIFT  JADE  CAKE"));
     words = nice_words;
   }
@@ -41,7 +41,7 @@ void slots_round(bool rude){
     unsigned long time = millis();
 
     if(running1){
-      running1 = disp1.loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME); 
+      running1 = disp1.loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME);
       if(!running1){
         choice1 = random(NUM_WORDS);
         disp1.show_string(words[choice1]);
@@ -49,7 +49,7 @@ void slots_round(bool rude){
     }
 
     if(running2){
-      running2 = disp2.loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME); 
+      running2 = disp2.loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME);
       if(!running2){
         choice2 = random(NUM_WORDS);
         disp2.show_string(words[choice2]);
@@ -57,7 +57,7 @@ void slots_round(bool rude){
     }
 
     if(running3){
-      running3 = disp3.loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME); 
+      running3 = disp3.loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME);
       if(!running3){
         choice3 = random(NUM_WORDS);
         disp3.show_string(words[choice3]);
@@ -84,11 +84,11 @@ bool jackpot_words_chosen(byte word1, byte word2, byte word3){
 
 void slots_game(){
   title_prompt(load_f_string(F("Silly Slots")), TITLE_SHOW_TIMES, true);
-  
+
   byte jackpot_choice1 = random(NUM_WORDS);
   byte jackpot_choice2 = random(NUM_WORDS);
   byte jackpot_choice3 = random(NUM_WORDS);
-   
+
   bool rude;
   bool buttons[] = {false, true, false, true};
   switch(button_led_prompt(load_f_string(F("NICE    RUDE")), buttons)){
@@ -109,7 +109,7 @@ void slots_game(){
 
   unsigned long sleep_timeout = millis() + SLEEP_TIMEOUT;
   unsigned long time;
-  
+
   while((time = millis()) < sleep_timeout){
     bet_amounts[BET_ALL] = purse;
     sprintf(display_buffer, load_f_string(F("Bet %s Back")), standard_bet_str(current_bet));
@@ -139,14 +139,14 @@ void slots_game(){
     purse -= bet_amounts[current_bet];
     save_data();
 
-    slots_round(rude);  
+    slots_round(rude);
 
     while(button_pressed());
 
-    char **words;
+    const char **words;
     if(rude){
       words = rude_words;
-    } else {  
+    } else {
       words = nice_words;
     }
 
@@ -166,7 +166,7 @@ void slots_game(){
         win *= WIN_WORD_BONUS;
     } else if(choice1 < WIN_WORD_CUTOFF || choice2 < WIN_WORD_CUTOFF || choice3 < WIN_WORD_CUTOFF) {
       win = WIN_WORD;
-    } 
+    }
 
     win *= bet_amounts[current_bet];
 
@@ -174,13 +174,13 @@ void slots_game(){
       display_jackpot(win);
     else if(win)
       display_win(win);
-    else 
+    else
       // see the non-winning results in lieu of being told you lost
       delay(ROUND_DELAY);
 
     purse += win;
     save_data();
-    
+
     display_purse();
   }
 }

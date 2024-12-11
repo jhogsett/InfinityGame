@@ -24,7 +24,9 @@ const char template4[] PROGMEM = "%s";
 const char template5[] PROGMEM = "LONG PRESS for OPTIONS";
 const char *const templates[] PROGMEM = { template0, template1, template2, template3, template4, template5 };
 
-BillboardsHandler billboards_handler(display_buffer, NUM_BILLBOARDS, templates, BLANKING_TIME, HOME_TIMES, false, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
+BillboardsHandler billboards_handler(display_buffer, NUM_BILLBOARDS, (const char **)templates, BLANKING_TIME, HOME_TIMES, false, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
+
+// argument types are: (char [71], int, const char *const [6], int, int, bool, int, int)
 
 void run_billboard(char *data) {
   unsigned long time = millis();
@@ -38,8 +40,8 @@ void run_billboard(char *data) {
 void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr on_long_press) {
   while (button_pressed())
     ;
-  unsigned long sleep_timeout = millis() + SLEEP_TIMEOUT;
-  unsigned long time;
+  unsigned long time = millis();
+  unsigned long sleep_timeout = time + SLEEP_TIMEOUT;
 
   all_leds.deactivate_leds(true);
   billboards_handler.reset();
@@ -114,7 +116,7 @@ int button_led_prompt(char *prompt, bool *states = NULL) {
 
 // prompt with text showing, no cycle waiting for a response
 // but cancelable with a button press
-bool title_prompt(char *title, byte times = 1, int show_panel_leds = false) {
+void title_prompt(char *title, byte times = 1, int show_panel_leds = false) {
   all_leds.deactivate_leds(true);
   display.begin_scroll_loop(times);
   if (show_panel_leds)
@@ -162,7 +164,7 @@ void branch_prompt(char *prompt, voidFuncPtr on_option_1, voidFuncPtr on_option_
   unsigned long prompt_timeout = millis() + PROMPT_TIMEOUT;
   unsigned long time;
 
-  byte choice;
+  int choice;
   while ((time = millis()) < prompt_timeout) {
     choice = button_led_prompt(prompt, states);
     switch (choice) {
@@ -198,7 +200,7 @@ void branch_prompt(char *prompt, voidFuncPtr on_option_1, voidFuncPtr on_option_
 // returns -1 on timeout or long press, otherwise current choice
 // current_choice and return value are zero-based
 // toggle_position is one-based to be consistent with button states
-int toggle_prompt(char *prompt, char **labels, byte current_choice, byte toggle_position, byte num_choices) {
+int toggle_prompt(const char *prompt, const char **labels, byte current_choice, byte toggle_position, byte num_choices) {
   unsigned long prompt_timeout = millis() + PROMPT_TIMEOUT;
   unsigned long time;
 
@@ -222,6 +224,7 @@ int toggle_prompt(char *prompt, char **labels, byte current_choice, byte toggle_
     } else
       return current_choice;
   }
+  return -1;
 }
 
 long time_to_seconds(byte second, byte minute, byte hour) {
@@ -310,7 +313,7 @@ void render_clock_string(byte seconds, byte minutes, byte hours) {
     sprintf(display_buffer, load_f_string(F("  %2d %02d %02d  ")), effective_hours, minutes, seconds);
 }
 
-int clock_prompt(byte seconds, byte minutes, byte hours, byte settable = true) {
+void clock_prompt(byte seconds, byte minutes, byte hours, byte settable = true) {
   // unsigned long next_second = millis() + 1000;
   clock_hour = hours;
   clock_minute = minutes;
@@ -359,7 +362,7 @@ int clock_prompt(byte seconds, byte minutes, byte hours, byte settable = true) {
 byte timer_hour, timer_minute, timer_second;
 
 void render_timer_string(byte seconds, byte minutes, byte hours, bool running) {
-  char *indicator;
+  const char *indicator;
   if (running)
     indicator = "Stop";
   else
@@ -372,7 +375,7 @@ void render_timer_string(byte seconds, byte minutes, byte hours, bool running) {
   }
 }
 
-int timer_prompt(byte seconds = 0, byte minutes = 0, byte hours = 0) {
+void timer_prompt(byte seconds = 0, byte minutes = 0, byte hours = 0) {
   unsigned long next_second = millis() + 1000;
   timer_hour = hours;
   timer_minute = minutes;

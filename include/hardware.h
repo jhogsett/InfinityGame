@@ -1,5 +1,5 @@
-#ifndef __HARDWARE_H
-#define __HARDWARE_H
+#ifndef __HARDWARE_H__
+#define __HARDWARE_H__
 
 #define FIRST_LED 6
 #define LAST_LED 11

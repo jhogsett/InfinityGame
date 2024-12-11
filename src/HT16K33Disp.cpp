@@ -3,20 +3,20 @@
 #include <Arduino.h>
 #include "HT16K33Disp.h"
 
-HT16K33Disp::HT16K33Disp(byte address = 0, byte num_displays = 1){
+HT16K33Disp::HT16K33Disp(int address, int num_displays){
     set_address(address, num_displays);
     _loop_running = false;
 }
 
-void HT16K33Disp::set_address(byte address, byte num_displays){
+void HT16K33Disp::set_address(int address, int num_displays){
     _address = address;
     _num_displays = num_displays;
     _num_digits = _num_displays * NUM_DIGITS_PER_DISPLAY;
 }
 
-// point to an array of bytes specifying brightness levels per display
-void HT16K33Disp::init(byte *brightLevels){
-    for(byte i = 0; i < _num_displays; i++){
+// point to an array of ints specifying brightness levels per display
+void HT16K33Disp::init(const int *brightLevels){
+    for(int i = 0; i < _num_displays; i++){
         Wire.beginTransmission(_address + i);
         Wire.write(0x21);               //normal operation mode
         Wire.endTransmission(false);
@@ -30,8 +30,8 @@ void HT16K33Disp::init(byte *brightLevels){
     }
 }
 
-void HT16K33Disp::write(byte digit, unsigned int data){
-    byte display = digit / NUM_DIGITS_PER_DISPLAY;
+void HT16K33Disp::write(int digit, unsigned int data){
+    int display = digit / NUM_DIGITS_PER_DISPLAY;
     digit -= (display * NUM_DIGITS_PER_DISPLAY);
     Wire.beginTransmission(_address + display);
     Wire.write(digit*2);
@@ -41,21 +41,21 @@ void HT16K33Disp::write(byte digit, unsigned int data){
 }
 
 void HT16K33Disp::segments_test(){
-    for(byte i = 0; i < _num_digits; i++)
+    for(int i = 0; i < _num_digits; i++)
         write(i, (uint16_t) -1);
 }
 
 void HT16K33Disp::clear(){
-    for(byte i = 0; i < _num_digits; i++)
+    for(int i = 0; i < _num_digits; i++)
         write(i, 0);
 }
 
 // determine the displayable length of the string
 // taking decimal points into account
-int HT16K33Disp::string_length(char * string){
+int HT16K33Disp::string_length(const char * string){
     int count = 0;
     int num_chars = strlen(string);
-    for(byte i = 0; i <= num_chars; i++){
+    for(int i = 0; i <= num_chars; i++){
         if(*string == 0)
             break;
         // period chars won't take up a digit position when displayed
@@ -67,8 +67,8 @@ int HT16K33Disp::string_length(char * string){
     return count;
 }
 
-void HT16K33Disp::show_string(char * string, bool pad_blanks = true, bool right_justify = false){
-    byte i = 0;
+void HT16K33Disp::show_string(const char * string, bool pad_blanks, bool right_justify){
+    int i = 0;
     if(right_justify)
     {
         char diff = _num_digits - string_length(string);
@@ -83,7 +83,7 @@ void HT16K33Disp::show_string(char * string, bool pad_blanks = true, bool right_
             i = diff;
     }
 
-    for(byte j = i; j < _num_digits; j++)
+    for(int j = i; j < _num_digits; j++)
     {
         if(*string == 0)
         {
@@ -107,8 +107,8 @@ void HT16K33Disp::show_string(char * string, bool pad_blanks = true, bool right_
     }
 }
 
-void HT16K33Disp::simple_show_string(char * string){
-    for(byte i = 0; i < _num_digits; i++){
+void HT16K33Disp::simple_show_string(const char * string){
+    for(int i = 0; i < _num_digits; i++){
         if(*string == 0)
             break;
         if(*(string + 1) == '.')
@@ -123,15 +123,15 @@ void HT16K33Disp::simple_show_string(char * string){
 }
 
 // save and restore string in case this is used along with a non-blocking scroll
-void HT16K33Disp::scroll_string(char * string, int show_delay = 0, int scroll_delay = 0){
-    char *old_string = _string;
-    int frames = begin_scroll_string(string, show_delay, scroll_delay);
+void HT16K33Disp::scroll_string(const char * string, int show_delay, int scroll_delay){
+    const char *old_string = _string;
+    begin_scroll_string(string, show_delay, scroll_delay);
     while(step_scroll_string(millis()));
     _string = old_string;
 }
 
 // returns count of frames
-int HT16K33Disp::begin_scroll_string(char * string, int show_delay = 0, int scroll_delay = 0){
+int HT16K33Disp::begin_scroll_string(const char * string, int show_delay, int scroll_delay){
     _string = string;
     _scrollpos = 0;
     _show_delay = show_delay ? show_delay : DEFAULT_SHOW_DELAY;
@@ -181,13 +181,13 @@ bool HT16K33Disp::step_scroll_string(unsigned long time){
 }
 
 // -1=loop forever
-void HT16K33Disp::begin_scroll_loop(int times=-1){
+void HT16K33Disp::begin_scroll_loop(int times){
     _loop_running = false;
     _loop_times = times;
 }
 
 // returns true if there's more loops to go
-bool HT16K33Disp::loop_scroll_string(unsigned long time, char * string, int show_delay = 0, int scroll_delay = 0){
+bool HT16K33Disp::loop_scroll_string(unsigned long time, const char * string, int show_delay, int scroll_delay){
     if(!_loop_running)
     {
         if(_loop_times == 0)
@@ -201,7 +201,7 @@ bool HT16K33Disp::loop_scroll_string(unsigned long time, char * string, int show
     return true;
 }
 
-uint16_t HT16K33Disp::char_to_segments(char c, bool decimal_point = false){
+uint16_t HT16K33Disp::char_to_segments(char c, bool decimal_point){
     if(c < 32 || c > 127)
         return (uint16_t) -1;
 #ifdef HT16K33Disp_USEPROGMEM

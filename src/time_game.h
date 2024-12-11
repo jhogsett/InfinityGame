@@ -2,7 +2,7 @@
 #define __TIME_GAME_H
 
 
-// TIME GAME related 
+// TIME GAME related
 #define MIN_DELAY 1500
 #define MAX_DELAY 5000
 #define ROUNDS 3
@@ -11,7 +11,7 @@
 void time_game(){
   title_prompt(load_f_string(F("The TimeGame")), TITLE_SHOW_TIMES, true);
 
-  int response;                                 
+  int response;
   response = button_led_prompt(load_f_string(F("Press to Go")));
   if(response == 0 || response == -1)
     return;
@@ -29,7 +29,7 @@ void time_game(){
 
     int del = random(MIN_DELAY, MAX_DELAY+1);
     delay(del);
-    
+
     unsigned long start_time = micros();
     panel_leds.flash_leds();
 
@@ -37,7 +37,7 @@ void time_game(){
     unsigned long reaction_time = micros() - start_time;
     while(digitalRead(ANY_BUTTON) == HIGH);
 
-    mean += reaction_time;    
+    mean += reaction_time;
 
     micros_to_ms(copy_buffer, reaction_time);
     sprintf(display_buffer, "%s ms", copy_buffer);
@@ -64,7 +64,7 @@ void time_game(){
     display_win(TIME_WIN);
     purse += TIME_WIN;
     display_purse();
-    
+
     save_data();
 
     sprintf(display_buffer, "NEW BEST * %s ms", copy_buffer);
