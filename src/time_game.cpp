@@ -1,12 +1,13 @@
 #include <Arduino.h>
-#include "prompts.h"
-#include "utils.h"
+
+#include "buffers.h"
+#include "buttons.h"
 #include "displays.h"
 #include "leds.h"
 #include "play_data.h"
-#include "buffers.h"
 #include "play_views.h"
-#include "buttons.h"
+#include "prompts.h"
+#include "utils.h"
 #include "time_game.h"
 
 void time_game(){

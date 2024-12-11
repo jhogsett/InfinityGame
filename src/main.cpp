@@ -2,22 +2,23 @@
 #include <Wire.h>
 #include <HT16K33Disp.h>
 #include <random_seed.h>
+
+#include "betting.h"
 #include "billboard.h"
 #include "billboards_handler.h"
-#include "led_handler.h"
-#include "hardware.h"
-#include "timeouts.h"
 #include "buttons.h"
 #include "buffers.h"
-#include "utils.h"
-#include "leds.h"
 #include "displays.h"
+#include "hardware.h"
+#include "led_handler.h"
+#include "leds.h"
 #include "play_data.h"
-#include "prompts.h"
-#include "betting.h"
 #include "play_views.h"
-#include "time_game.h"
+#include "prompts.h"
 #include "slot_game.h"
+#include "time_game.h"
+#include "timeouts.h"
+#include "utils.h"
 
 #define RANDOM_SEED_PIN A1
 static RandomSeed<RANDOM_SEED_PIN> randomizer;

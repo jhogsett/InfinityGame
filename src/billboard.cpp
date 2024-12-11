@@ -1,4 +1,5 @@
 #include <HT16K33Disp.h>
+
 #include "billboard.h"
 
 Billboard::Billboard(char * buffer, int show_delay, int frame_delay){

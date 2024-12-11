@@ -1,15 +1,11 @@
-#ifndef __PLAY_VIEW_H
-#define __PLAY_VIEW_H
-
 #include <Arduino.h>
+
+#include "betting.h"
 #include "buffers.h"
 #include "play_data.h"
+#include "play_views.h"
 #include "prompts.h"
 #include "utils.h"
-#include "betting.h"
-#include "play_views.h"
-
-// Game Play Displays
 
 void display_purse(){
   sprintf(display_buffer, "CASH $%ld", purse);
@@ -41,5 +37,3 @@ char *standard_bet_str(byte bet){
   } else
     return numeric_bet_str(bet_amounts[bet]);
 }
-
-#endif

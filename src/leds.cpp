@@ -1,6 +1,6 @@
-#include "leds.h"
 #include "hardware.h"
 #include "led_handler.h"
+#include "leds.h"
 
 // LEDs handling
 #define DEFAULT_ALL_LEDS_SHOW_TIME    1000

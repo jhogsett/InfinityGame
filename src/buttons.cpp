@@ -1,6 +1,7 @@
 #include <Arduino.h>
-#include "hardware.h"
+
 #include "buttons.h"
+#include "hardware.h"
 
 volatile bool button_states[NUM_BUTTONS];
 volatile unsigned long press_time;

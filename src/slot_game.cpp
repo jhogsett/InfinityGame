@@ -1,15 +1,15 @@
 #include <Arduino.h>
-#include "displays.h"
-#include "utils.h"
-#include "prompts.h"
-#include "timeouts.h"
+
 #include "betting.h"
-#include "play_data.h"
-#include "displays.h"
 #include "buffers.h"
-#include "play_views.h"
 #include "buttons.h"
+#include "displays.h"
+#include "play_data.h"
+#include "play_views.h"
+#include "prompts.h"
 #include "slot_game.h"
+#include "timeouts.h"
+#include "utils.h"
 
 byte choice1, choice2, choice3;
 
