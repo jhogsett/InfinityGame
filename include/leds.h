@@ -4,7 +4,6 @@
 #include "hardware.h"
 #include "led_handler.h"
 
-// LEDs handling
 #define DEFAULT_ALL_LEDS_SHOW_TIME    1000
 #define DEFAULT_ALL_LEDS_BLANK_TIME   1000
 #define DEFAULT_PANEL_LEDS_SHOW_TIME   750
