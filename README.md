@@ -1,6 +1,10 @@
 # InfinityGame
 
-![20241203_151358R](https://github.com/user-attachments/assets/be32cdc8-5c24-4461-9863-0d2bd3c998e3)
+<!-- ![20241203_151358R](https://github.com/user-attachments/assets/be32cdc8-5c24-4461-9863-0d2bd3c998e3) -->
+
+[![Infinity Game](https://i.ytimg.com/vi/1CtiteT6PyU/maxresdefault.jpg)](https://www.youtube.com/watch?v=1CtiteT6PyU "Infinity Game") 
+
+<!-- https://youtu.be/1CtiteT6PyU -->
 
 The "Infinity Game" it is the beginning of an infinity of possible Arduino-based games. With a colorful alphanumeric display, arcade-style buttons, bright LEDs, sound and a vibrator, any number of fun games are possible based on the Arduino architecture.
 
