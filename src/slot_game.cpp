@@ -6,9 +6,9 @@
 #include "play_data.h"
 #include "play_views.h"
 #include "prompts.h"
-#include "slot_game.h"
 #include "timeouts.h"
 #include "utils.h"
+#include "slot_game.h"
 
 byte choice1, choice2, choice3;
 

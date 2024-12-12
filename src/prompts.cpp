@@ -29,7 +29,7 @@ void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr
 
   all_leds.deactivate_leds(true);
   billboards_handler.reset();
-  panel_leds.begin(time, LEDHandler::STYLE_RANDOM, 750, 350);
+  panel_leds.begin(time, LEDHandler::STYLE_RANDOM, 750, 350); // TODO
 
   micros_to_ms(display_buffer, best_time);
   sprintf(copy_buffer, load_f_string(F("Cash $%ld Best Time %s ms")), purse, display_buffer);
