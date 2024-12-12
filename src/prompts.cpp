@@ -1,6 +1,5 @@
 
 #include <Arduino.h>
-
 #include "billboards_handler.h"
 #include "buffers.h"
 #include "buttons.h"

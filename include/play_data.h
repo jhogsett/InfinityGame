@@ -1,8 +1,6 @@
 #ifndef __PLAY_DATA_H
 #define __PLAY_DATA_H
 
-#include <EEPROM.h>
-
 #define DEFAULT_PURSE 1000
 #define ROUND_DELAY 750
 

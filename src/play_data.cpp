@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include <EEPROM.h>
-
 #include "play_data.h"
 
 bool option_sound = false;

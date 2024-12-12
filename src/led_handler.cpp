@@ -1,5 +1,4 @@
 #include <Arduino.h>
-
 #include "led_handler.h"
 
 LEDHandler::LEDHandler(int first_pin, int num_leds, const int *intensity, int show_time, int blank_time){

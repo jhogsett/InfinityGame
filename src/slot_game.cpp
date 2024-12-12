@@ -1,5 +1,4 @@
 #include <Arduino.h>
-
 #include "betting.h"
 #include "buffers.h"
 #include "buttons.h"
