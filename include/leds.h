@@ -14,12 +14,9 @@
 #define TITLE_PANEL_LEDS_BLANK_TIME    0
 #define TITLE_PANEL_LEDS_STYLE (LEDHandler::STYLE_PLAIN)
 
-// Green panel LED is a bit brighter than the Amber and Red LEDs
-#define LED_INTENSITY1 32
-// Amber panel LED matched to Green
-#define LED_INTENSITY2 40
-// Red panel LED matched to Red
-#define LED_INTENSITY3 40
+#define LED_INTENSITY1 32 // Green panel LED is a bit brighter than the Amber and Red LEDs
+#define LED_INTENSITY2 40 // Amber panel LED matched to Green
+#define LED_INTENSITY3 40 // Red panel LED matched to Red
 
 extern const int led_intensities[];
 extern LEDHandler all_leds;

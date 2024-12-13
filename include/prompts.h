@@ -30,11 +30,11 @@ extern BillboardsHandler billboards_handler;
 
 void run_billboard(char *data);
 void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr on_long_press);
-int button_led_prompt(char *prompt, bool *states = NULL);
-void title_prompt(char *title, byte times = 1, int show_panel_leds = false);
+int button_led_prompt(const char * prompt, const bool *states = NULL);
+void title_prompt(const char * title, byte times = 1, int show_panel_leds = false);
 int panel_led_prompt();
-void branch_prompt(char *prompt, voidFuncPtr on_option_1, voidFuncPtr on_option_2, voidFuncPtr on_option_3, voidFuncPtr on_long_press = NULL, bool *states = NULL);
-int toggle_prompt(const char *prompt, const char **labels, byte current_choice, byte toggle_position, byte num_choices);
+void branch_prompt(const char * prompt, voidFuncPtr on_option_1, voidFuncPtr on_option_2, voidFuncPtr on_option_3, voidFuncPtr on_long_press = NULL, const bool *states = NULL);
+int toggle_prompt(const char * prompt, const char **labels, byte current_choice, byte toggle_position, byte num_choices);
 long time_to_seconds(byte second, byte minute, byte hour);
 void seconds_to_time(long seconds, byte &second, byte &minute, byte &hour);
 

@@ -5,18 +5,18 @@
 class Billboard
 {
 public:
-  Billboard(char * buffer, int show_delay=0, int frame_delay=0);
-  void begin(HT16K33Disp * display, int times);
-  void reset_round(HT16K33Disp * display);
-  bool step(HT16K33Disp * display, unsigned long time);
+	explicit Billboard(char * buffer, int show_delay=0, int frame_delay=0);
+	void begin(HT16K33Disp * display, int times);
+	void reset_round(HT16K33Disp * display);
+	bool step(HT16K33Disp * display, unsigned long time);
 
-  char * _buffer;
-  int _show_delay;
-  int _frame_delay;
+	char * _buffer;
+	int _show_delay;
+	int _frame_delay;
 
 private:
-  int _frames;
-  int _num_times;
+	int _frames;
+	int _num_times;
 };
 
 #endif
