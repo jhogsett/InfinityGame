@@ -6,6 +6,7 @@
 #include "timer_mode.h"
 #include "utils.h"
 #include "tools_mode.h"
+#include "debug.h"
 
 void tools_menu(){
 	switch(button_led_prompt(load_f_string(F("CLOCK   Go  ")))){
@@ -45,6 +46,14 @@ void tools_menu(){
 		return;
 	case 3:
 		test_mode();
+		return;
+	}
+
+	switch(button_led_prompt(load_f_string(F("DEBUG   Go  ")))){
+	case -1:
+		return;
+	case 3:
+		debug_mode();
 		return;
 	}
 }

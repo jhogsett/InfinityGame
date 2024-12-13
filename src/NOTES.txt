@@ -1,3 +1,7 @@
+	// TODO replace while(true) with a sleep timeout
+	// TODO rename sleep timeout idle timeout
+
+
 
 // have segments disappear randomly or go into place randomly
 

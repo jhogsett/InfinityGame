@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "buttons.h"
 #include "hardware.h"
+#include "debug.h"
 
 volatile bool button_states[NUM_BUTTONS];
 volatile unsigned long press_time;
@@ -16,8 +17,8 @@ void button_pressed_i(){
 	button_states[RED_ID] = digitalRead(RED_BUTTON);
 }
 
-// still having dropped valid button presses
-#define MAX_DROPS 10
+// max LOW reads on a button in a tight loop
+#define MAX_DROPS 1000
 
 // use in conjunction with the ISR
 bool button_pressed(){
@@ -25,6 +26,7 @@ bool button_pressed(){
     if(!button_states[ANY_COLOR_ID])
 		return false;
 
+	// rereading these may be redundant
 	button_states[GREEN_ID] = digitalRead(GREEN_BUTTON);
 	button_states[AMBER_ID] = digitalRead(AMBER_BUTTON);
 	button_states[RED_ID] = digitalRead(RED_BUTTON);
@@ -40,8 +42,11 @@ bool button_pressed(){
 		    drop_count++;
 	}
 
-	if(drop_count > MAX_DROPS)
+	if(drop_count > MAX_DROPS){
+		set_debug_marker(drop_count);
 		return false;
+	}
+
 	// if(digitalRead(ANY_BUTTON) == LOW)
 	//     return false;
 
@@ -131,7 +136,7 @@ int wait_on_long_press(){
 			return 0;
 		else
 			return -1;
-		} else {
+	} else {
 		// long press time has been met
 		if(button_still_pressed())
 			return 1;

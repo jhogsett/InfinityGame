@@ -9,6 +9,7 @@
 #include "prompts.h"
 #include "timeouts.h"
 #include "utils.h"
+#include "debug.h"
 
 BillboardsHandler billboards_handler(display_buffer, NUM_BILLBOARDS, (const char **)templates, BLANKING_TIME, HOME_TIMES, false, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
 
@@ -22,8 +23,10 @@ void run_billboard(char *data) {
 
 // show the billboard and cycle waiting for any button press
 void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr on_long_press) {
-	while (button_pressed())
+	while (button_still_pressed())
 		;
+	reset_buttons_state();
+
 	unsigned long time = millis();
 	unsigned long sleep_timeout = time + SLEEP_TIMEOUT;
 
@@ -63,6 +66,10 @@ void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr
 // prompt with text and cycle waiting for a button response
 // returns -1=timed out, 0=long press, button ID otherwise
 int button_led_prompt(const char * prompt, const bool *states) {
+	// while (button_still_pressed())
+	// 	;
+	// reset_buttons_state();
+
 	// while(digitalRead(ANY_BUTTON) == HIGH);
 
 	unsigned long time;
@@ -76,16 +83,19 @@ int button_led_prompt(const char * prompt, const bool *states) {
 	display.begin_scroll_loop();
 
 	// eat an already pressed button on arrival here
-	while (((time = millis()) < timeout_time) && digitalRead(ANY_BUTTON) == HIGH) {
+	while (((time = millis()) < timeout_time) && button_still_pressed()) {
 		display.loop_scroll_string(time, prompt, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
 		// ;
 	}
+	reset_buttons_state();
 
-	all_leds.deactivate_leds(true);
-	display.begin_scroll_loop();
+	// all_leds.deactivate_leds(true);
+	// display.begin_scroll_loop();
 
 	if (states)
 		button_leds.activate_leds(states);
+	else
+		all_leds.deactivate_leds(true);
 
 	while ((time = millis()) < timeout_time) {
 		display.loop_scroll_string(time, prompt, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
@@ -97,8 +107,9 @@ int button_led_prompt(const char * prompt, const bool *states) {
 				;
 
 			all_leds.deactivate_leds(true);
-			if (long_press_state == 1)
+			if (long_press_state == 1){
 				return 0;
+			}
 			else {
 				if (button_states[GREEN_ID])
 					return GREEN_ID;
@@ -118,13 +129,30 @@ int button_led_prompt(const char * prompt, const bool *states) {
 // prompt with text showing, no cycle waiting for a response
 // but cancelable with a button press
 void title_prompt(const char * title, byte times, int show_panel_leds) {
-	all_leds.deactivate_leds(true);
-	display.begin_scroll_loop(times);
+	unsigned long time;
+	unsigned long timeout_time = millis() + PROMPT_TIMEOUT;
+
+	// all_leds.deactivate_leds(true);
 	if (show_panel_leds)
 		panel_leds.begin(millis(), TITLE_PANEL_LEDS_STYLE, TITLE_PANEL_LEDS_SHOW_TIME, TITLE_PANEL_LEDS_BLANK_TIME);
+	display.begin_scroll_loop(times);
+
+	// eat an already pressed button on arrival here
+	while (((time = millis()) < timeout_time) && button_still_pressed()) {
+		display.loop_scroll_string(time, title, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
+
+		if (show_panel_leds)
+			panel_leds.step(time);
+	}
+	reset_buttons_state();
+
+	all_leds.deactivate_leds(true);
+
 	// breaking out of the loop is handled by the display call
+	// TODO replace while(true) with a sleep timeout
+	// TODO rename sleep timeout idle timeout
 	while (true) {
-		unsigned long time = millis();
+		time = millis();
 		if (display.loop_scroll_string(time, title, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME)) {
 			if (show_panel_leds)
 				panel_leds.step(time);
@@ -137,12 +165,26 @@ void title_prompt(const char * title, byte times, int show_panel_leds) {
 
 // prompt with panel leds showing only and cycle waiting for any button press
 int panel_led_prompt() {
-	all_leds.deactivate_leds(true);
+	unsigned long time;
+	unsigned long timeout_time = millis() + PROMPT_TIMEOUT;
+
+	// all_leds.deactivate_leds(true);
 	panel_leds.begin(millis(), LEDHandler::STYLE_RANDOM | LEDHandler::STYLE_BLANKING, 1500, 1500);
+
+	// eat an already pressed button on arrival here
+	while (((time = millis()) < timeout_time) && button_still_pressed()) {
+		panel_leds.step(time);
+	}
+	reset_buttons_state();
+
+	all_leds.deactivate_leds(true);
+
+	// all_leds.deactivate_leds(true);
 
 	// the sleep mode never times out
 	while (true) {
-		panel_leds.step(millis());
+		time = millis();
+		panel_leds.step(time);
 		if (!button_pressed())
 			continue;
 
@@ -199,27 +241,27 @@ void branch_prompt(const char * prompt, voidFuncPtr on_option_1, voidFuncPtr on_
 // current_choice and return value are zero-based
 // toggle_position is one-based to be consistent with button states
 int toggle_prompt(const char * prompt, const char **labels, byte current_choice, byte toggle_position, byte num_choices) {
-	unsigned long prompt_timeout = millis() + PROMPT_TIMEOUT;
 	unsigned long time;
+	unsigned long prompt_timeout = millis() + PROMPT_TIMEOUT;
 
 	while ((time = millis()) < prompt_timeout) {
-	sprintf(display_buffer, prompt, labels[current_choice]);
+		sprintf(display_buffer, prompt, labels[current_choice]);
 
-	bool states[] = { false, false, false, false };
-	states[toggle_position] = true;
+		bool states[] = { false, false, false, false };
+		states[toggle_position] = true;
 
-	int choice = button_led_prompt(display_buffer, states);
-	if (choice == 0 || choice == -1)
-		return -1;
+		int choice = button_led_prompt(display_buffer, states);
+		if (choice == 0 || choice == -1)
+			return -1;
 
-	if (choice == toggle_position) {
-		current_choice++;
-		if (current_choice >= num_choices)
-			current_choice = 0;
-		displays[toggle_position].scroll_string(labels[current_choice], 1, OPTION_FLIP_SCROLL_TIME);
-		continue;
-	} else
-		return current_choice;
+		if (choice == toggle_position) {
+			current_choice++;
+			if (current_choice >= num_choices)
+				current_choice = 0;
+			displays[toggle_position].scroll_string(labels[current_choice], 1, OPTION_FLIP_SCROLL_TIME);
+			continue;
+		} else
+			return current_choice;
 	}
 	return -1;
 }
