@@ -21,3 +21,6 @@
 
 // the clock should look different in idle mode so you know it's ok not to use a long press (or in idle mode long press to exit)
 
+	// TODO rename sleep timeout idle timeout
+
+// TODO timer mode should time out per sleep timeout after no activity

@@ -17,9 +17,6 @@ void button_pressed_i(){
 	button_states[RED_ID] = digitalRead(RED_BUTTON);
 }
 
-// // max button LOWs during the debounce period reads on a button in a tight loop
-// #define MAX_DROPS 1000
-
 // use in conjunction with the ISR
 bool button_pressed(){
 	// do nothing if no button has been presssed according to the ISR

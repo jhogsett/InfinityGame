@@ -66,31 +66,16 @@ void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr
 // prompt with text and cycle waiting for a button response
 // returns -1=timed out, 0=long press, button ID otherwise
 int button_led_prompt(const char * prompt, const bool *states) {
-	// while (button_still_pressed())
-	// 	;
-	// reset_buttons_state();
-
-	// while(digitalRead(ANY_BUTTON) == HIGH);
-
 	unsigned long time;
 	unsigned long timeout_time = millis() + PROMPT_TIMEOUT;
-
-//   all_leds.deactivate_leds(true);
-
-//   if (states)
-//     button_leds.activate_leds(states);
 
 	display.begin_scroll_loop();
 
 	// eat an already pressed button on arrival here
 	while (((time = millis()) < timeout_time) && button_still_pressed()) {
 		display.loop_scroll_string(time, prompt, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
-		// ;
 	}
 	reset_buttons_state();
-
-	// all_leds.deactivate_leds(true);
-	// display.begin_scroll_loop();
 
 	if (states)
 		button_leds.activate_leds(states);
@@ -131,8 +116,8 @@ int button_led_prompt(const char * prompt, const bool *states) {
 void title_prompt(const char * title, byte times, int show_panel_leds) {
 	unsigned long time;
 	unsigned long timeout_time = millis() + PROMPT_TIMEOUT;
+	unsigned long sleep_timeout = time + SLEEP_TIMEOUT;
 
-	// all_leds.deactivate_leds(true);
 	if (show_panel_leds)
 		panel_leds.begin(millis(), TITLE_PANEL_LEDS_STYLE, TITLE_PANEL_LEDS_SHOW_TIME, TITLE_PANEL_LEDS_BLANK_TIME);
 	display.begin_scroll_loop(times);
@@ -149,10 +134,7 @@ void title_prompt(const char * title, byte times, int show_panel_leds) {
 	all_leds.deactivate_leds(true);
 
 	// breaking out of the loop is handled by the display call
-	// TODO replace while(true) with a sleep timeout
-	// TODO rename sleep timeout idle timeout
-	while (true) {
-		time = millis();
+	while ((time = millis()) < sleep_timeout) {
 		if (display.loop_scroll_string(time, title, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME)) {
 			if (show_panel_leds)
 				panel_leds.step(time);
@@ -168,7 +150,6 @@ int panel_led_prompt() {
 	unsigned long time;
 	unsigned long timeout_time = millis() + PROMPT_TIMEOUT;
 
-	// all_leds.deactivate_leds(true);
 	panel_leds.begin(millis(), LEDHandler::STYLE_RANDOM | LEDHandler::STYLE_BLANKING, 1500, 1500);
 
 	// eat an already pressed button on arrival here
@@ -178,8 +159,6 @@ int panel_led_prompt() {
 	reset_buttons_state();
 
 	all_leds.deactivate_leds(true);
-
-	// all_leds.deactivate_leds(true);
 
 	// the sleep mode never times out
 	while (true) {
@@ -323,9 +302,7 @@ void increment_time_basis(byte &second, byte &minute, byte &hour, byte seconds, 
 	seconds_to_time(total_seconds, second, minute, hour);
 
 	if (option_clock_24h) {
-		// hours %= 24;
 	} else {
-		// hours %= 12;
 		if (hour == 0)
 			hour = 12;
 	}
@@ -357,6 +334,7 @@ void clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
 
 	render_clock_string(clock_second, clock_minute, clock_hour);
 	display.show_string(display_buffer);
+	// clock mode never times out
 	while (true) {
 		seconds_to_time(time_in_seconds(), clock_second, clock_minute, clock_hour);
 
@@ -405,6 +383,7 @@ void render_timer_string(byte seconds, byte minutes, byte hours, bool running) {
 	}
 }
 
+// TODO timer mode should time out per sleep timeout after no activity
 void timer_prompt(byte seconds, byte minutes, byte hours) {
 	unsigned long next_second = millis() + 1000;
 	timer_hour = hours;
