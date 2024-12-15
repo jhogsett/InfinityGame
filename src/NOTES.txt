@@ -24,3 +24,7 @@
 	// TODO rename sleep timeout idle timeout
 
 // TODO timer mode should time out per sleep timeout after no activity
+
+// use randomizer on each new spin (find out how noisy it is)
+
+// minimum reaction time (or a bug?) is 50ms
