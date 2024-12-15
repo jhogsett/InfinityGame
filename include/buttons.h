@@ -13,6 +13,9 @@
 #define DEBOUNCE_TIME 5
 #define LONG_PRESS_TIME 1500
 
+// max button LOWs during the debounce period reads on a button in a tight loop
+#define MAX_DROPS 1000
+
 extern volatile bool button_states[];
 extern volatile unsigned long press_time;
 
