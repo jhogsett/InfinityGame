@@ -1,3 +1,6 @@
+// make the jackpot win more prominent
+
+
 	// TODO replace while(true) with a sleep timeout
 	// TODO rename sleep timeout idle timeout
 

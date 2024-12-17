@@ -107,77 +107,77 @@ void slots_game(){
 	unsigned long time;
 
 	while((time = millis()) < sleep_timeout){
-	bet_amounts[BET_ALL] = purse;
-	sprintf(display_buffer, load_f_string(F("Bet %s Back")), standard_bet_str(current_bet));
-	const bool states[] = {false, true, false, false};
-	switch(button_led_prompt(display_buffer, states)){
-		case -1:
-			return;
-		case 0:
-			return;
-		case 1:
-			break;
-		case 2:
-			current_bet++;
-			if(current_bet >= NUM_BET_AMOUNTS)
-				current_bet = 0;
+		bet_amounts[BET_ALL] = purse;
+		sprintf(display_buffer, load_f_string(F("Bet %s Back")), standard_bet_str(current_bet));
+		const bool states[] = {false, true, false, false};
+		switch(button_led_prompt(display_buffer, states)){
+			case -1:
+				return;
+			case 0:
+				return;
+			case 1:
+				break;
+			case 2:
+				current_bet++;
+				if(current_bet >= NUM_BET_AMOUNTS)
+					current_bet = 0;
 
-			sprintf(display_buffer, load_f_string(F("    %s")), standard_bet_str(current_bet));
-			disp2.scroll_string(display_buffer, 1, OPTION_FLIP_SCROLL_TIME);
-			continue;
-		case 3:
-			return;
-	}
+				sprintf(display_buffer, load_f_string(F("    %s")), standard_bet_str(current_bet));
+				disp2.scroll_string(display_buffer, 1, OPTION_FLIP_SCROLL_TIME);
+				continue;
+			case 3:
+				return;
+		}
 
-	sleep_timeout = millis() + SLEEP_TIMEOUT;
+		sleep_timeout = millis() + SLEEP_TIMEOUT;
 
-	int win = 0;
-	bool jackpot = false;
-	purse -= bet_amounts[current_bet];
-	save_data();
+		int win = 0;
+		bool jackpot = false;
+		purse -= bet_amounts[current_bet];
+		save_data();
 
-	slots_round(rude);
+		slots_round(rude);
 
-	while(button_pressed())
-		;
+		while(button_pressed())
+			;
 
-	const char **words;
-	if(rude)
-		words = rude_words;
-	else
-		words = nice_words;
+		const char **words;
+		if(rude)
+			words = rude_words;
+		else
+			words = nice_words;
 
-	sprintf(display_buffer, "%s%s%s", words[choice1], words[choice2], words[choice3]);
-	title_prompt(display_buffer);
+		sprintf(display_buffer, "%s%s%s", words[choice1], words[choice2], words[choice3]);
+		title_prompt(display_buffer);
 
-	if(jackpot_words_chosen(jackpot_choice1, jackpot_choice2, jackpot_choice3)){
-		win = WIN_JACKPOT;
-		jackpot = true;
-	} else if(triple_word_chosen()){
-		win = WIN_TRIPLE;
-		if(special_word_chosen())
-			win *= WIN_WORD_BONUS;
-	} else if(double_word_chosen()){
-		win = WIN_DOUBLE;
-		if(special_word_chosen())
-			win *= WIN_WORD_BONUS;
-	} else if(choice1 < WIN_WORD_CUTOFF || choice2 < WIN_WORD_CUTOFF || choice3 < WIN_WORD_CUTOFF) {
-		win = WIN_WORD;
-	}
+		if(jackpot_words_chosen(jackpot_choice1, jackpot_choice2, jackpot_choice3)){
+			win = WIN_JACKPOT;
+			jackpot = true;
+		} else if(triple_word_chosen()){
+			win = WIN_TRIPLE;
+			if(special_word_chosen())
+				win *= WIN_WORD_BONUS;
+		} else if(double_word_chosen()){
+			win = WIN_DOUBLE;
+			if(special_word_chosen())
+				win *= WIN_WORD_BONUS;
+		} else if(choice1 < WIN_WORD_CUTOFF || choice2 < WIN_WORD_CUTOFF || choice3 < WIN_WORD_CUTOFF) {
+			win = WIN_WORD;
+		}
 
-	win *= bet_amounts[current_bet];
+		win *= bet_amounts[current_bet];
 
-	if(jackpot)
-		display_jackpot(win);
-	else if(win)
-		display_win(win);
-	else
-		// see the non-winning results in lieu of being told you lost
-		delay(ROUND_DELAY);
+		if(jackpot)
+			display_jackpot(win);
+		else if(win)
+			display_win(win);
+		else
+			// see the non-winning results in lieu of being told you lost
+			delay(ROUND_DELAY);
 
-	purse += win;
-	save_data();
+		purse += win;
+		save_data();
 
-	display_purse();
+		display_purse();
 	}
 }

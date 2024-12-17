@@ -114,8 +114,8 @@ int button_led_prompt(const char * prompt, const bool *states) {
 // prompt with text showing, no cycle waiting for a response
 // but cancelable with a button press
 void title_prompt(const char * title, byte times, int show_panel_leds) {
-	unsigned long time;
-	unsigned long timeout_time = millis() + PROMPT_TIMEOUT;
+	unsigned long time = millis();
+	unsigned long timeout_time = time + PROMPT_TIMEOUT;
 	unsigned long sleep_timeout = time + SLEEP_TIMEOUT;
 
 	if (show_panel_leds)
@@ -385,7 +385,11 @@ void render_timer_string(byte seconds, byte minutes, byte hours, bool running) {
 
 // TODO timer mode should time out per sleep timeout after no activity
 void timer_prompt(byte seconds, byte minutes, byte hours) {
-	unsigned long next_second = millis() + 1000;
+	unsigned long time = millis();
+	unsigned long sleep_timeout = time + SLEEP_TIMEOUT;
+
+	// unsigned long next_second = millis() + 1000;
+	unsigned long next_second = 0;
 	timer_hour = hours;
 	timer_minute = minutes;
 	timer_second = seconds;
@@ -394,9 +398,8 @@ void timer_prompt(byte seconds, byte minutes, byte hours) {
 
 	render_timer_string(timer_second, timer_minute, timer_hour, running);
 	display.show_string(display_buffer);
-	while (true) {
-		unsigned long time = millis();
 
+	while ((time = millis()) < sleep_timeout) {
 		if (running && time >= next_second) {
 			if (going_up)
 				increment_timer(timer_second, timer_minute, timer_hour);
