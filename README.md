@@ -28,10 +28,6 @@ The panel LEDs are:
 
 The Arduino Nano and speaker are common. The vibrator is from an old XBox 360 controller.
 
-The source code for the version of the “game” shown (just test code now) is here:
-
-https://github.com/jhogsett/Arduino/tree/main/reaction_game/led_visuals2
-
 # 3D Models
 https://www.printables.com/model/1096533-the-infinity-game-arduino-gaming-device
 
