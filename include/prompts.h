@@ -35,29 +35,5 @@ void title_prompt(const char * title, byte times = 1, int show_panel_leds = fals
 int panel_led_prompt();
 void branch_prompt(const char * prompt, voidFuncPtr on_option_1, voidFuncPtr on_option_2, voidFuncPtr on_option_3, voidFuncPtr on_long_press = NULL, const bool *states = NULL);
 int toggle_prompt(const char * prompt, const char **labels, byte current_choice, byte toggle_position, byte num_choices);
-long time_to_seconds(byte second, byte minute, byte hour);
-void seconds_to_time(long seconds, byte &second, byte &minute, byte &hour);
-
-#define DEFAULT_TIME_BASIS (1000L * 12L * 3600L)
-
-extern unsigned long clock_basis;
-extern unsigned long time_basis;
-extern byte clock_hour, clock_minute, clock_second;
-
-void establish_clock_basis(byte seconds, byte minutes, byte hours);
-
-#define MAX_MS_PER_DAY (1000L * 24L * 60L * 60L)
-
-extern long time_in_seconds();
-extern void increment_timer(byte &second, byte &minute, byte &hour, byte seconds = 1, byte minutes = 0, byte hours = 0);
-extern bool decrement_timer(byte &second, byte &minute, byte &hour, int seconds = 1, int minutes = 0, int hours = 0);
-extern void increment_time_basis(byte &second, byte &minute, byte &hour, byte seconds = 1, byte minutes = 0, byte hours = 0);
-extern void render_clock_string(byte seconds, byte minutes, byte hours);
-extern void clock_prompt(byte seconds, byte minutes, byte hours, byte settable = true);
-
-extern byte timer_hour, timer_minute, timer_second;
-
-extern void render_timer_string(byte seconds, byte minutes, byte hours, bool running);
-extern void timer_prompt(byte seconds = 0, byte minutes = 0, byte hours = 0);
 
 #endif
