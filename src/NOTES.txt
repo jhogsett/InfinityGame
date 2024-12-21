@@ -29,3 +29,7 @@
 // add lm34
 // option to show temp instead of seconds for clock
 // option for c or f
+
+options for timeout time
+- prompt timeouts
+- idle timeouts

@@ -12,8 +12,9 @@
 #include "debug.h"
 
 BillboardsHandler billboards_handler(display_buffer, NUM_BILLBOARDS, (const char **)templates, BLANKING_TIME, HOME_TIMES, false, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
+char *billboard_data[NUM_BILLBOARDS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
-void run_billboard(char *data) {
+void run_billboard(char **data) {
 	unsigned long time = millis();
 	panel_leds.step(time);
 	// button_leds.step(time);
@@ -34,11 +35,22 @@ void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr
 	billboards_handler.reset();
 	panel_leds.begin(time, LEDHandler::STYLE_RANDOM, 750, 350); // TODO
 
-	micros_to_ms(display_buffer, best_time);
-	sprintf(copy_buffer, FSTR("Cash $%ld Best Time %s ms"), purse, display_buffer);
+	// micros_to_ms(display_buffer, best_time);
+	// sprintf(copy_buffer, FSTR("Cash $%ld Best Time %s ms"), purse, display_buffer);
+
+	char cash_display[12];
+	char time_display[12];
+
+	sprintf(cash_display, FSTR("$%ld"), purse);
+
+	micros_to_ms(copy_buffer, best_time);
+	sprintf(time_display, FSTR("%s ms"), copy_buffer);
+
+	billboard_data[BILLBOARD_CASH] = cash_display;
+	billboard_data[BILLBOARD_TIME] = time_display;
 
 	while ((time = millis()) < idle_timeout) {
-		run_billboard(copy_buffer);
+		run_billboard(billboard_data);
 
 		if (button_pressed()) {
 			all_leds.activate_leds(button_states, true);

@@ -27,12 +27,12 @@ void BillboardsHandler::update_buffer(char *string) {
 	sprintf_P(_buffer, (char *)pgm_read_ptr(&(_templates[_n_current_template])), string);
 }
 
-void BillboardsHandler::run(unsigned long time, HT16K33Disp * display, char *string){
+void BillboardsHandler::run(unsigned long time, HT16K33Disp * display, char **data){
 	if(handle_blanking(display, time))
 		return;
 	if(terminate_blanking(time))
 		return;
-	process_display(display, string);
+	process_display(display, data);
 	_running = _billboard->step(display, time);
 }
 
@@ -59,10 +59,12 @@ bool BillboardsHandler::terminate_blanking(unsigned long time){
 }
 
 // start next billboard, alternating home (first billboard) and random other billboards
-void BillboardsHandler::process_display(HT16K33Disp * display, char *string){
+void BillboardsHandler::process_display(HT16K33Disp * display, char **data){
 	if (!_running) {
 		process_billboard_switch();
-		update_buffer(string);
+		// if(data[_n_current_template])
+		// 	Serial.println(data[_n_current_template]);
+		update_buffer(data[_n_current_template]);
 		_billboard->begin(display, run_times());
 	}
 }

@@ -47,6 +47,7 @@ void setup_buttons(){
 }
 
 void setup(){
+	// Serial.begin(115200);
 	randomizer.randomize();
 
 	setup_leds();

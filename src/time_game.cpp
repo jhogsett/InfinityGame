@@ -13,8 +13,9 @@ void time_game(){
 	title_prompt(FSTR("The TimeGame"), TITLE_SHOW_TIMES, true);
 
 	int response;
-	response = button_led_prompt(FSTR("Press to Go"));
-	if(response == 0 || response == -1)
+	const bool buttons[] = {false, true, false, true};
+	response = button_led_prompt(FSTR("START   Back"), buttons);
+	if(response == 0 || response == -1 || response == RED_ID)
 		return;
 
 	display.clear();

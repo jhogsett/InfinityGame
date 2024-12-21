@@ -23,7 +23,7 @@ public:
 
 	static const int DEFAULT_SHOW_TIME  = 250;
 	static const int DEFAULT_BLANK_TIME = 250;
-	static const int DEFAULT_FLASH_TIME = 50;
+	static const int DEFAULT_FLASH_TIME = 25; //50;
 
 private:
 	void deactivate_led(int virtual_pin, bool mirror=false);

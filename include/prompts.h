@@ -17,18 +17,23 @@ typedef void (*voidFuncPtr)(void);
 #define DISPLAY_SCROLL_TIME 90
 #define OPTION_FLIP_SCROLL_TIME 100
 
-#define NUM_BILLBOARDS 6
+#define NUM_BILLBOARDS 7
 const char template0[] PROGMEM = "InfinityGame";
-const char template1[] PROGMEM = "Press Any Button to Play";
+const char template1[] PROGMEM = "Press A Button to Play";
 const char template2[] PROGMEM = "Play Silly Slots";
 const char template3[] PROGMEM = "Play The TimeGame";
-const char template4[] PROGMEM = "%s";
-const char template5[] PROGMEM = "LONG PRESS for OPTIONS";
-const char *const templates[] PROGMEM = { template0, template1, template2, template3, template4, template5 };
+const char template4[] PROGMEM = "Your CASH %s";
+const char template5[] PROGMEM = "BEST Time %s";
+const char template6[] PROGMEM = "LONG PRESS for OPTIONS";
+const char *const templates[] PROGMEM = { template0, template1, template2, template3, template4, template5, template6 };
+
+#define BILLBOARD_CASH 4
+#define BILLBOARD_TIME 5
 
 extern BillboardsHandler billboards_handler;
+extern char *billboard_data[NUM_BILLBOARDS];
 
-void run_billboard(char *data);
+void run_billboard(char **data);
 void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr on_long_press);
 int button_led_prompt(const char * prompt, const bool *states = NULL);
 void title_prompt(const char * title, byte times = 1, bool show_panel_leds = false, int show_delay=0);
