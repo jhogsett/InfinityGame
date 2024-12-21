@@ -138,21 +138,17 @@ void title_prompt(const char * title, byte times, int show_panel_leds) {
 		if (display.loop_scroll_string(time, title, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME)) {
 			if (show_panel_leds)
 				panel_leds.step(time);
-
 			// if (button_pressed())
 			// 	break;
-
 			if (button_pressed()) {
 				while ((wait_on_long_press()) == 0)
 					;
 				break;
 			}
-
 		} else
 			break;
 	}
 }
-
 // prompt with panel leds showing only and cycle waiting for any button press
 int panel_led_prompt() {
 	unsigned long time;
