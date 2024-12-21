@@ -1,3 +1,4 @@
+#include "clock.h"
 #include "leds.h"
 #include "play_data.h"
 #include "prompts.h"

@@ -13,3 +13,16 @@ void micros_to_ms(char * buffer, unsigned long micros){
 	ms_frac = micros % 1000;
 	sprintf(buffer, "%u.%04u", ms_dec, ms_frac);
 }
+
+long time_to_seconds(byte second, byte minute, byte hour) {
+	long result = (long)second + (60L * (long)minute) + (3600L * (long)hour);
+	return result;
+}
+
+void seconds_to_time(long seconds, byte &second, byte &minute, byte &hour) {
+	hour = seconds / 3600L;
+	seconds -= hour * 3600L;
+	minute = seconds / 60L;
+	seconds -= minute * 60L;
+	second = seconds;
+}
