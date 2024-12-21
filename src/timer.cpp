@@ -43,7 +43,7 @@ bool decrement_timer(byte &second, byte &minute, byte &hour, int seconds, int mi
 // TODO timer mode should time out per sleep timeout after no activity
 void timer_prompt(byte seconds, byte minutes, byte hours) {
 	unsigned long time = millis();
-	unsigned long sleep_timeout = time + SLEEP_TIMEOUT;
+	unsigned long idle_timeout = time + IDLE_TIMEOUT;
 
 	// unsigned long next_second = millis() + 1000;
 	unsigned long next_second = 0;
@@ -56,7 +56,7 @@ void timer_prompt(byte seconds, byte minutes, byte hours) {
 	render_timer_string(timer_second, timer_minute, timer_hour, running);
 	display.show_string(display_buffer);
 
-	while ((time = millis()) < sleep_timeout) {
+	while ((time = millis()) < idle_timeout) {
 		if (running && time >= next_second) {
 			if (going_up)
 				increment_timer(timer_second, timer_minute, timer_hour);
@@ -76,6 +76,8 @@ void timer_prompt(byte seconds, byte minutes, byte hours) {
 			if (long_press_state == 1) {
 				return;
 			} else {
+				idle_timeout = time + IDLE_TIMEOUT;
+
 				if (button_states[GREEN_ID]) {
 					if (!running) {
 						running = true;

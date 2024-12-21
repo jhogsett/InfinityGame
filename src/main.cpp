@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <Wire.h>
-#include <random_seed.h>
+// #include <random_seed.h>
 #include "buttons.h"
 #include "displays.h"
 #include "hardware.h"
@@ -10,12 +10,13 @@
 #include "options_mode.h"
 #include "play_data.h"
 #include "prompts.h"
+#include "seeding.h"
 #include "slot_game.h"
 #include "time_game.h"
 #include "utils.h"
 
-#define RANDOM_SEED_PIN A1
-static RandomSeed<RANDOM_SEED_PIN> randomizer;
+// #define RANDOM_SEED_PIN A1
+// static RandomSeed<RANDOM_SEED_PIN> randomizer;
 
 void setup_display(){
 	Wire.begin();

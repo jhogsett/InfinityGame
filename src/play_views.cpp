@@ -14,13 +14,13 @@ void display_purse(){
 
 void display_win(long win){
 	sprintf(display_buffer, "WIN * $%ld", win);
-	title_prompt(display_buffer);
+	title_prompt(display_buffer, WIN_SHOW_TIMES, true);
 	delay(ROUND_DELAY);
 }
 
 void display_jackpot(long win){
-	sprintf(display_buffer, "Jackpot Words * $%ld", win);
-	title_prompt(display_buffer);
+	sprintf(display_buffer, "JACKPOT *** $%ld", win);
+	title_prompt(display_buffer, JACKPOT_SHOW_TIMES, true);
 	delay(ROUND_DELAY);
 }
 

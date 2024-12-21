@@ -4,6 +4,9 @@
 #include <Arduino.h>
 #include "buffers.h"
 
+#define WIN_SHOW_TIMES 2
+#define JACKPOT_SHOW_TIMES 3
+
 extern void display_purse();
 extern void display_win(long win);
 extern void display_jackpot(long win);

@@ -13,11 +13,11 @@ class RandomSeed
 
 template<byte pin>
 void RandomSeed<pin>::randomize(void){
-	int seed = analogRead(pin);
+  int seed = 0;
+  while(seed == 0)
 	for(byte i = 0; i < RANDOM_SEED_SAMPLES; i++)
-		seed = (seed << 1) ^ analogRead(0);
-	randomSeed(seed);
+		seed = (seed << 1) ^ analogRead(pin);
+  randomSeed(seed);
 }
-
 
 #endif

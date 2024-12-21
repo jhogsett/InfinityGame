@@ -2,6 +2,6 @@
 #define __TIMEOUTS_H__
 
 #define PROMPT_TIMEOUT 30000L
-#define SLEEP_TIMEOUT 300000L
+#define IDLE_TIMEOUT 300000L
 
 #endif

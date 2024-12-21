@@ -28,7 +28,7 @@ void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr
 	reset_buttons_state();
 
 	unsigned long time = millis();
-	unsigned long sleep_timeout = time + SLEEP_TIMEOUT;
+	unsigned long idle_timeout = time + IDLE_TIMEOUT;
 
 	all_leds.deactivate_leds(true);
 	billboards_handler.reset();
@@ -37,7 +37,7 @@ void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr
 	micros_to_ms(display_buffer, best_time);
 	sprintf(copy_buffer, load_f_string(F("Cash $%ld Best Time %s ms")), purse, display_buffer);
 
-	while ((time = millis()) < sleep_timeout) {
+	while ((time = millis()) < idle_timeout) {
 		run_billboard(copy_buffer);
 
 		if (button_pressed()) {
@@ -113,10 +113,10 @@ int button_led_prompt(const char * prompt, const bool *states) {
 
 // prompt with text showing, no cycle waiting for a response
 // but cancelable with a button press
-void title_prompt(const char * title, byte times, int show_panel_leds) {
+void title_prompt(const char * title, byte times, bool show_panel_leds) {
 	unsigned long time = millis();
 	unsigned long timeout_time = time + PROMPT_TIMEOUT;
-	unsigned long sleep_timeout = time + SLEEP_TIMEOUT;
+	unsigned long idle_timeout = time + IDLE_TIMEOUT;
 
 	if (show_panel_leds)
 		panel_leds.begin(millis(), TITLE_PANEL_LEDS_STYLE, TITLE_PANEL_LEDS_SHOW_TIME, TITLE_PANEL_LEDS_BLANK_TIME);
@@ -134,7 +134,7 @@ void title_prompt(const char * title, byte times, int show_panel_leds) {
 	all_leds.deactivate_leds(true);
 
 	// breaking out of the loop is handled by the display call
-	while ((time = millis()) < sleep_timeout) {
+	while ((time = millis()) < idle_timeout) {
 		if (display.loop_scroll_string(time, title, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME)) {
 			if (show_panel_leds)
 				panel_leds.step(time);
