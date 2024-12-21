@@ -1,9 +1,8 @@
+// minimum reaction time (or a bug?) is 50ms
 // time game choose a color and the average is stored with it, allowing for three profiles
 
 // accumlate the bank (add up all bets)
 // show the bank somewhere
-
-// billboard manager - receive an array of pointers to fill-in strings per billboard, NULL to not use
 
 // have segments disappear randomly or go into place randomly
 
@@ -14,17 +13,12 @@
 
 // last frame of scroll animation seems to skip ahead 1
 
-
 // tests - button closure time while pressed, glitchyness etc., timing of millis
 
 // setting for clock speed
 // it's losing about 2 seconds a day, might be able to tweak the daily clock basis
 
 // the clock should look different in idle mode so you know it's ok not to use a long press (or in idle mode long press to exit)
-
-// use randomizer on each new spin (find out how noisy it is)
-
-// minimum reaction time (or a bug?) is 50ms
 
 // add lm34
 // option to show temp instead of seconds for clock
