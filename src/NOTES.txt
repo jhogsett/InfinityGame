@@ -1,10 +1,14 @@
 // time game choose a color and the average is stored with it, allowing for three profiles
 
+// accumlate the bank (add up all bets)
+// show the bank somewhere
 
+// billboard manager - receive an array of pointers to fill-in strings per billboard, NULL to not use
 
 // have segments disappear randomly or go into place randomly
 
 // keep timer running in the background
+	// save and restore a timer basis when it's started
 
 // if title show times < 3 doesn't show it
 

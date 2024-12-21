@@ -58,9 +58,9 @@ void render_clock_string(byte seconds, byte minutes, byte hours) {
 	}
 
 	if (effective_hours < 10)
-		sprintf(display_buffer, load_f_string(F("   %1d %02d %02d  ")), effective_hours, minutes, seconds);
+		sprintf(display_buffer, FSTR("   %1d %02d %02d  "), effective_hours, minutes, seconds);
 	else
-		sprintf(display_buffer, load_f_string(F("  %2d %02d %02d  ")), effective_hours, minutes, seconds);
+		sprintf(display_buffer, FSTR("  %2d %02d %02d  "), effective_hours, minutes, seconds);
 }
 
 void clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {

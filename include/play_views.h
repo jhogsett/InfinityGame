@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include "buffers.h"
 
+#define CASH_SHOW_TIMES 1
 #define WIN_SHOW_TIMES 2
 #define JACKPOT_SHOW_TIMES 3
 

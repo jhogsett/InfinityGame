@@ -61,7 +61,7 @@ void setup(){
 
 void main_menu(){
 	bool buttons[] = {false, true, false, true};
-	branch_prompt(load_f_string(F("Slot    Time")), slots_game, NULL, time_game, NULL, buttons);
+	branch_prompt(FSTR("Slot    Time"), slots_game, NULL, time_game, NULL, buttons);
 }
 
 void loop()

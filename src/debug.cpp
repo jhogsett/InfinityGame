@@ -16,7 +16,7 @@ void clear_debug_marker(){
 }
 
 void debug_mode(){
-	sprintf(display_buffer, load_f_string(F("Debug Marker %lu")), debug_marker);
+	sprintf(display_buffer, FSTR("Debug Marker %lu"), debug_marker);
 	button_led_prompt(display_buffer);
 	clear_debug_marker();
 }

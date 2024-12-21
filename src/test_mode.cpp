@@ -9,12 +9,12 @@
 #include "test_mode.h"
 
 void test_mode(){
-	if(button_led_prompt(load_f_string(F("Press to start GLITCH TEST"))) < 1)
+	if(button_led_prompt(FSTR("Press to start GLITCH TEST")) < 1)
 		return;
 
 	unsigned long time_out;
 	for(int round_num = 1; round_num <= GLITCH_TEST_TIMES; round_num++){
-		display.scroll_string(load_f_string(F("HOLD A BUTTON")), DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
+		display.scroll_string(FSTR("HOLD A BUTTON"), DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
 		while(digitalRead(ANY_BUTTON) == LOW);
 		time_out = millis() + GLITCH_TEST_TIMEOUT;
 		unsigned long low_count = 0;
@@ -23,19 +23,19 @@ void test_mode(){
 
 		low_count++;
 		}
-		sprintf(display_buffer, load_f_string(F("%d/%d     DONE")), round_num, GLITCH_TEST_TIMES);
+		sprintf(display_buffer, FSTR("%d/%d     DONE"), round_num, GLITCH_TEST_TIMES);
 		display.scroll_string(display_buffer, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
 		while(button_still_pressed());
 		reset_buttons_state();
-		sprintf(display_buffer, load_f_string(F("%ld DROPS")), low_count);
+		sprintf(display_buffer, FSTR("%ld DROPS"), low_count);
 		title_prompt(display_buffer);
 	}
 
 
-	if(button_led_prompt(load_f_string(F("Press to start 60S NOISE TEST"))) < 1)
+	if(button_led_prompt(FSTR("Press to start 60S NOISE TEST")) < 1)
 		return;
 	while(button_still_pressed());
-	title_prompt(load_f_string(F("Starting.....")));
+	title_prompt(FSTR("Starting....."));
 
 	time_out = millis() + NOISE_TEST_TIMEOUT;
 
@@ -54,9 +54,9 @@ void test_mode(){
 		unsigned long remain = time_out - time;
 		unsigned long secs = remain / 1000L;
 		unsigned long dec = remain - (secs * 1000L);
-		sprintf(display_buffer, load_f_string(F("  %2ld.%04ld")), secs, dec);
+		sprintf(display_buffer, FSTR("  %2ld.%04ld"), secs, dec);
 		display.show_string(display_buffer, true, false);
 		panel_leds.activate_leds(states);
 	}
-	button_led_prompt(load_f_string(F("Press any button to EXIT")));
+	button_led_prompt(FSTR("Press any button to EXIT"));
 }

@@ -19,9 +19,9 @@ void render_timer_string(byte seconds, byte minutes, byte hours, bool running) {
 		indicator = "RUN ";
 
 	if (timer_hour < 1)
-		sprintf(display_buffer, load_f_string(F("%s %02d %02d  ")), indicator, timer_minute, timer_second);
+		sprintf(display_buffer, FSTR("%s %02d %02d  "), indicator, timer_minute, timer_second);
 	else {
-		sprintf(display_buffer, load_f_string(F("%s %02d. %02d  ")), indicator, timer_hour, timer_minute);
+		sprintf(display_buffer, FSTR("%s %02d. %02d  "), indicator, timer_hour, timer_minute);
 	}
 }
 

@@ -35,7 +35,7 @@ void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr
 	panel_leds.begin(time, LEDHandler::STYLE_RANDOM, 750, 350); // TODO
 
 	micros_to_ms(display_buffer, best_time);
-	sprintf(copy_buffer, load_f_string(F("Cash $%ld Best Time %s ms")), purse, display_buffer);
+	sprintf(copy_buffer, FSTR("Cash $%ld Best Time %s ms"), purse, display_buffer);
 
 	while ((time = millis()) < idle_timeout) {
 		run_billboard(copy_buffer);
@@ -113,7 +113,9 @@ int button_led_prompt(const char * prompt, const bool *states) {
 
 // prompt with text showing, no cycle waiting for a response
 // but cancelable with a button press
-void title_prompt(const char * title, byte times, bool show_panel_leds) {
+// show_panel_leds = true to have them cycle
+// show_delay = ensure delay between multiple titles
+void title_prompt(const char * title, byte times, bool show_panel_leds, int show_delay) {
 	unsigned long time = millis();
 	unsigned long timeout_time = time + PROMPT_TIMEOUT;
 	unsigned long idle_timeout = time + IDLE_TIMEOUT;
@@ -138,8 +140,6 @@ void title_prompt(const char * title, byte times, bool show_panel_leds) {
 		if (display.loop_scroll_string(time, title, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME)) {
 			if (show_panel_leds)
 				panel_leds.step(time);
-			// if (button_pressed())
-			// 	break;
 			if (button_pressed()) {
 				while ((wait_on_long_press()) == 0)
 					;
@@ -148,7 +148,26 @@ void title_prompt(const char * title, byte times, bool show_panel_leds) {
 		} else
 			break;
 	}
+
+	// keep checking for a button press and optionally keep the leds cycling during the show delay
+	// the display is no longer scrolled during this period
+	if(show_delay){
+		unsigned long show_timeout = millis() + show_delay;
+		while ((time = millis()) < show_timeout) {
+			if (show_panel_leds)
+				panel_leds.step(time);
+			if (button_pressed()) {
+				while ((wait_on_long_press()) == 0)
+					;
+				break;
+			}
+		}
+	}
+
+	if (show_panel_leds)
+		panel_leds.deactivate_leds();
 }
+
 // prompt with panel leds showing only and cycle waiting for any button press
 int panel_led_prompt() {
 	unsigned long time;
