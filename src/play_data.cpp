@@ -8,6 +8,10 @@ long purse = DEFAULT_PURSE;
 unsigned long best_time = (unsigned long)-1;
 bool option_clock_24h = false;
 bool option_clock_on_idle = false;
+unsigned long bank = DEFAULT_BANK;
+unsigned long best_time1 = (unsigned long)-1;
+unsigned long best_time2 = (unsigned long)-1;
+unsigned long best_time3 = (unsigned long)-1;
 
 void load_save_data(){
 	SavedData saved_data;
@@ -24,6 +28,10 @@ void load_save_data(){
 	best_time = saved_data.best_time;
 	option_clock_24h = saved_data.option_clock_24h;
 	option_clock_on_idle = saved_data.option_clock_on_idle;
+	bank = saved_data.bank;
+	best_time1 = saved_data.best_time1;
+	best_time2 = saved_data.best_time2;
+	best_time3 = saved_data.best_time3;
 }
 
 void save_data(){
@@ -35,6 +43,10 @@ void save_data(){
 	saved_data.best_time = best_time;
 	saved_data.option_clock_24h = option_clock_24h;
 	saved_data.option_clock_on_idle = option_clock_on_idle;
+	saved_data.bank = bank;
+	saved_data.best_time1 = best_time1;
+	saved_data.best_time2 = best_time2;
+	saved_data.best_time3 = best_time3;
 	EEPROM.put(0, saved_data);
 }
 
@@ -45,5 +57,9 @@ void reset_options(){
 	best_time = (unsigned long)-1;
 	option_clock_24h = false;
 	option_clock_on_idle = false;
+	bank = DEFAULT_BANK;
+	best_time1 = (unsigned long)-1;
+	best_time2 = (unsigned long)-1;
+	best_time3 = (unsigned long)-1;
 	save_data();
 }

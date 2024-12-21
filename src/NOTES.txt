@@ -1,33 +1,29 @@
-// make the jackpot win more prominent
+// minimum reaction time (or a bug?) is 50ms
+// time game choose a color and the average is stored with it, allowing for three profiles
 
-
-	// TODO replace while(true) with a sleep timeout
-	// TODO rename sleep timeout idle timeout
-
-
+// accumlate the bank (add up all bets)
+// show the bank somewhere
 
 // have segments disappear randomly or go into place randomly
 
 // keep timer running in the background
+	// save and restore a timer basis when it's started
 
 // if title show times < 3 doesn't show it
 
 // last frame of scroll animation seems to skip ahead 1
 
-// time game choose a color and the average is stored with it, allowing for three profiles
-
 // tests - button closure time while pressed, glitchyness etc., timing of millis
 
-// options for idle time
-
 // setting for clock speed
+// it's losing about 2 seconds a day, might be able to tweak the daily clock basis
 
 // the clock should look different in idle mode so you know it's ok not to use a long press (or in idle mode long press to exit)
 
-	// TODO rename sleep timeout idle timeout
+// add lm34
+// option to show temp instead of seconds for clock
+// option for c or f
 
-// TODO timer mode should time out per sleep timeout after no activity
-
-// use randomizer on each new spin (find out how noisy it is)
-
-// minimum reaction time (or a bug?) is 50ms
+options for timeout time
+- prompt timeouts
+- idle timeouts

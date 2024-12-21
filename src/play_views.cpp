@@ -7,31 +7,31 @@
 #include "utils.h"
 
 void display_purse(){
-	sprintf(display_buffer, "CASH $%ld", purse);
-	title_prompt(display_buffer);
-	delay(ROUND_DELAY);
+	sprintf(display_buffer, FSTR("CASH $%ld"), purse);
+	title_prompt(display_buffer, CASH_SHOW_TIMES, false, ROUND_DELAY);
+	// delay(ROUND_DELAY);
 }
 
 void display_win(long win){
-	sprintf(display_buffer, "WIN * $%ld", win);
-	title_prompt(display_buffer);
-	delay(ROUND_DELAY);
+	sprintf(display_buffer, FSTR("WIN * $%ld"), win);
+	title_prompt(display_buffer, WIN_SHOW_TIMES, true, ROUND_DELAY);
+	// delay(ROUND_DELAY);
 }
 
 void display_jackpot(long win){
-	sprintf(display_buffer, "Jackpot Words * $%ld", win);
-	title_prompt(display_buffer);
-	delay(ROUND_DELAY);
+	sprintf(display_buffer, FSTR("JACKPOT *** $%ld"), win);
+	title_prompt(display_buffer, JACKPOT_SHOW_TIMES, true, ROUND_DELAY);
+	// delay(ROUND_DELAY);
 }
 
 char *numeric_bet_str(long bet){
-	sprintf(copy_buffer, load_f_string(F("$%ld")), bet);
+	sprintf(copy_buffer, FSTR("$%ld"), bet);
 	return copy_buffer;
 }
 
 char *standard_bet_str(byte bet){
 	if(bet == BET_ALL){
-		sprintf(copy_buffer, load_f_string(F("ALL")));
+		sprintf(copy_buffer, FSTR("ALL"));
 		return copy_buffer;
 	} else
 		return numeric_bet_str(bet_amounts[bet]);

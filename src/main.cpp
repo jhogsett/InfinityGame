@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <Wire.h>
-#include <random_seed.h>
+// #include <random_seed.h>
 #include "buttons.h"
 #include "displays.h"
 #include "hardware.h"
@@ -10,12 +10,13 @@
 #include "options_mode.h"
 #include "play_data.h"
 #include "prompts.h"
+#include "seeding.h"
 #include "slot_game.h"
 #include "time_game.h"
 #include "utils.h"
 
-#define RANDOM_SEED_PIN A1
-static RandomSeed<RANDOM_SEED_PIN> randomizer;
+// #define RANDOM_SEED_PIN A1
+// static RandomSeed<RANDOM_SEED_PIN> randomizer;
 
 void setup_display(){
 	Wire.begin();
@@ -46,6 +47,7 @@ void setup_buttons(){
 }
 
 void setup(){
+	// Serial.begin(115200);
 	randomizer.randomize();
 
 	setup_leds();
@@ -60,7 +62,7 @@ void setup(){
 
 void main_menu(){
 	bool buttons[] = {false, true, false, true};
-	branch_prompt(load_f_string(F("Slot    Time")), slots_game, NULL, time_game, NULL, buttons);
+	branch_prompt(FSTR("Slot    Time"), slots_game, NULL, time_game, NULL, buttons);
 }
 
 void loop()

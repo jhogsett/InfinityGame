@@ -9,7 +9,7 @@
 #include "debug.h"
 
 void tools_menu(){
-	switch(button_led_prompt(load_f_string(F("CLOCK   Go  ")))){
+	switch(button_led_prompt(FSTR("CLOCK   Go  "))){
 	case -1:
 		return;
 	case 3:
@@ -17,7 +17,7 @@ void tools_menu(){
 		return;
 	}
 
-	switch(button_led_prompt(load_f_string(F("TIMER   Go  ")))){
+	switch(button_led_prompt(FSTR("TIMER   Go  "))){
 	case -1:
 		return;
 	case 3:
@@ -25,7 +25,7 @@ void tools_menu(){
 		return;
 	}
 
-	switch(button_led_prompt(load_f_string(F("SLEEP   Go  ")))){
+	switch(button_led_prompt(FSTR("SLEEP   Go  "))){
 	case -1:
 		return;
 	case 3:
@@ -33,7 +33,7 @@ void tools_menu(){
 		return;
 	}
 
-	switch(button_led_prompt(load_f_string(F("RESET   Go  ")))){
+	switch(button_led_prompt(FSTR("RESET   Go  "))){
 	case -1:
 		return;
 	case 3:
@@ -41,7 +41,7 @@ void tools_menu(){
 		return;
 	}
 
-	switch(button_led_prompt(load_f_string(F("TEST    Go  ")))){
+	switch(button_led_prompt(FSTR("TEST    Go  "))){
 	case -1:
 		return;
 	case 3:
@@ -49,7 +49,7 @@ void tools_menu(){
 		return;
 	}
 
-	switch(button_led_prompt(load_f_string(F("DEBUG   Go  ")))){
+	switch(button_led_prompt(FSTR("DEBUG   Go  "))){
 	case -1:
 		return;
 	case 3:
