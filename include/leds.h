@@ -12,7 +12,7 @@
 #define DEFAULT_BUTTON_LEDS_BLANK_TIME 400
 #define TITLE_PANEL_LEDS_SHOW_TIME     100
 #define TITLE_PANEL_LEDS_BLANK_TIME    0
-#define TITLE_PANEL_LEDS_STYLE (LEDHandler::STYLE_PLAIN)
+#define TITLE_PANEL_LEDS_STYLE (LEDHandler::STYLE_RANDOM)
 
 #define LED_INTENSITY1 32 // Green panel LED is a bit brighter than the Amber and Red LEDs
 #define LED_INTENSITY2 40 // Amber panel LED matched to Green
