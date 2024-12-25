@@ -136,3 +136,38 @@ void LEDHandler::flash_leds(bool mirror, long time){
 			digitalWrite(virtual_pin + _first_pin + (_num_leds / 2), LOW);
 	}
 }
+
+// flash the LEDs at full intensity, non-blocking
+void LEDHandler::begin_flash(bool mirror, int on_time){
+	_flash_mirror = mirror;
+	_flash_pins = mirror ? (_num_leds / 2) : _num_leds;
+
+	for(int virtual_pin = 0; virtual_pin < _flash_pins; virtual_pin++){
+		digitalWrite(virtual_pin + _first_pin, HIGH);
+		if(_flash_mirror)
+			digitalWrite(virtual_pin + _first_pin + (_num_leds / 2), HIGH);
+	}
+
+	_flash_on_time = on_time != 0 ? on_time : DEFAULT_FLASH_TIME;
+	_flash_state = true;
+	_next_flash_change = millis() + _flash_on_time;
+}
+
+// returns true to keep going
+bool LEDHandler::step_flash(unsigned long time){
+	if(!_flash_state)
+		// already done flashing
+		return false;
+
+	if(time < _next_flash_change)
+		// not time yet to stop flash
+		return true;
+
+	// currently on, turn off
+	for(int virtual_pin = 0; virtual_pin < _flash_pins; virtual_pin++){
+		digitalWrite(virtual_pin + _first_pin, LOW);
+		if(_flash_mirror)
+			digitalWrite(virtual_pin + _first_pin + (_num_leds / 2), LOW);
+	}
+	_flash_state = false;
+}
