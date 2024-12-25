@@ -8,6 +8,7 @@
 #include "prompts.h"
 #include "utils.h"
 #include "time_game.h"
+#include "debug.h"
 
 void time_game(){
 	title_prompt(FSTR("The TimeGame"), TITLE_SHOW_TIMES, true);
@@ -22,6 +23,7 @@ void time_game(){
 	delay(ROUND_DELAY);
 
 	unsigned long mean = 0;
+	bool fault = false;
 	for(byte i = 0; i < ROUNDS; i++){
 		button_leds.activate_all(true);
 		display.scroll_string(FSTR("Wait 4 FLASH"), DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
@@ -32,11 +34,32 @@ void time_game(){
 		int del = random(MIN_DELAY, MAX_DELAY+1);
 		delay(del);
 
+		while(digitalRead(ANY_BUTTON) == HIGH){
+			// player already pressing button
+			set_debug_marker(1);
+			;
+		}
+
 		unsigned long start_time = micros();
-		panel_leds.flash_leds();
+
+		// panel_leds.flash_leds();
+		panel_leds.begin_flash(false, 0);
+		panel_leds.step_flash(millis());
+
+		// if(digitalRead(ANY_BUTTON) == HIGH){
+		// 	fault = true;
+		// 	break;
+		// }
+
+		while(digitalRead(ANY_BUTTON) == HIGH){
+			set_debug_marker(1);
+			// button is glitched on by flashing LEDs?
+			panel_leds.step_flash(millis());
+		}
 
 		while(digitalRead(ANY_BUTTON) == LOW)
-			;
+			panel_leds.step_flash(millis());
+
 		unsigned long reaction_time = micros() - start_time;
 		while(digitalRead(ANY_BUTTON) == HIGH)
 			;
@@ -48,6 +71,12 @@ void time_game(){
 		display.scroll_string(display_buffer, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
 		delay(ROUND_DELAY);
 		display.clear();
+	}
+
+	if(fault){
+		sprintf(display_buffer, FSTR("FAULT - Button Problem - Try Again"));
+		while(button_led_prompt(display_buffer) == -1);
+		return;
 	}
 
 	while(button_pressed());
