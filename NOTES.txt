@@ -1,3 +1,6 @@
+// implement non-blocking delay and use it to speed up repeated slots play (press to bypass cash display)
+
+
 // minimum reaction time (or a bug?) is 50ms
 // time game choose a color and the average is stored with it, allowing for three profiles
 
