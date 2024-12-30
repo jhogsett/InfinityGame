@@ -12,6 +12,7 @@
 #include "prompts.h"
 #include "seeding.h"
 #include "slot_game.h"
+#include "speaker.h"
 #include "time_game.h"
 #include "utils.h"
 
@@ -58,6 +59,9 @@ void setup(){
 
 	attachInterrupt(digitalPinToInterrupt(ANY_BUTTON), button_pressed_i, RISING);
 	button_states[ANY_COLOR_ID] = false;
+
+	if(option_sound)
+		beep();
 }
 
 void main_menu(){
