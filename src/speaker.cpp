@@ -20,10 +20,16 @@ void beep_gap(int inv_freq, int pulses){
   }
 }
 
-void beeps(int times, int gap, int inv_freq, int pulses){
+void beeps(int times, int inv_freq, int pulses){
   for(int i = 0; i < times; i++){
     beep(inv_freq, pulses);
     beep_gap(inv_freq, pulses);
   }
-  delay(gap);
+}
+
+void alert(int times, int gap, int beep_times, int inv_freq, int pulses){
+	for(int i = 0; i < times; i++){
+		beeps(beep_times, inv_freq, pulses);
+		delay(gap);
+	}
 }

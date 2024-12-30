@@ -68,10 +68,11 @@ void timer_prompt(byte seconds, byte minutes, byte hours) {
 				increment_timer(timer_second, timer_minute, timer_hour);
 			else if (!decrement_timer(timer_second, timer_minute, timer_hour)){
 				running = false;
+				idle_timeout = time + IDLE_TIMEOUT;
 				render_timer_string(timer_second, timer_minute, timer_hour, running);
 				display.show_string(display_buffer);
 				if(option_sound)
-					beeps();
+					alert();
 			}
 			render_timer_string(timer_second, timer_minute, timer_hour, running);
 			display.show_string(display_buffer);
