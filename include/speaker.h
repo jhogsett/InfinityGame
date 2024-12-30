@@ -1,7 +1,6 @@
 #ifndef __SPEAKER_H__
 #define __SPEAKER_H__
 
-#define SPEAKER_PIN 13
 #define INV_FREQUENCY 339
 #define BEEP_PULSES 110
 #define BEEPS_TIMES 4

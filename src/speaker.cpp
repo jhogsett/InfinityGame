@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "hardware.h"
 #include "speaker.h"
 
 void beep(int inv_freq, int pulses){
