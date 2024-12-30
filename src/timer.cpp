@@ -5,6 +5,8 @@
 #include "displays.h"
 #include "hardware.h"
 #include "leds.h"
+#include "play_data.h"
+#include "speaker.h"
 #include "timeouts.h"
 #include "utils.h"
 #include "timer.h"
@@ -56,12 +58,22 @@ void timer_prompt(byte seconds, byte minutes, byte hours) {
 	render_timer_string(timer_second, timer_minute, timer_hour, running);
 	display.show_string(display_buffer);
 
-	while ((time = millis()) < idle_timeout) {
+	while(true){
+		time = millis();
+		if(!running && (time >= idle_timeout))
+			break;
+
 		if (running && time >= next_second) {
 			if (going_up)
 				increment_timer(timer_second, timer_minute, timer_hour);
-			else if (!decrement_timer(timer_second, timer_minute, timer_hour))
+			else if (!decrement_timer(timer_second, timer_minute, timer_hour)){
 				running = false;
+				idle_timeout = time + IDLE_TIMEOUT;
+				render_timer_string(timer_second, timer_minute, timer_hour, running);
+				display.show_string(display_buffer);
+				if(option_sound)
+					alert();
+			}
 			render_timer_string(timer_second, timer_minute, timer_hour, running);
 			display.show_string(display_buffer);
 			next_second = time + 1000;
