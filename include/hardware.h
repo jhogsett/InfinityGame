@@ -25,5 +25,6 @@
 #define GREEN_BUTTON_LED 6
 #define AMBER_BUTTON_LED 7
 #define RED_BUTTON_LED 8
+#define SPEAKER_PIN 13
 
 #endif
