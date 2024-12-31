@@ -15,7 +15,7 @@ void time_game(){
 
 	int response;
 	const bool buttons[] = {false, true, false, true};
-	response = button_led_prompt(FSTR("START   Back"), buttons);
+	response = button_led_prompt(FSTR(" GO     Back"), buttons);
 	if(response == 0 || response == -1 || response == RED_ID)
 		return;
 
@@ -40,10 +40,10 @@ void time_game(){
 			;
 		}
 
+		panel_leds.begin_flash(false, 0);
 		unsigned long start_time = micros();
 
 		// panel_leds.flash_leds();
-		panel_leds.begin_flash(false, 0);
 		panel_leds.step_flash(millis());
 
 		// if(digitalRead(ANY_BUTTON) == HIGH){
@@ -62,7 +62,7 @@ void time_game(){
 
 		unsigned long reaction_time = micros() - start_time;
 		while(digitalRead(ANY_BUTTON) == HIGH)
-			;
+			panel_leds.step_flash(millis());
 
 		mean += reaction_time;
 
@@ -106,5 +106,6 @@ void time_game(){
 		sprintf(display_buffer, FSTR("* Best Time %s ms"), copy_buffer);
 	}
 
-	while(button_led_prompt(display_buffer) == -1);
+	// while(button_led_prompt(display_buffer) == -1);
+	button_led_prompt(display_buffer);
 }
