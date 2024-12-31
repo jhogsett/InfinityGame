@@ -4,7 +4,7 @@
 #define INV_FREQUENCY 339
 #define BEEP_PULSES 90
 #define BEEPS_TIMES 4
-#define ALERT_TIMES 2
+#define ALERT_TIMES 3
 #define ALERT_DELAY 600
 
 extern void beep(int inv_freq = INV_FREQUENCY, int pulses = BEEP_PULSES);

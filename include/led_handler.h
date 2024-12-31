@@ -3,6 +3,10 @@
 
 // for STYLE_MIRROR, the secondary LEDs mirroring the first are expected to be in the upper half of the set of LED pins
 
+#define FLASH_STATE_START 0
+#define FLASH_STATE_RUN   1
+#define FLASH_STATE_DONE  2
+
 class LEDHandler
 {
 public:
@@ -15,6 +19,9 @@ public:
 	void deactivate_leds(bool mirror=false);
 	void flash_leds(bool mirror=false, long time=0);
 
+	void begin_flash(bool mirror, int on_time);
+	bool step_flash(unsigned long time);
+
 	static const int STYLE_PLAIN    = 0x00; // one LED at a time sequentially
 	static const int STYLE_RANDOM   = 0x01; // one LED at a time randomly
 	static const int STYLE_BLANKING = 0x02; // blanking period between LED activations
@@ -23,7 +30,7 @@ public:
 
 	static const int DEFAULT_SHOW_TIME  = 250;
 	static const int DEFAULT_BLANK_TIME = 250;
-	static const int DEFAULT_FLASH_TIME = 25; //50;
+	static const int DEFAULT_FLASH_TIME = 100; //50;
 
 private:
 	void deactivate_led(int virtual_pin, bool mirror=false);
@@ -41,9 +48,13 @@ private:
 	int _num_frames;
 	int _num_states;
 	bool _blanking;
-	char _active;
-		   // virtual current active led or other state
+	char _active;			// virtual current active led or other state
 
+	bool _flash_mirror;
+	int _flash_on_time;
+	bool _flash_state;
+	int _flash_pins;
+	unsigned long _next_flash_change;
 };
 
 #endif
