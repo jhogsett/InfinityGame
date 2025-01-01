@@ -6,15 +6,21 @@
 typedef void (*voidFuncPtr)(void);
 
 // Billboard display related
+// number of times to show home billboard "InfinityGame" (effectively time of display because no scroll needed)
 #define HOME_TIMES 5
+// blacking time between billboards
 #define BLANKING_TIME 600
 
 // Prompt related
+// number of times to show a title, such as a game title (or effective time of display if no scroll needed)
 #define TITLE_SHOW_TIMES 3
 
-// display handling
+// Display handling
+// show a display string for 700ms before beginning scrolling for ease of reading
 #define DISPLAY_SHOW_TIME 700
+// scroll the display every 90ms for ease of reading
 #define DISPLAY_SCROLL_TIME 90
+// scroll flipped options every 100ms
 #define OPTION_FLIP_SCROLL_TIME 100
 
 #define NUM_BILLBOARDS 7
@@ -27,6 +33,7 @@ const char template5[] PROGMEM = "BEST Time %s";
 const char template6[] PROGMEM = "LONG PRESS for OPTIONS";
 const char *const templates[] PROGMEM = { template0, template1, template2, template3, template4, template5, template6 };
 
+// Identify array position for placing fill-in data
 #define BILLBOARD_CASH 4
 #define BILLBOARD_TIME 5
 

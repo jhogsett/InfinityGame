@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 
+// current timer value as set by the user
 extern byte timer_hour, timer_minute, timer_second;
 
 extern void render_timer_string(byte seconds, byte minutes, byte hours, bool running);

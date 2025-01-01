@@ -5,8 +5,13 @@
 #define FSTRING_BUFFER 71
 #define COPY_BUFFER 71
 
+// string buffer used to prepare text to go to the display
 extern char display_buffer[DISPLAY_BUFFER];
+
+// string buffer used to load string data from program memory (F() strings)
 extern char fstring_buffer[FSTRING_BUFFER];
+
+// general purpose buffer used for preparing data for display
 extern char copy_buffer[COPY_BUFFER];
 
 #endif

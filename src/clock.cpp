@@ -21,8 +21,6 @@ void establish_clock_basis(byte seconds, byte minutes, byte hours) {
 	time_basis = total_seconds * 1000L;
 }
 
-// #define MAX_MS_PER_DAY (1000L * 24L * 60L * 60L)
-
 long time_in_seconds() {
 	unsigned long time_in_ms = millis() - clock_basis + time_basis;
 	if (time_in_ms > MAX_MS_PER_DAY) {

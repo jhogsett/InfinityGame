@@ -2,6 +2,7 @@
 #define __BILLBOARD_H__
 #include <HT16K33Disp.h>
 
+// Handles display of a single billboard (billboads are a set of pre-defined messages shown while awake idling)
 class Billboard
 {
 public:

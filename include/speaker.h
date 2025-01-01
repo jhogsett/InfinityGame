@@ -1,10 +1,15 @@
 #ifndef __SPEAKER_H__
 #define __SPEAKER_H__
 
+// empirically discovered loudest and most pleasant resonant frequency of the particular speaker used in the v2 PLA 3D printed cabinet
 #define INV_FREQUENCY 339
+// how many pulses to create a beep
 #define BEEP_PULSES 90
+// how many times to beep (with an equal sized paused in between)
 #define BEEPS_TIMES 4
+// how many times to play the four-beeps to alert the user (that the Timer has elapsed)
 #define ALERT_TIMES 3
+// delay between the four-beeps
 #define ALERT_DELAY 600
 
 extern void beep(int inv_freq = INV_FREQUENCY, int pulses = BEEP_PULSES);

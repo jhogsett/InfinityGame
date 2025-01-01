@@ -3,6 +3,10 @@
 #include <HT16K33Disp.h>
 #include "billboard.h"
 
+// Manages the display of a set of billboards
+// The 'home' billboard is display between every other billboard
+// an array of string templates are provides, optionally containing a '%s' string format specifier
+// an array of fill-in string data is provided (NULL array entry OK if no fill-in needed)
 class BillboardsHandler
 {
 public:
