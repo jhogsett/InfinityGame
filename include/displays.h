@@ -7,11 +7,18 @@
 #define DISPLAY_BRIGHTNESS2 9  // Orange needs balance between Emerald Green and REd
 #define DISPLAY_BRIGHTNESS3 15 // Red needs maximum brightness to match minimum Emerald Green brightness
 
+// main 12 digit full display
 extern HT16K33Disp display;
+
+// individual green, amber and red displays
 extern HT16K33Disp disp1;
 extern HT16K33Disp disp2;
 extern HT16K33Disp disp3;
+
+// array of the individual displays
 extern HT16K33Disp displays[];
+
+// used for matching the displays
 extern const byte display_brightnesses[];
 
 #endif

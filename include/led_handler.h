@@ -1,12 +1,7 @@
 #ifndef __LED_HANDLER_H__
 #define __LED_HANDLER_H__
 
-// for STYLE_MIRROR, the secondary LEDs mirroring the first are expected to be in the upper half of the set of LED pins
-
-#define FLASH_STATE_START 0
-#define FLASH_STATE_RUN   1
-#define FLASH_STATE_DONE  2
-
+// Handles activation and animation of panel and button LEDs
 class LEDHandler
 {
 public:
@@ -26,11 +21,12 @@ public:
 	static const int STYLE_RANDOM   = 0x01; // one LED at a time randomly
 	static const int STYLE_BLANKING = 0x02; // blanking period between LED activations
 	static const int STYLE_MIRROR   = 0x04; // same output for panel and button LEDs
+	// for STYLE_MIRROR, the secondary LEDs mirroring the first are expected to be in the upper half of the set of LED pins
 	// static const int STYLE_STALLING = 0x08; // blanking period between rounds
 
 	static const int DEFAULT_SHOW_TIME  = 250;
 	static const int DEFAULT_BLANK_TIME = 250;
-	static const int DEFAULT_FLASH_TIME = 100; //50;
+	static const int DEFAULT_FLASH_TIME = 100;
 
 private:
 	void deactivate_led(int virtual_pin, bool mirror=false);
@@ -56,5 +52,11 @@ private:
 	int _flash_pins;
 	unsigned long _next_flash_change;
 };
+
+// used to manage non-block LED flash
+// TODO move into the class
+#define FLASH_STATE_START 0
+#define FLASH_STATE_RUN   1
+#define FLASH_STATE_DONE  2
 
 #endif
