@@ -75,6 +75,78 @@ int shuffle_word(char *buffer, int size, int min_times, int max_times){
 	return times;
 }
 
+// returns -1 on time out or long press, 0 if player exceeds maximum moves, otherwise winning factor
+// returns -2 if user wins in one move
+int word_game_round(bool rude){
+	const char **words;
+	if(rude)
+		words = rude_words;
+	else
+		words = nice_words;
+
+	sprintf(display_buffer, FSTR("<-- <--> -->"));
+	title_prompt(display_buffer, INSTRUCTION_SHOW_TIMES, false, ROUND_DELAY);
+
+	randomizer.randomize();
+	int word_choice = random(NUM_WORDS);
+	strcpy(chosen_word, words[word_choice]);
+	strcpy(scramble_word, words[word_choice]);
+
+	int scramble_moves = 0;
+	while(strcmp(scramble_word, chosen_word) == 0){
+		scramble_moves = shuffle_word(scramble_word, WORD_WIDTH, SHUFFLE_TIMES_MIN, SHUFFLE_TIMES_MAX);
+	}
+	int player_moves = 0;
+
+	unsigned long idle_timeout = millis() + IDLE_TIMEOUT;
+	unsigned long time;
+
+	while((time = millis()) < idle_timeout){
+		sprintf(display_buffer, FSTR("<-- %s -->"), scramble_word);
+		const bool states[] = {false, true, true, true};
+		switch(button_led_prompt(display_buffer, states)){
+			case -1:
+				return -1;
+			case 0:
+				return -1;
+			case 1:
+				// player_moves++;
+				rotate_left(scramble_word, WORD_WIDTH);
+				break;
+			case 2:
+				// player_moves++;
+				flip(scramble_word, WORD_WIDTH);
+				break;
+			case 3:
+				// player_moves++;
+				rotate_right(scramble_word, WORD_WIDTH);
+				break;
+		}
+
+		idle_timeout = millis() + IDLE_TIMEOUT;
+
+		while(button_pressed())
+			;
+
+		if(player_moves > MAX_MOVES){
+			return 0;
+		} else {
+			player_moves++;
+		}
+
+		// word found, compute winning factor
+		if(strcmp(scramble_word, chosen_word) == 0){
+			if(player_moves == 1)
+				return -2;
+			int factor = scramble_moves - player_moves;
+			if(factor < 1)
+				factor = 1;
+			return factor;
+		}
+	}
+	return -1;
+}
+
 void word_game(){
 	title_prompt(FSTR("The WordGame"), TITLE_SHOW_TIMES, true);
 
@@ -96,107 +168,44 @@ void word_game(){
 		break;
 	}
 
-	const char **words;
-	if(rude)
-		words = rude_words;
-	else
-		words = nice_words;
-
-	sprintf(display_buffer, FSTR("<-- Flip -->"));
-	title_prompt(display_buffer, INSTRUCTION_SHOW_TIMES, false, ROUND_DELAY);
-
-	randomizer.randomize();
-	int word_choice = random(NUM_WORDS);
-	strcpy(chosen_word, words[word_choice]);
-	strcpy(scramble_word, words[word_choice]);
-
-	int scramble_moves = 0;
-	while(strcmp(scramble_word, chosen_word) == 0){
-		scramble_moves = shuffle_word(scramble_word, WORD_WIDTH, SHUFFLE_TIMES_MIN, SHUFFLE_TIMES_MAX);
-	}
-	int player_moves = 0;
-
 	unsigned long idle_timeout = millis() + IDLE_TIMEOUT;
 	unsigned long time;
 
 	while((time = millis()) < idle_timeout){
-		// bet_amounts[BET_ALL] = purse;
-		sprintf(display_buffer, FSTR("<-- %s -->"), scramble_word);
-		const bool states[] = {false, true, true, true};
-		switch(button_led_prompt(display_buffer, states)){
+		int round_result = word_game_round(rude);
+		switch(round_result){
 			case -1:
+				// timed out of long press
 				return;
 			case 0:
-				return;
-			case 1:
-				player_moves++;
-				rotate_left(scramble_word, WORD_WIDTH);
-				break;
-			case 2:
-				player_moves++;
-				flip(scramble_word, WORD_WIDTH);
-				break;
-			case 3:
-				player_moves++;
-				rotate_right(scramble_word, WORD_WIDTH);
-				break;
+				// exceeded max moves
+				sprintf(display_buffer, FSTR("Out Of Moves"));
+				title_prompt(display_buffer, EXCEEDED_SHOW_TIMES, false, ROUND_DELAY);
+				continue;
 		}
 
-		idle_timeout = millis() + IDLE_TIMEOUT;
+		sprintf(display_buffer, FSTR("%s%s%s"), scramble_word, scramble_word, scramble_word);
+		title_prompt(display_buffer, SUCCESS_SHOW_TIMES, false, ROUND_DELAY);
 
-		// int win = 0;
-		// bool jackpot = false;
-		// purse -= bet_amounts[current_bet];
-		// save_data();
-
-		// slots_round(rude);
-
-		while(button_pressed())
-			;
-
-		// const char **words;
-		// if(rude)
-		// 	words = rude_words;
-		// else
-		// 	words = nice_words;
-
-		if(strcmp(scramble_word, chosen_word) == 0){
-			sprintf(display_buffer, FSTR("    %s    "), scramble_word);
-			title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);
+		int win = 0;
+		if(round_result == -2){
+			// win in one move
+			win = WIN_IN_1_BONUS * BASE_WIN_CASE;
+			display_win(win);
+		} else {
+			// subtract one, which is the minumum win value returned each time
+			win = (round_result-1) * BASE_WIN_CASE;
+			if(win > 0)
+				display_win(win);
 		}
 
+		if(win > 0){
+			purse += win;
+			save_data();
+		}
 
-		// if(jackpot_words_chosen(jackpot_choice1, jackpot_choice2, jackpot_choice3)){
-		// 	win = WIN_JACKPOT;
-		// 	jackpot = true;
-		// } else if(triple_word_chosen()){
-		// 	win = WIN_TRIPLE;
-		// 	if(special_word_chosen())
-		// 		win *= WIN_WORD_BONUS;
-		// } else if(double_word_chosen()){
-		// 	win = WIN_DOUBLE;
-		// 	if(special_word_chosen())
-		// 		win *= WIN_WORD_BONUS;
-		// } else if(choice1 < WIN_WORD_CUTOFF || choice2 < WIN_WORD_CUTOFF || choice3 < WIN_WORD_CUTOFF) {
-		// 	win = WIN_WORD;
-		// }
-
-		// win *= bet_amounts[current_bet];
-
-		// if(jackpot)
-		// 	display_jackpot(win);
-		// else if(win)
-		// 	display_win(win);
-		// else
-		// 	// see the non-winning results in lieu of being told you lost
-		// 	delay(ROUND_DELAY);
-
-		// purse += win;
-		// save_data();
-
-		// display_purse();
+		display_purse();
 	}
-
 }
 
 
