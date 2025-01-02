@@ -47,9 +47,6 @@ void flip(char *buffer, int size){
 #define MOVE_MIN 1
 #define MOVE_MAX 3
 
-#define SHUFFLE_TIMES_MIN 3
-#define SHUFFLE_TIMES_MAX 6
-
 int shuffle_word(char *buffer, int size, int min_times, int max_times){
 	int times = random(min_times, max_times+1);
 	int last_move = MOVE_NONE;
