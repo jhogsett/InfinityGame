@@ -170,4 +170,5 @@ bool LEDHandler::step_flash(unsigned long time){
 			digitalWrite(virtual_pin + _first_pin + (_num_leds / 2), LOW);
 	}
 	_flash_state = false;
+	return false;
 }

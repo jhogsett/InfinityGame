@@ -15,6 +15,7 @@
 #include "speaker.h"
 #include "time_game.h"
 #include "utils.h"
+#include "word_game.h"
 
 // #define RANDOM_SEED_PIN A1
 // static RandomSeed<RANDOM_SEED_PIN> randomizer;
@@ -65,8 +66,8 @@ void setup(){
 }
 
 void main_menu(){
-	bool buttons[] = {false, true, false, true};
-	branch_prompt(FSTR("Slot    Time"), slots_game, NULL, time_game, NULL, buttons);
+	bool buttons[] = {false, true, true, true};
+	branch_prompt(FSTR("SlotWordTime"), slots_game, word_game, time_game, NULL, buttons);
 }
 
 void loop()
