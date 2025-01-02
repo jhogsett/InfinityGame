@@ -21,11 +21,11 @@
 // Default best on power-up
 #define DEFAULT_BET 10
 
-// Number of words in each words list
-#define NUM_WORDS 10
+// // Number of words in each words list
+// #define NUM_WORDS 10
 
-extern const char *rude_words[];
-extern const char *nice_words[];
+// extern const char *rude_words[];
+// extern const char *nice_words[];
 
 extern byte choice1, choice2, choice3;
 
