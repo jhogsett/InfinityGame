@@ -41,6 +41,7 @@ void tools_menu(){
 		return;
 	}
 
+#ifdef ENABLE_TEST_FEATURES
 	switch(button_led_prompt(FSTR("TEST    Go  "))){
 	case -1:
 		return;
@@ -48,7 +49,9 @@ void tools_menu(){
 		test_mode();
 		return;
 	}
+#endif
 
+#ifdef ENABLE_DEBUG_FEATURES
 	switch(button_led_prompt(FSTR("DEBUG   Go  "))){
 	case -1:
 		return;
@@ -56,4 +59,5 @@ void tools_menu(){
 		debug_mode();
 		return;
 	}
+#endif
 }

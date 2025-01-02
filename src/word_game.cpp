@@ -1,4 +1,3 @@
-#include "betting.h"
 #include "buttons.h"
 #include "buffers.h"
 #include "displays.h"
@@ -12,7 +11,7 @@
 #include "word_game.h"
 
 char chosen_word[WORD_BUFFER_SIZE];
-char scramble_word[WORD_BUFFER_SIZE];
+char scramble_word[SCRAMBLE_BUFFER_SIZE];
 
 // rotation size of buffer not including null terminator
 void rotate_left(char *buffer, int size){
@@ -49,7 +48,7 @@ void flip(char *buffer, int size){
 #define MOVE_MAX 3
 
 #define SHUFFLE_TIMES_MIN 3
-#define SHUFFLE_TIMES_MAX 12
+#define SHUFFLE_TIMES_MAX 6
 
 int shuffle_word(char *buffer, int size, int min_times, int max_times){
 	int times = random(min_times, max_times+1);
@@ -75,34 +74,73 @@ int shuffle_word(char *buffer, int size, int min_times, int max_times){
 	return times;
 }
 
-// returns -1 on time out or long press, 0 if player exceeds maximum moves, otherwise winning factor
-// returns -2 if user wins in one move
-int word_game_round(bool rude){
+void format_scamble_word(char *buffer){
+	for(int i = 0; i < WORD_WIDTH; i++){
+		buffer[i] = scramble_word[i];
+	}
+	buffer[WORD_BUFFER_SIZE- 1] = '\0';
+}
+
+void format_scamble_word_display(char *buffer){
+	char show_word[WORD_BUFFER_SIZE];
+	format_scamble_word(show_word);
+	sprintf(buffer, FSTR("<-- %s -->"), show_word);
+}
+
+int last_word_choice = -1;
+
+// returns the number of random shifts done
+int choose_word(bool rude){
 	const char **words;
 	if(rude)
 		words = rude_words;
 	else
 		words = nice_words;
 
+	randomizer.randomize();
+
+	int word_choice;
+	while((word_choice = random(NUM_WORDS)) == last_word_choice)
+		word_choice = random(NUM_WORDS);
+	last_word_choice = word_choice;
+
+	strcpy(chosen_word, words[word_choice]);
+
+	char add_chars[ADD_CHARS_BUFFER_SIZE];
+	for(int i = 0; i < ADD_CHARS; i++){
+		add_chars[i] = (char)random((int)'A', (int)'Z' + 1);
+	}
+	add_chars[ADD_CHARS_BUFFER_SIZE-1] = '\0';
+
+	sprintf(scramble_word, "%s%s", chosen_word, add_chars);
+
+	char show_word[WORD_BUFFER_SIZE];
+	format_scamble_word(show_word);
+
+	int scramble_moves = 0;
+
+	while(strcmp(show_word, chosen_word) == 0){
+		scramble_moves += shuffle_word(scramble_word, SCRAMBLE_SIZE, SHUFFLE_TIMES_MIN, SHUFFLE_TIMES_MAX);
+		format_scamble_word(show_word);
+	}
+
+	return scramble_moves;
+}
+
+// returns -1 on time out or long press, 0 if player exceeds maximum moves, otherwise winning factor
+// returns -2 if user wins in one move
+int word_game_round(bool rude){
 	sprintf(display_buffer, FSTR("<-- <--> -->"));
 	title_prompt(display_buffer, INSTRUCTION_SHOW_TIMES, false, ROUND_DELAY);
 
-	randomizer.randomize();
-	int word_choice = random(NUM_WORDS);
-	strcpy(chosen_word, words[word_choice]);
-	strcpy(scramble_word, words[word_choice]);
-
-	int scramble_moves = 0;
-	while(strcmp(scramble_word, chosen_word) == 0){
-		scramble_moves = shuffle_word(scramble_word, WORD_WIDTH, SHUFFLE_TIMES_MIN, SHUFFLE_TIMES_MAX);
-	}
+	int scramble_moves = choose_word(rude);
 	int player_moves = 0;
 
 	unsigned long idle_timeout = millis() + IDLE_TIMEOUT;
 	unsigned long time;
 
 	while((time = millis()) < idle_timeout){
-		sprintf(display_buffer, FSTR("<-- %s -->"), scramble_word);
+		format_scamble_word_display(display_buffer);
 		const bool states[] = {false, true, true, true};
 		switch(button_led_prompt(display_buffer, states)){
 			case -1:
@@ -110,16 +148,13 @@ int word_game_round(bool rude){
 			case 0:
 				return -1;
 			case 1:
-				// player_moves++;
-				rotate_left(scramble_word, WORD_WIDTH);
+				rotate_left(scramble_word, SCRAMBLE_SIZE);
 				break;
 			case 2:
-				// player_moves++;
 				flip(scramble_word, WORD_WIDTH);
 				break;
 			case 3:
-				// player_moves++;
-				rotate_right(scramble_word, WORD_WIDTH);
+				rotate_right(scramble_word, SCRAMBLE_SIZE);
 				break;
 		}
 
@@ -135,13 +170,18 @@ int word_game_round(bool rude){
 		}
 
 		// word found, compute winning factor
-		if(strcmp(scramble_word, chosen_word) == 0){
+		char show_word[WORD_BUFFER_SIZE];
+		format_scamble_word(show_word);
+
+		if(strcmp(show_word, chosen_word) == 0){
+#ifdef ENABLE_WIN_IN_1
 			if(player_moves == 1)
 				return -2;
+#endif
 			int factor = scramble_moves - player_moves;
 			if(factor < 1)
 				factor = 1;
-			return factor;
+			return factor + 1; // hack return 1+ the factor and subtract on use, otherwise every time is a win
 		}
 	}
 	return -1;
@@ -183,17 +223,22 @@ void word_game(){
 				title_prompt(display_buffer, EXCEEDED_SHOW_TIMES, false, ROUND_DELAY);
 				continue;
 		}
-
-		sprintf(display_buffer, FSTR("%s%s%s"), scramble_word, scramble_word, scramble_word);
+		sprintf(display_buffer, FSTR("    %s    "), chosen_word);
 		title_prompt(display_buffer, SUCCESS_SHOW_TIMES, false, ROUND_DELAY);
 
+		sprintf(display_buffer, FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word);
+		title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);
+
 		int win = 0;
+#ifdef ENABLE_WIN_IN_1
 		if(round_result == -2){
 			// win in one move
 			win = WIN_IN_1_BONUS * BASE_WIN_CASE;
 			display_win(win);
-		} else {
-			// subtract one, which is the minumum win value returned each time
+		} else
+#endif
+		{
+			// subtract one, added in the found to ensure every round is not a win
 			win = (round_result-1) * BASE_WIN_CASE;
 			if(win > 0)
 				display_win(win);
@@ -202,24 +247,7 @@ void word_game(){
 		if(win > 0){
 			purse += win;
 			save_data();
+			display_purse();
 		}
-
-		display_purse();
 	}
 }
-
-
-// pick a word from the word list
-//   have an optio for which word list
-// do a random number of transformations on the letters
-//   make sure the next one doesn't undo the previous one
-// shift left by one, shift right by one, flip
-//   ensure the scrambled word doesn't match the original
-// flash the user a display showing which button does which
-//   green=shift left, amber=flip, red=shift right
-// show the scrambled word and light up all three buttons
-// do the transformations to the shown scambled word
-//   if it happens to match the real word, stop and score
-// 	 stop and score on prompt timeout
-
-//

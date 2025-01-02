@@ -9,7 +9,6 @@
 #include "prompts.h"
 #include "timeouts.h"
 #include "utils.h"
-#include "debug.h"
 
 BillboardsHandler billboards_handler(display_buffer, NUM_BILLBOARDS, (const char **)templates, BLANKING_TIME, HOME_TIMES, false, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
 char *billboard_data[NUM_BILLBOARDS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL};
