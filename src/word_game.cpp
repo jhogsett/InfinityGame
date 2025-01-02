@@ -11,7 +11,7 @@
 #include "word_game.h"
 
 char chosen_word[WORD_BUFFER_SIZE];
-char scramble_word[WORD_BUFFER_SIZE];
+char scramble_word[SCRAMBLE_BUFFER_SIZE];
 
 // rotation size of buffer not including null terminator
 void rotate_left(char *buffer, int size){
@@ -74,19 +74,28 @@ int shuffle_word(char *buffer, int size, int min_times, int max_times){
 	return times;
 }
 
+void format_scamble_word(char *buffer){
+	for(int i = 0; i < WORD_WIDTH; i++){
+		buffer[i] = scramble_word[i];
+	}
+	buffer[WORD_BUFFER_SIZE- 1] = '\0';
+}
+
+void format_scamble_word_display(char *buffer){
+	char show_word[WORD_BUFFER_SIZE];
+	format_scamble_word(show_word);
+	sprintf(buffer, FSTR("<-- %s -->"), show_word);
+}
+
 int last_word_choice = -1;
 
-// returns -1 on time out or long press, 0 if player exceeds maximum moves, otherwise winning factor
-// returns -2 if user wins in one move
-int word_game_round(bool rude){
+// returns the number of random shifts done
+int choose_word(bool rude){
 	const char **words;
 	if(rude)
 		words = rude_words;
 	else
 		words = nice_words;
-
-	sprintf(display_buffer, FSTR("<-- <--> -->"));
-	title_prompt(display_buffer, INSTRUCTION_SHOW_TIMES, false, ROUND_DELAY);
 
 	randomizer.randomize();
 
@@ -96,19 +105,42 @@ int word_game_round(bool rude){
 	last_word_choice = word_choice;
 
 	strcpy(chosen_word, words[word_choice]);
-	strcpy(scramble_word, words[word_choice]);
+
+	char add_chars[ADD_CHARS_BUFFER_SIZE];
+	for(int i = 0; i < ADD_CHARS; i++){
+		add_chars[i] = (char)random((int)'A', (int)'Z' + 1);
+	}
+	add_chars[ADD_CHARS_BUFFER_SIZE-1] = '\0';
+
+	sprintf(scramble_word, "%s%s", chosen_word, add_chars);
+
+	char show_word[WORD_BUFFER_SIZE];
+	format_scamble_word(show_word);
 
 	int scramble_moves = 0;
-	while(strcmp(scramble_word, chosen_word) == 0){
-		scramble_moves = shuffle_word(scramble_word, WORD_WIDTH, SHUFFLE_TIMES_MIN, SHUFFLE_TIMES_MAX);
+
+	while(strcmp(show_word, chosen_word) == 0){
+		scramble_moves += shuffle_word(scramble_word, SCRAMBLE_SIZE, SHUFFLE_TIMES_MIN, SHUFFLE_TIMES_MAX);
+		format_scamble_word(show_word);
 	}
+
+	return scramble_moves;
+}
+
+// returns -1 on time out or long press, 0 if player exceeds maximum moves, otherwise winning factor
+// returns -2 if user wins in one move
+int word_game_round(bool rude){
+	sprintf(display_buffer, FSTR("<-- <--> -->"));
+	title_prompt(display_buffer, INSTRUCTION_SHOW_TIMES, false, ROUND_DELAY);
+
+	int scramble_moves = choose_word(rude);
 	int player_moves = 0;
 
 	unsigned long idle_timeout = millis() + IDLE_TIMEOUT;
 	unsigned long time;
 
 	while((time = millis()) < idle_timeout){
-		sprintf(display_buffer, FSTR("<-- %s -->"), scramble_word);
+		format_scamble_word_display(display_buffer);
 		const bool states[] = {false, true, true, true};
 		switch(button_led_prompt(display_buffer, states)){
 			case -1:
@@ -116,13 +148,13 @@ int word_game_round(bool rude){
 			case 0:
 				return -1;
 			case 1:
-				rotate_left(scramble_word, WORD_WIDTH);
+				rotate_left(scramble_word, SCRAMBLE_SIZE);
 				break;
 			case 2:
 				flip(scramble_word, WORD_WIDTH);
 				break;
 			case 3:
-				rotate_right(scramble_word, WORD_WIDTH);
+				rotate_right(scramble_word, SCRAMBLE_SIZE);
 				break;
 		}
 
@@ -138,7 +170,10 @@ int word_game_round(bool rude){
 		}
 
 		// word found, compute winning factor
-		if(strcmp(scramble_word, chosen_word) == 0){
+		char show_word[WORD_BUFFER_SIZE];
+		format_scamble_word(show_word);
+
+		if(strcmp(show_word, chosen_word) == 0){
 #ifdef ENABLE_WIN_IN_1
 			if(player_moves == 1)
 				return -2;
@@ -188,9 +223,11 @@ void word_game(){
 				title_prompt(display_buffer, EXCEEDED_SHOW_TIMES, false, ROUND_DELAY);
 				continue;
 		}
-
-		sprintf(display_buffer, FSTR("%s%s%s"), scramble_word, scramble_word, scramble_word);
+		sprintf(display_buffer, FSTR("    %s    "), chosen_word);
 		title_prompt(display_buffer, SUCCESS_SHOW_TIMES, false, ROUND_DELAY);
+
+		sprintf(display_buffer, FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word);
+		title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);
 
 		int win = 0;
 #ifdef ENABLE_WIN_IN_1

@@ -62,8 +62,6 @@ bool BillboardsHandler::terminate_blanking(unsigned long time){
 void BillboardsHandler::process_display(HT16K33Disp * display, char **data){
 	if (!_running) {
 		process_billboard_switch();
-		// if(data[_n_current_template])
-		// 	Serial.println(data[_n_current_template]);
 		update_buffer(data[_n_current_template]);
 		_billboard->begin(display, run_times());
 	}
