@@ -33,18 +33,46 @@ void rotate_right(char *buffer, int size){
 
 // size must be a multiple of two
 void flip(char *buffer, int size){
-	// char carry = buffer[0];
-	// buffer[0] = buffer[3];
-	// buffer[3] = carry;
-	// carry = buffer[1];
-	// buffer[1] = buffer[2];
-	// buffer[2] = carry;
 	int half_size = size / 2;
 	for(int i = 0; i < half_size; i++){
 		char carry = buffer[i];
 		buffer[i] = buffer[(size-1) -i];
 		buffer[(size-1) -i] = carry;
 	}
+}
+
+#define MOVE_NONE 0
+#define MOVE_ROL 1
+#define MOVE_FLIP 2
+#define MOVE_ROR 3
+#define MOVE_MIN 1
+#define MOVE_MAX 3
+
+#define SHUFFLE_TIMES_MIN 3
+#define SHUFFLE_TIMES_MAX 12
+
+int shuffle_word(char *buffer, int size, int min_times, int max_times){
+	int times = random(min_times, max_times+1);
+	int last_move = MOVE_NONE;
+
+	for(int i = 0; i < times; i++){
+		int move;
+		while((move = random(MOVE_MIN, MOVE_MAX+1)) == last_move)
+			;
+		last_move = move;
+		switch(move){
+			case MOVE_ROL:
+				rotate_left(buffer, size);
+				break;
+			case MOVE_FLIP:
+				flip(buffer, size);
+				break;
+			case MOVE_ROR:
+				rotate_right(buffer, size);
+				break;
+		}
+	}
+	return times;
 }
 
 void word_game(){
@@ -82,6 +110,12 @@ void word_game(){
 	strcpy(chosen_word, words[word_choice]);
 	strcpy(scramble_word, words[word_choice]);
 
+	int scramble_moves = 0;
+	while(strcmp(scramble_word, chosen_word) == 0){
+		scramble_moves = shuffle_word(scramble_word, WORD_WIDTH, SHUFFLE_TIMES_MIN, SHUFFLE_TIMES_MAX);
+	}
+	int player_moves = 0;
+
 	unsigned long idle_timeout = millis() + IDLE_TIMEOUT;
 	unsigned long time;
 
@@ -95,12 +129,15 @@ void word_game(){
 			case 0:
 				return;
 			case 1:
+				player_moves++;
 				rotate_left(scramble_word, WORD_WIDTH);
 				break;
 			case 2:
+				player_moves++;
 				flip(scramble_word, WORD_WIDTH);
 				break;
 			case 3:
+				player_moves++;
 				rotate_right(scramble_word, WORD_WIDTH);
 				break;
 		}
@@ -123,9 +160,11 @@ void word_game(){
 		// else
 		// 	words = nice_words;
 
+		if(strcmp(scramble_word, chosen_word) == 0){
+			sprintf(display_buffer, FSTR("    %s    "), scramble_word);
+			title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);
+		}
 
-// sprintf(display_buffer, FSTR("<-- %s -->"), scramble_word);
-// title_prompt(display_buffer);
 
 		// if(jackpot_words_chosen(jackpot_choice1, jackpot_choice2, jackpot_choice3)){
 		// 	win = WIN_JACKPOT;
