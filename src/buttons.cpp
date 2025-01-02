@@ -40,7 +40,9 @@ bool button_pressed(){
 	}
 
 	if(drop_count > MAX_DROPS){
+#ifdef ENABLE_DEBUG_FEATURES
 		set_debug_marker(drop_count);
+#endif
 		return false;
 	}
 

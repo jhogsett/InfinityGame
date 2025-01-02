@@ -7,7 +7,7 @@
 
 void options_mode(){
 	bool buttons[] = {false, true, false, true};
-	branch_prompt(FSTR("TOOLS    SET"), tools_menu, NULL, options_menu, NULL, buttons);
+	branch_prompt(FSTR("TOOLS   SET"), tools_menu, NULL, options_menu, NULL, buttons);
 }
 
 void options_menu(){

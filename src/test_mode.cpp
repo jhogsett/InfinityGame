@@ -8,6 +8,7 @@
 #include "utils.h"
 #include "test_mode.h"
 
+#ifdef ENABLE_TEST_FEATURES
 void test_mode(){
 	if(button_led_prompt(FSTR("Press to start GLITCH TEST")) < 1)
 		return;
@@ -60,3 +61,4 @@ void test_mode(){
 	}
 	button_led_prompt(FSTR("Press any button to EXIT"));
 }
+#endif
