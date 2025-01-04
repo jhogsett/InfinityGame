@@ -11,7 +11,7 @@
 #include "utils.h"
 
 BillboardsHandler billboards_handler(display_buffer, NUM_BILLBOARDS, (const char **)templates, BLANKING_TIME, HOME_TIMES, false, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
-char *billboard_data[NUM_BILLBOARDS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+char *billboard_data[NUM_BILLBOARDS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
 void run_billboard(char **data) {
 	unsigned long time = millis();
@@ -32,24 +32,30 @@ void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr
 
 	all_leds.deactivate_leds(true);
 	billboards_handler.reset();
-	panel_leds.begin(time, LEDHandler::STYLE_RANDOM, 750, 350); // TODO
+	panel_leds.begin(time, BILLBOARD_PANEL_LEDS_STYLE, BILLBOARD_PANEL_LEDS_SHOW_TIME, BILLBOARD_PANEL_LEDS_BLANK_TIME);
 
 	char cash_display[10];
-	char time_display[20];
 	char house_display[10];
+	char bank_display[10];
+	char gang_display[10];
+	char time_display[15];
 
-	// sprintf(cash_display, FSTR("$%ld"), purse);
 	ltoa(purse, cash_display, 10);
-
-	micros_to_ms(time_display, best_time);
-	// sprintf(time_display, FSTR("%s ms"), copy_buffer);
-
-	// sprintf(house_display, FSTR("$%ld"), house);
 	ltoa(house, house_display, 10);
+	ltoa(bank, bank_display, 10);
+	ltoa(gang, gang_display, 10);
+
+	if(best_time == DEFAULT_TIME){
+		strcpy(time_display, FSTR("0.0000"));
+	} else {
+		micros_to_ms(time_display, best_time);
+	}
 
 	billboard_data[BILLBOARD_CASH] = cash_display;
 	billboard_data[BILLBOARD_TIME] = time_display;
 	billboard_data[BILLBOARD_HOUSE] = house_display;
+	billboard_data[BILLBOARD_BANK] = bank_display;
+	billboard_data[BILLBOARD_GANG] = gang_display;
 
 	while ((time = millis()) < idle_timeout) {
 		run_billboard(billboard_data);
@@ -129,13 +135,13 @@ int button_led_prompt(const char * prompt, const bool *states) {
 // but cancelable with a button press
 // show_panel_leds = true to have them cycle
 // show_delay = ensure delay between multiple titles
-void title_prompt(const char * title, byte times, bool show_panel_leds, int show_delay) {
+void title_prompt(const char * title, byte times, bool show_panel_leds, int show_delay, int leds_style, int leds_show_time, int leds_blank_time) {
 	unsigned long time = millis();
 	unsigned long timeout_time = time + PROMPT_TIMEOUT;
 	unsigned long idle_timeout = time + IDLE_TIMEOUT;
 
 	if (show_panel_leds)
-		panel_leds.begin(millis(), TITLE_PANEL_LEDS_STYLE, TITLE_PANEL_LEDS_SHOW_TIME, TITLE_PANEL_LEDS_BLANK_TIME);
+		panel_leds.begin(millis(), leds_style, leds_show_time, leds_blank_time);
 	display.begin_scroll_loop(times);
 
 	// eat an already pressed button on arrival here

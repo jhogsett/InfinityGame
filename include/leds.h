@@ -16,11 +16,23 @@
 #define DEFAULT_BUTTON_LEDS_SHOW_TIME  800
 #define DEFAULT_BUTTON_LEDS_BLANK_TIME 400
 
+// when dislaying the main billboard prompt, this is the
+// timing and style for the panel LEDs
+#define BILLBOARD_PANEL_LEDS_SHOW_TIME 750
+#define BILLBOARD_PANEL_LEDS_BLANK_TIME 350
+#define BILLBOARD_PANEL_LEDS_STYLE (LEDHandler::STYLE_RANDOM)
+
 // when displaying a title with LEDs, this is the on/off time
-// this is used for celabrating wins
+// this is used for celebrating wins
 #define TITLE_PANEL_LEDS_SHOW_TIME     100
 #define TITLE_PANEL_LEDS_BLANK_TIME    0
 #define TITLE_PANEL_LEDS_STYLE (LEDHandler::STYLE_RANDOM)
+
+// alternate timing to show the leds in sequence
+// without blanking at a slower pace
+#define TITLE_PANEL_LEDS_SHOW_TIME2     550
+#define TITLE_PANEL_LEDS_BLANK_TIME2    0
+#define TITLE_PANEL_LEDS_STYLE2 (LEDHandler::STYLE_PLAIN)
 
 // adjustments to match the panels LEDs to the display
 #define LED_INTENSITY1 32 // Green panel LED is a bit brighter than the Amber and Red LEDs

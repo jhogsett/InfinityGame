@@ -15,8 +15,8 @@
 
 byte choice1, choice2, choice3;
 
-// const char *rude_words[NUM_WORDS] = {"FUCK", "SHIT", "CUNT", "COCK", "PISS", "TITS", "FART", "POOP", "DICK", "BOOB"};
-// const char *nice_words[NUM_WORDS] = {"WEED", "VAPE", "BEER", "WINE", "TACO", "GOLD", "MINT", "GIFT", "JADE", "CAKE"};
+// const char *rude_words[NUM_WORDS] = {"FUCK", "SHIT", "CUNT", "COCK", "PISS", "TITS", "FART", "POOP", "DICK", "ANAL"};
+// const char *nice_words[NUM_WORDS] = {"WEED", "VAPE", "BEER", "WINE", "TACO", "GOLD", "MINT", "PORK", "JADE", "CAKE"};
 
 void slots_round(bool rude){
 	disp1.begin_scroll_loop(1);
@@ -26,10 +26,10 @@ void slots_round(bool rude){
 	char * text;
 	const char **words;
 	if(rude){
-		text = FSTR("    FUCK  SHIT  CUNT  COCK  PISS  TITS  FART  POOP  DICK  BOOB");
+		text = FSTR("    FUCK  SHIT  CUNT  COCK  PISS  TITS  FART  POOP  DICK  ANAL");
 		words = rude_words;
 	} else {
-		text = FSTR("    WEED  VAPE  BEER  WINE  TACO  GOLD  MINT  GIFT  JADE  CAKE");
+		text = FSTR("    WEED  VAPE  BEER  WINE  TACO  GOLD  MINT  PORK  JADE  CAKE");
 		words = nice_words;
 	}
 
