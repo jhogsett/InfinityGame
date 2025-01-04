@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include "buttons.h"
 #include "hardware.h"
+#include "motor.h"
+#include "play_data.h"
 #include "debug.h"
 
 volatile bool button_states[NUM_BUTTONS];
@@ -67,8 +69,11 @@ int wait_on_long_press(){
 			return -1;
 	} else {
 		// long press time has been met
-		if(button_still_pressed())
+		if(button_still_pressed()){
+			if(option_vibrate)
+				vibrate();
 			return 1;
+		}
 		else
 			return -1;
 	}
