@@ -1,7 +1,7 @@
 #ifndef __DEBUG_H__
 #define __DEBUG_H__
 
-// #define ENABLE_DEBUG_FEATURES
+#define ENABLE_DEBUG_FEATURES
 
 #ifdef ENABLE_DEBUG_FEATURES
 // arbitrary use variable that can be used to check for causes directly on the device

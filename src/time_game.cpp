@@ -53,7 +53,7 @@ void time_game(){
 
 		while(digitalRead(ANY_BUTTON) == HIGH){
 #ifdef ENABLE_DEBUG_FEATURES
-			set_debug_marker(1);
+			// set_debug_marker(1);
 #endif
 			// button is glitched on by flashing LEDs?
 			panel_leds.step_flash(millis());

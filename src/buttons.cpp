@@ -26,9 +26,9 @@ bool button_pressed(){
 		return false;
 
 	// rereading these may be redundant
-	button_states[GREEN_ID] = digitalRead(GREEN_BUTTON);
-	button_states[AMBER_ID] = digitalRead(AMBER_BUTTON);
-	button_states[RED_ID] = digitalRead(RED_BUTTON);
+	// button_states[GREEN_ID] = digitalRead(GREEN_BUTTON);
+	// button_states[AMBER_ID] = digitalRead(AMBER_BUTTON);
+	// button_states[RED_ID] = digitalRead(RED_BUTTON);
 
 	// enforce a debounce period
     // if the button is unpressed during this time, cancel the press
@@ -43,7 +43,7 @@ bool button_pressed(){
 
 	if(drop_count > MAX_DROPS){
 #ifdef ENABLE_DEBUG_FEATURES
-		set_debug_marker(drop_count);
+		set_debug_marker(1);
 #endif
 		return false;
 	}
