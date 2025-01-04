@@ -1,12 +1,12 @@
 #include <Arduino.h>
 #include <Wire.h>
-// #include <random_seed.h>
 #include "buttons.h"
 #include "displays.h"
 #include "hardware.h"
 #include "idle_mode.h"
 #include "led_handler.h"
 #include "leds.h"
+#include "motor.h"
 #include "options_mode.h"
 #include "play_data.h"
 #include "prompts.h"
@@ -16,9 +16,6 @@
 #include "time_game.h"
 #include "utils.h"
 #include "word_game.h"
-
-// #define RANDOM_SEED_PIN A1
-// static RandomSeed<RANDOM_SEED_PIN> randomizer;
 
 void setup_display(){
 	Wire.begin();
@@ -63,6 +60,9 @@ void setup(){
 
 	if(option_sound)
 		beep();
+
+	if(option_vibrate)
+		vibrate();
 }
 
 void main_menu(){
