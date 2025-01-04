@@ -12,7 +12,7 @@ unsigned long bank = DEFAULT_BANK;
 unsigned long best_time1 = (unsigned long)-1;
 unsigned long best_time2 = (unsigned long)-1;
 unsigned long best_time3 = (unsigned long)-1;
-unsigned long house = DEFAULT_HOUSE;
+long house = DEFAULT_HOUSE;
 
 void load_save_data(){
 	SavedData saved_data;

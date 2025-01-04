@@ -7,7 +7,7 @@ typedef void (*voidFuncPtr)(void);
 
 // Billboard display related
 // number of times to show home billboard "InfinityGame" (effectively time of display because no scroll needed)
-#define HOME_TIMES 5
+#define HOME_TIMES 0
 // blacking time between billboards
 #define BLANKING_TIME 600
 

@@ -45,7 +45,7 @@ extern bool option_clock_on_idle;
 extern unsigned long bank;
 
 // Current house
-extern unsigned long house;
+extern long house;
 
 // Additional slots for best times (future use)
 extern unsigned long best_time1;
@@ -65,7 +65,7 @@ struct SavedData{
 	unsigned long best_time1;
 	unsigned long best_time2;
 	unsigned long best_time3;
-	unsigned long house;
+	long house;
 };
 
 extern void load_save_data();

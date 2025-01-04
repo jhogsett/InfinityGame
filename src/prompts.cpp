@@ -40,13 +40,14 @@ void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr
 
 	sprintf(cash_display, FSTR("$%ld"), purse);
 	sprintf(house_display, FSTR("$%ld"), house);
+	// sprintf(house_display, FSTR("X%ld"), house);
 
 	micros_to_ms(copy_buffer, best_time);
 	sprintf(time_display, FSTR("%s ms"), copy_buffer);
 
 	billboard_data[BILLBOARD_CASH] = cash_display;
 	billboard_data[BILLBOARD_TIME] = time_display;
-	billboard_data[BILLBOARD_HOUSE] = house_display;
+	billboard_data[BILLBOARD_HOUSE] = NULL; // house_display;
 
 	while ((time = millis()) < idle_timeout) {
 		run_billboard(billboard_data);
