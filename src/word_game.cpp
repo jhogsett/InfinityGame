@@ -81,8 +81,11 @@ void format_scamble_word(char *buffer){
 void format_scamble_word_display(char *buffer){
 	char show_word[WORD_BUFFER_SIZE];
 	format_scamble_word(show_word);
-	sprintf(buffer, FSTR("<-- %s -->"), show_word);
+	sprintf(buffer, FSTR("rol %s ror"), show_word);
 }
+
+#define LETTERS_LEN 12
+#define LETTERS_BUFFER_LEN 13
 
 int last_word_choice = -1;
 
@@ -103,9 +106,16 @@ int choose_word(bool rude){
 
 	strcpy(chosen_word, words[word_choice]);
 
+	// https://pi.math.cornell.edu/~mec/2003-2004/cryptography/subs/frequencies.html
+	char letters[LETTERS_BUFFER_LEN];
+	strcpy(letters, FSTR("ETAOINSRHDLU"));
+
 	char add_chars[ADD_CHARS_BUFFER_SIZE];
-	for(int i = 0; i < ADD_CHARS; i++){
-		add_chars[i] = (char)random((int)'A', (int)'Z' + 1);
+	for(int i = 0; i < ADD_CHARS; i++)
+	{
+		int letter = random(LETTERS_LEN);
+		add_chars[i] = letters[letter];
+		// add_chars[i] = (char)random((int)'A', (int)'Z' + 1);
 	}
 	add_chars[ADD_CHARS_BUFFER_SIZE-1] = '\0';
 
@@ -127,7 +137,7 @@ int choose_word(bool rude){
 // returns -1 on time out or long press, 0 if player exceeds maximum moves, otherwise winning factor
 // returns -2 if user wins in one move
 int word_game_round(bool rude){
-	sprintf(display_buffer, FSTR("<-- <--> -->"));
+	sprintf(display_buffer, FSTR("ROL FLIP ROR"));
 	title_prompt(display_buffer, INSTRUCTION_SHOW_TIMES, false, ROUND_DELAY);
 
 	int scramble_moves = choose_word(rude);
