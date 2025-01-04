@@ -23,7 +23,7 @@ typedef void (*voidFuncPtr)(void);
 // scroll flipped options every 100ms
 #define OPTION_FLIP_SCROLL_TIME 100
 
-#define NUM_BILLBOARDS 8
+#define NUM_BILLBOARDS 9
 const char template0[] PROGMEM = "InfinityGame";
 const char template1[] PROGMEM = "Press A Button to Play";
 const char template2[] PROGMEM = "Play Silly Slots";
@@ -31,12 +31,14 @@ const char template3[] PROGMEM = "Play The WordGame";
 const char template4[] PROGMEM = "Play The TimeGame";
 const char template5[] PROGMEM = "Your CASH %s";
 const char template6[] PROGMEM = "BEST Time %s";
-const char template7[] PROGMEM = "LONG PRESS for OPTIONS";
-const char *const templates[] PROGMEM = { template0, template1, template2, template3, template4, template5, template6, template7 };
+const char template7[] PROGMEM = "HOUSE Cash %s";
+const char template8[] PROGMEM = "LONG PRESS for OPTIONS";
+const char *const templates[] PROGMEM = { template0, template1, template2, template3, template4, template5, template6, template7, template8 };
 
 // Identify array position for placing fill-in data
 #define BILLBOARD_CASH 5
 #define BILLBOARD_TIME 6
+#define BILLBOARD_HOUSE 7
 
 extern BillboardsHandler billboards_handler;
 extern char *billboard_data[NUM_BILLBOARDS];

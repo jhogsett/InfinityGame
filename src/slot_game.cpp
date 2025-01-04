@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "bank.h"
 #include "betting.h"
 #include "buffers.h"
 #include "buttons.h"
@@ -141,7 +142,9 @@ void slots_game(){
 
 		int win = 0;
 		bool jackpot = false;
-		purse -= bet_amounts[current_bet];
+
+		pay_house(use_purse(bet_amounts[current_bet]));
+
 		save_data();
 
 		slots_round(rude);
@@ -183,7 +186,7 @@ void slots_game(){
 			// see the non-winning results in lieu of being told you lost
 			delay(ROUND_DELAY);
 
-		purse += win;
+		add_to_purse(house_payout(win));
 		save_data();
 
 		display_purse();

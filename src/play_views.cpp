@@ -11,6 +11,16 @@ void display_purse(){
 	title_prompt(display_buffer, CASH_SHOW_TIMES, false, ROUND_DELAY);
 }
 
+// void display_bank(){
+// 	sprintf(display_buffer, FSTR("BANK $%ld"), bank);
+// 	title_prompt(display_buffer, CASH_SHOW_TIMES, false, ROUND_DELAY);
+// }
+
+// void display_house(){
+// 	sprintf(display_buffer, FSTR("HOUSE $%ld"), house);
+// 	title_prompt(display_buffer, CASH_SHOW_TIMES, false, ROUND_DELAY);
+// }
+
 void display_win(long win){
 	sprintf(display_buffer, FSTR("WIN * $%ld"), win);
 	title_prompt(display_buffer, WIN_SHOW_TIMES, true, ROUND_DELAY);

@@ -1,3 +1,4 @@
+#include "bank.h"
 #include "buttons.h"
 #include "buffers.h"
 #include "displays.h"
@@ -258,7 +259,7 @@ void word_game(){
 		}
 
 		if(win > 0){
-			purse += win;
+			add_to_purse(house_payout(win));
 			save_data();
 			display_purse();
 		}
