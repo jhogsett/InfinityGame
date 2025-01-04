@@ -19,7 +19,7 @@
 
 // Max button LOWs during the debounce period reads on a button in a tight loop (experimental)
 // if the supposedly-pressed button is actually low this many times, the press is rejected as unreliable
-#define MAX_DROPS 1000
+#define MAX_DROPS 1500
 
 // An array used by the button ISR to capture the states of the 'any' button and the three real buttons
 // this array type is used in various places to determine or set the buttons states
