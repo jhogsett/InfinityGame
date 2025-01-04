@@ -121,15 +121,21 @@ int choose_word(bool rude){
 
 	sprintf(scramble_word, "%s%s", chosen_word, add_chars);
 
+	int scramble_moves = 0;
+
 	char show_word[WORD_BUFFER_SIZE];
 	format_scamble_word(show_word);
 
-	int scramble_moves = 0;
-
 	while(strcmp(show_word, chosen_word) == 0){
-		scramble_moves += shuffle_word(scramble_word, SCRAMBLE_SIZE, SHUFFLE_TIMES_MIN, SHUFFLE_TIMES_MAX);
+		// scramble_moves += shuffle_word(scramble_word, SCRAMBLE_SIZE, SHUFFLE_TIMES_MIN, SHUFFLE_TIMES_MAX);
+		scramble_moves = shuffle_word(scramble_word, SCRAMBLE_SIZE, SHUFFLE_TIMES_MIN, SHUFFLE_TIMES_MAX);
 		format_scamble_word(show_word);
 	}
+
+	// // rotate the real word into the middle
+	// for(int i = 0; i < ADD_CHARS / 2; i++){
+	// 	rotate_right(scramble_word, SCRAMBLE_SIZE);
+	// 	scramble_moves++;
 
 	return scramble_moves;
 }
