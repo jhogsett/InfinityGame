@@ -34,20 +34,22 @@ void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr
 	billboards_handler.reset();
 	panel_leds.begin(time, LEDHandler::STYLE_RANDOM, 750, 350); // TODO
 
-	char cash_display[12];
-	char time_display[12];
-	char house_display[12];
+	char cash_display[10];
+	char time_display[20];
+	char house_display[10];
 
-	sprintf(cash_display, FSTR("$%ld"), purse);
-	sprintf(house_display, FSTR("$%ld"), house);
-	// sprintf(house_display, FSTR("X%ld"), house);
+	// sprintf(cash_display, FSTR("$%ld"), purse);
+	ltoa(purse, cash_display, 10);
 
-	micros_to_ms(copy_buffer, best_time);
-	sprintf(time_display, FSTR("%s ms"), copy_buffer);
+	micros_to_ms(time_display, best_time);
+	// sprintf(time_display, FSTR("%s ms"), copy_buffer);
+
+	// sprintf(house_display, FSTR("$%ld"), house);
+	ltoa(house, house_display, 10);
 
 	billboard_data[BILLBOARD_CASH] = cash_display;
 	billboard_data[BILLBOARD_TIME] = time_display;
-	billboard_data[BILLBOARD_HOUSE] = NULL; // house_display;
+	billboard_data[BILLBOARD_HOUSE] = house_display;
 
 	while ((time = millis()) < idle_timeout) {
 		run_billboard(billboard_data);

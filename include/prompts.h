@@ -29,9 +29,9 @@ const char template1[] PROGMEM = "Press A Button to Play";
 const char template2[] PROGMEM = "Play Silly Slots";
 const char template3[] PROGMEM = "Play The WordGame";
 const char template4[] PROGMEM = "Play The TimeGame";
-const char template5[] PROGMEM = "Your CASH %s";
-const char template6[] PROGMEM = "BEST Time %s";
-const char template7[] PROGMEM = "HOUSE Cash %s";
+const char template5[] PROGMEM = "Your CASH $%s";
+const char template6[] PROGMEM = "BEST Time %s ms";
+const char template7[] PROGMEM = "HOUSE Cash $%s";
 const char template8[] PROGMEM = "LONG PRESS for OPTIONS";
 const char *const templates[] PROGMEM = { template0, template1, template2, template3, template4, template5, template6, template7, template8 };
 
