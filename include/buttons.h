@@ -12,7 +12,7 @@
 #define NO_COLOR_ID -1
 
 // Time in milliseconds to check for and possibly reject a noisy button activation
-#define DEBOUNCE_TIME 5
+#define DEBOUNCE_TIME 10
 
 // Time in milliseconds for a button to be pressed for it to be a long press and active alternate actions
 #define LONG_PRESS_TIME 1500

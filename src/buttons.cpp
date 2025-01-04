@@ -34,6 +34,13 @@ bool button_pressed(){
     // if the button is unpressed during this time, cancel the press
     // this depends on being called immediately after the ISR has recorded a press,
 	//   ie. in a loop
+
+	// save the original pressed button state, that may change in the background
+	// if the switch is noisy
+	bool saved_button_states[NUM_BUTTONS];
+	for(int i = 0; i < NUM_BUTTONS; i++)
+		saved_button_states[i] = button_states[i];
+
     unsigned long debounce_timeout =  press_time + DEBOUNCE_TIME;
 	unsigned long drop_count = 0;
 	while(millis() < debounce_timeout){
@@ -41,12 +48,18 @@ bool button_pressed(){
 		    drop_count++;
 	}
 
-	if(drop_count > MAX_DROPS){
 #ifdef ENABLE_DEBUG_FEATURES
-		set_debug_marker(1);
+	if(debug_marker == 0)
+		set_debug_marker(drop_count);
 #endif
+	if(drop_count > MAX_DROPS){
+		// set_debug_marker(1);
 		return false;
 	}
+
+	// restore the saved button state
+	for(int i = 0; i < NUM_BUTTONS; i++)
+		button_states[i] = saved_button_states[i];
 
 	button_states[ANY_COLOR_ID] = false;
 	return true;
