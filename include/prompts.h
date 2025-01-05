@@ -4,7 +4,8 @@
 #include "billboards_handler.h"
 #include "leds.h"
 
-typedef void (*voidFuncPtr)(void);
+// typedef void (*voidFuncPtr)(void);
+typedef bool (*boolFuncPtr)(void);
 
 // Billboard display related
 // number of times to show home billboard "InfinityGame" (effectively time of display because no scroll needed)
@@ -50,11 +51,11 @@ extern BillboardsHandler billboards_handler;
 extern char *billboard_data[NUM_BILLBOARDS];
 
 void run_billboard(char **data);
-void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr on_long_press);
+void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr on_long_press);
 int button_led_prompt(const char * prompt, const bool *states = NULL);
 void title_prompt(const char * title, byte times = 1, bool show_panel_leds = false, int show_delay=0, int leds_style=TITLE_PANEL_LEDS_STYLE, int leds_show_time=TITLE_PANEL_LEDS_SHOW_TIME, int leds_blank_time=TITLE_PANEL_LEDS_BLANK_TIME);
 int panel_led_prompt();
-void branch_prompt(const char * prompt, voidFuncPtr on_option_1, voidFuncPtr on_option_2, voidFuncPtr on_option_3, voidFuncPtr on_long_press = NULL, const bool *states = NULL);
+bool branch_prompt(const char * prompt, boolFuncPtr on_option_1, boolFuncPtr on_option_2, boolFuncPtr on_option_3, boolFuncPtr on_long_press = NULL, const bool *states = NULL);
 int toggle_prompt(const char * prompt, const char **labels, byte current_choice, byte toggle_position, byte num_choices);
 
 #endif

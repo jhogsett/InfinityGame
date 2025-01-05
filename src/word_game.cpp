@@ -206,7 +206,7 @@ int word_game_round(bool rude){
 	return -1;
 }
 
-void word_game(){
+bool word_game(){
 	// reset this flag to show extra instruction on the first play
 	new_game = true;
 
@@ -216,9 +216,8 @@ void word_game(){
 	const bool buttons[] = {false, true, false, true};
 	switch(button_led_prompt(FSTR("NICE    RUDE"), buttons)){
 	case -1:
-		return;
 	case 0:
-		return;
+		return false;
 	case 1:
 		rude = false;
 		break;
@@ -246,7 +245,7 @@ void word_game(){
 		switch(round_result){
 			case -1:
 				// timed out of long press
-				return;
+				break;
 			case 0:
 				// exceeded max moves
 				sprintf(display_buffer, FSTR("Out Of Moves"));
@@ -287,4 +286,5 @@ void word_game(){
 			display_purse();
 		}
 	}
+	return false;
 }

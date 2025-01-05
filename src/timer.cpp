@@ -43,7 +43,7 @@ bool decrement_timer(byte &second, byte &minute, byte &hour, int seconds, int mi
 }
 
 // TODO timer mode should time out per sleep timeout after no activity
-void timer_prompt(byte seconds, byte minutes, byte hours) {
+bool timer_prompt(byte seconds, byte minutes, byte hours) {
 	unsigned long time = millis();
 	unsigned long idle_timeout = time + IDLE_TIMEOUT;
 
@@ -86,7 +86,7 @@ void timer_prompt(byte seconds, byte minutes, byte hours) {
 				;
 			all_leds.deactivate_leds(true);
 			if (long_press_state == 1) {
-				return;
+				break;
 			} else {
 				idle_timeout = time + IDLE_TIMEOUT;
 
@@ -110,4 +110,5 @@ void timer_prompt(byte seconds, byte minutes, byte hours) {
 			}
 		}
 	}
+	return false;
 }

@@ -18,6 +18,8 @@
 #define PURSE_STEAL_MIN 25000L
 #define ALERT_SHOW_TIME 1000
 
+extern bool crime_wave;
+
 // returns amount deposited
 extern long bank_deposit(long dollars);
 

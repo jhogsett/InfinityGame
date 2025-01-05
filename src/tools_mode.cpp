@@ -8,56 +8,54 @@
 #include "tools_mode.h"
 #include "debug.h"
 
-void tools_menu(){
+bool tools_menu(){
 	switch(button_led_prompt(FSTR("CLOCK   Go  "))){
 	case -1:
-		return;
+	case 0:
+		return false;
 	case 3:
-		clock_mode();
-		return;
+		return clock_mode();
 	}
 
 	switch(button_led_prompt(FSTR("TIMER   Go  "))){
 	case -1:
-		return;
+	case 0:
+		return false;
 	case 3:
-		timer_mode();
-		return;
+		return timer_mode();
 	}
 
 	switch(button_led_prompt(FSTR("SLEEP   Go  "))){
 	case -1:
-		return;
+	case 0:
+		return false;
 	case 3:
-		sleep_mode();
-		return;
+		return sleep_mode();
 	}
 
 	switch(button_led_prompt(FSTR("RESET   Go  "))){
 	case -1:
-		return;
+		return false;
 	case 3:
-		reset_options();
-		return;
+		return reset_options();
 	}
 
 #ifdef ENABLE_TEST_FEATURES
 	switch(button_led_prompt(FSTR("TEST    Go  "))){
 	case -1:
-		return;
+		return false;
 	case 3:
-		test_mode();
-		return;
+		return test_mode();
 	}
 #endif
 
 #ifdef ENABLE_DEBUG_FEATURES
 	switch(button_led_prompt(FSTR("DEBUG   Go  "))){
 	case -1:
-		return;
+		return false;
 	case 3:
-		debug_mode();
-		return;
+		return debug_mode();
 	}
 #endif
+	return false;
 }

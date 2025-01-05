@@ -5,6 +5,8 @@
 #include "utils.h"
 #include "debug.h"
 
+#include "play_data.h"
+
 #ifdef ENABLE_DEBUG_FEATURES
 unsigned long debug_marker = 0;
 
@@ -16,9 +18,13 @@ void clear_debug_marker(){
 	debug_marker = 0;
 }
 
-void debug_mode(){
+bool debug_mode(){
 	sprintf(display_buffer, FSTR("Debug Marker %lu"), debug_marker);
 	button_led_prompt(display_buffer);
 	clear_debug_marker();
+
+	purse = 500000000L;
+
+	return false;
 }
 #endif

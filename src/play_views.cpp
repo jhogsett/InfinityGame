@@ -7,7 +7,10 @@
 #include "utils.h"
 
 void display_purse(){
-	sprintf(display_buffer, FSTR("CASH $%ld"), purse);
+	if(purse > 999999)
+		sprintf(display_buffer, FSTR("CASH$%ld"), purse);
+	else
+		sprintf(display_buffer, FSTR("CASH $%ld"), purse);
 	title_prompt(display_buffer, CASH_SHOW_TIMES, false, ROUND_DELAY);
 }
 

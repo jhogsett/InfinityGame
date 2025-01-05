@@ -1,12 +1,14 @@
 #ifndef __LED_HANDLER_H__
 #define __LED_HANDLER_H__
 
+#include <Arduino.h>
+
 // Handles activation and animation of panel and button LEDs
 class LEDHandler
 {
 public:
 	explicit LEDHandler(int first_pin, int num_leds, const int *intensity, int show_time=0, int blank_time=0);
-	void begin(unsigned long time, int style, int show_time=0, int blank_time=0);
+	void begin(unsigned long time, int style, int show_time=0, int blank_time=0, bool *enabled= NULL);
 	void step(unsigned long time);
 
 	void activate_leds(const volatile bool * states, bool mirror=false);
@@ -44,7 +46,8 @@ private:
 	int _num_frames;
 	int _num_states;
 	bool _blanking;
-	char _active;			// virtual current active led or other state
+	int _active;			// virtual current active led or other state
+	bool *_enabled;			// array of enabled leds for animation matching LED count
 
 	bool _flash_mirror;
 	int _flash_on_time;

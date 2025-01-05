@@ -83,6 +83,6 @@ struct SavedData{
 
 extern void load_save_data();
 extern void save_data();
-extern void reset_options();
+extern bool reset_options();
 
 #endif
