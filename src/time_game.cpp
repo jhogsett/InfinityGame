@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "bank.h"
 #include "buffers.h"
 #include "buttons.h"
 #include "displays.h"
@@ -97,7 +98,8 @@ void time_game(){
 		// delay(ROUND_DELAY);
 
 		display_win(TIME_WIN);
-		purse += TIME_WIN;
+
+		add_to_purse(house_payout(TIME_WIN));
 		display_purse();
 
 		save_data();

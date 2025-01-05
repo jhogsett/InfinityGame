@@ -1,6 +1,8 @@
+#include "bank.h"
 #include "buttons.h"
 #include "buffers.h"
 #include "displays.h"
+#include "leds.h"
 #include "prompts.h"
 #include "seeding.h"
 #include "play_data.h"
@@ -12,6 +14,7 @@
 
 char chosen_word[WORD_BUFFER_SIZE];
 char scramble_word[SCRAMBLE_BUFFER_SIZE];
+bool new_game = true;
 
 // rotation size of buffer not including null terminator
 void rotate_left(char *buffer, int size){
@@ -143,8 +146,11 @@ int choose_word(bool rude){
 // returns -1 on time out or long press, 0 if player exceeds maximum moves, otherwise winning factor
 // returns -2 if user wins in one move
 int word_game_round(bool rude){
+	int instruction_times = new_game ? CONTROLS_SHOW_TIMES : 1;
+	int instruction_show_leds = new_game;
 	sprintf(display_buffer, FSTR("ROL FLIP ROR"));
-	title_prompt(display_buffer, INSTRUCTION_SHOW_TIMES, false, ROUND_DELAY);
+	title_prompt(display_buffer, instruction_times, instruction_show_leds, ROUND_DELAY, TITLE_PANEL_LEDS_STYLE2, TITLE_PANEL_LEDS_SHOW_TIME2, TITLE_PANEL_LEDS_BLANK_TIME2);
+	new_game = false;
 
 	int scramble_moves = choose_word(rude);
 	int player_moves = 0;
@@ -201,6 +207,9 @@ int word_game_round(bool rude){
 }
 
 void word_game(){
+	// reset this flag to show extra instruction on the first play
+	new_game = true;
+
 	title_prompt(FSTR("The WordGame"), TITLE_SHOW_TIMES, true);
 
 	bool rude;
@@ -221,10 +230,18 @@ void word_game(){
 		break;
 	}
 
+	sprintf(display_buffer, FSTR("Use BUTTONS to ROTATE and FLIP WORD"));
+	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
+	sprintf(display_buffer, FSTR("LONG PRESS to EXIT"));
+	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
+
 	unsigned long idle_timeout = millis() + IDLE_TIMEOUT;
 	unsigned long time;
 
 	while((time = millis()) < idle_timeout){
+		long win = 0;
+		// int bet = 0;
+		bool purse_change = false;
 		int round_result = word_game_round(rude);
 		switch(round_result){
 			case -1:
@@ -234,31 +251,37 @@ void word_game(){
 				// exceeded max moves
 				sprintf(display_buffer, FSTR("Out Of Moves"));
 				title_prompt(display_buffer, EXCEEDED_SHOW_TIMES, false, ROUND_DELAY);
-				continue;
+
+				// pay_house(use_purse(WORD_GAME_PLAY_BET));
+				// purse_change = true;
+			default:
+				sprintf(display_buffer, FSTR("    %s    "), chosen_word);
+				title_prompt(display_buffer, SUCCESS_SHOW_TIMES, false, CORRECT_WORD_SHOW_TIME);
+
+				sprintf(display_buffer, FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word);
+				title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);
+
+				win = (round_result-1) * BASE_WIN_CASE;
+				if(win > 0)
+					display_win(win);
+
+				pay_house(use_purse(WORD_GAME_PLAY_BET));
+				add_to_purse(house_payout(win));
+				purse_change = true;
+
 		}
-		sprintf(display_buffer, FSTR("    %s    "), chosen_word);
-		title_prompt(display_buffer, SUCCESS_SHOW_TIMES, false, ROUND_DELAY);
 
-		sprintf(display_buffer, FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word);
-		title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);
 
-		int win = 0;
+		// int win = 0;
 #ifdef ENABLE_WIN_IN_1
-		if(round_result == -2){
-			// win in one move
-			win = WIN_IN_1_BONUS * BASE_WIN_CASE;
-			display_win(win);
-		} else
+		// if(round_result == -2){
+		// 	// win in one move
+		// 	win = WIN_IN_1_BONUS * BASE_WIN_CASE;
+		// 	display_win(win);
+		// } else
 #endif
-		{
-			// subtract one, added in the found to ensure every round is not a win
-			win = (round_result-1) * BASE_WIN_CASE;
-			if(win > 0)
-				display_win(win);
-		}
 
-		if(win > 0){
-			purse += win;
+		if(purse_change){
 			save_data();
 			display_purse();
 		}

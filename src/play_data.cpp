@@ -12,6 +12,8 @@ unsigned long bank = DEFAULT_BANK;
 unsigned long best_time1 = (unsigned long)-1;
 unsigned long best_time2 = (unsigned long)-1;
 unsigned long best_time3 = (unsigned long)-1;
+long house = DEFAULT_HOUSE;
+long gang = DEFAULT_GANG;
 
 void load_save_data(){
 	SavedData saved_data;
@@ -32,6 +34,8 @@ void load_save_data(){
 	best_time1 = saved_data.best_time1;
 	best_time2 = saved_data.best_time2;
 	best_time3 = saved_data.best_time3;
+	house = saved_data.house;
+	gang = saved_data.gang;
 }
 
 void save_data(){
@@ -47,6 +51,8 @@ void save_data(){
 	saved_data.best_time1 = best_time1;
 	saved_data.best_time2 = best_time2;
 	saved_data.best_time3 = best_time3;
+	saved_data.house = house;
+	saved_data.gang = gang;
 	EEPROM.put(0, saved_data);
 }
 
@@ -54,12 +60,14 @@ void reset_options(){
 	option_sound = true;
 	option_vibrate = true;
 	purse = DEFAULT_PURSE;
-	best_time = (unsigned long)-1;
+	best_time = DEFAULT_TIME;
 	option_clock_24h = false;
 	option_clock_on_idle = false;
 	bank = DEFAULT_BANK;
-	best_time1 = (unsigned long)-1;
-	best_time2 = (unsigned long)-1;
-	best_time3 = (unsigned long)-1;
+	best_time1 = DEFAULT_TIME;
+	best_time2 = DEFAULT_TIME;
+	best_time3 = DEFAULT_TIME;
+	house = DEFAULT_HOUSE;
+	gang = DEFAULT_GANG;
 	save_data();
 }

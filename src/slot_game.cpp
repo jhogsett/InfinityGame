@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "bank.h"
 #include "betting.h"
 #include "buffers.h"
 #include "buttons.h"
@@ -14,9 +15,6 @@
 
 byte choice1, choice2, choice3;
 
-// const char *rude_words[NUM_WORDS] = {"FUCK", "SHIT", "CUNT", "COCK", "PISS", "TITS", "FART", "POOP", "DICK", "BOOB"};
-// const char *nice_words[NUM_WORDS] = {"WEED", "VAPE", "BEER", "WINE", "TACO", "GOLD", "MINT", "GIFT", "JADE", "CAKE"};
-
 void slots_round(bool rude){
 	disp1.begin_scroll_loop(1);
 	disp2.begin_scroll_loop(2);
@@ -25,10 +23,10 @@ void slots_round(bool rude){
 	char * text;
 	const char **words;
 	if(rude){
-		text = FSTR("    FUCK  SHIT  CUNT  COCK  PISS  TITS  FART  POOP  DICK  BOOB");
+		text = FSTR("    FUCK  SHIT  CUNT  COCK  PISS  TITS  FART  POOP  DICK  ANAL");
 		words = rude_words;
 	} else {
-		text = FSTR("    WEED  VAPE  BEER  WINE  TACO  GOLD  MINT  GIFT  JADE  CAKE");
+		text = FSTR("    WEED  VAPE  BEER  WINE  TACO  GOLD  MINT  PORK  JADE  CAKE");
 		words = nice_words;
 	}
 
@@ -113,9 +111,12 @@ void slots_game(){
 
 	unsigned long idle_timeout = millis() + IDLE_TIMEOUT;
 	unsigned long time;
+	long last_bet_amount = 0L;
 
 	while((time = millis()) < idle_timeout){
 		bet_amounts[BET_ALL] = purse;
+		bet_amounts[BET_REPEAT] = last_bet_amount;
+
 		sprintf(display_buffer, FSTR("Bet %s Back"), standard_bet_str(current_bet));
 		const bool states[] = {false, true, false, false};
 		switch(button_led_prompt(display_buffer, states)){
@@ -139,9 +140,11 @@ void slots_game(){
 
 		idle_timeout = millis() + IDLE_TIMEOUT;
 
-		int win = 0;
+		long win = 0;
 		bool jackpot = false;
-		purse -= bet_amounts[current_bet];
+
+		last_bet_amount = bet_amounts[current_bet];
+		pay_house(use_purse(last_bet_amount));
 		save_data();
 
 		slots_round(rude);
@@ -183,7 +186,7 @@ void slots_game(){
 			// see the non-winning results in lieu of being told you lost
 			delay(ROUND_DELAY);
 
-		purse += win;
+		add_to_purse(house_payout(win));
 		save_data();
 
 		display_purse();
