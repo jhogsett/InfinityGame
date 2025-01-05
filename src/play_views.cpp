@@ -22,10 +22,12 @@ void display_purse(){
 // }
 
 void display_win(long win){
-	if(win > 99999L)
+	if(win > 999999L)
+		sprintf(display_buffer, FSTR("WIN$%ld"), win);
+	else if(win > 99999L)
 		sprintf(display_buffer, FSTR("WIN $%ld"), win);
 	else
-		sprintf(display_buffer, FSTR("WIN * $%ld"), win);
+		sprintf(display_buffer, FSTR("WIN* $%ld"), win);
 	title_prompt(display_buffer, WIN_SHOW_TIMES, true, ROUND_DELAY);
 }
 

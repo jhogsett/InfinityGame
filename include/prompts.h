@@ -8,9 +8,9 @@ typedef void (*voidFuncPtr)(void);
 
 // Billboard display related
 // number of times to show home billboard "InfinityGame" (effectively time of display because no scroll needed)
-#define HOME_TIMES 0
+#define HOME_TIMES 5
 // blacking time between billboards
-#define BLANKING_TIME 600
+#define BLANKING_TIME 500
 
 // Prompt related
 // number of times to show a title, such as a game title (or effective time of display if no scroll needed)
@@ -18,9 +18,9 @@ typedef void (*voidFuncPtr)(void);
 
 // Display handling
 // show a display string for 700ms before beginning scrolling for ease of reading
-#define DISPLAY_SHOW_TIME 700
+#define DISPLAY_SHOW_TIME 900
 // scroll the display every 90ms for ease of reading
-#define DISPLAY_SCROLL_TIME 80
+#define DISPLAY_SCROLL_TIME 70
 // scroll flipped options every 100ms
 #define OPTION_FLIP_SCROLL_TIME 100
 
@@ -28,23 +28,23 @@ typedef void (*voidFuncPtr)(void);
 #define NUM_BILLBOARDS 11
 const char template0[] PROGMEM = "InfinityGame";
 const char template1[] PROGMEM = "Press A Button to Play";
-const char template2[] PROGMEM = "Your WALLET $%s.00";
-const char template3[] PROGMEM = "Your Best Time %s ms";
-const char template4[] PROGMEM = "House SAFE $%s";
-const char template5[] PROGMEM = "Bank VAULT $%s";
-const char template6[] PROGMEM = "Gang STASH $%s";
-const char template7[] PROGMEM = "Long Press for Options";
-const char template8[] PROGMEM = "Play Silly Slots";
-const char template9[] PROGMEM = "Play The WordGame";
-const char template10[] PROGMEM = "Play The TimeGame";
+const char template2[] PROGMEM = "Play Silly Slots";
+const char template3[] PROGMEM = "Play The WordGame";
+const char template4[] PROGMEM = "Play The TimeGame";
+const char template5[] PROGMEM = "Your WALLET $%s";
+const char template6[] PROGMEM = "Your Best Time %s ms";
+const char template7[] PROGMEM = "House SAFE $%s";
+const char template8[] PROGMEM = "Bank VAULT $%s";
+const char template9[] PROGMEM = "Gang STASH $%s";
+const char template10[] PROGMEM = "Long Press for Options";
 const char *const templates[] PROGMEM = { template0, template1, template2, template3, template4, template5, template6, template7, template8, template9, template10 };
 
 // Identify array position for placing fill-in data
-#define BILLBOARD_CASH 2
-#define BILLBOARD_TIME 3
-#define BILLBOARD_HOUSE 4
-#define BILLBOARD_BANK 5
-#define BILLBOARD_GANG 6
+#define BILLBOARD_CASH 5
+#define BILLBOARD_TIME 6
+#define BILLBOARD_HOUSE 7
+#define BILLBOARD_BANK 8
+#define BILLBOARD_GANG 9
 
 extern BillboardsHandler billboards_handler;
 extern char *billboard_data[NUM_BILLBOARDS];

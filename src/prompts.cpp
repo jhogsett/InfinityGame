@@ -34,10 +34,10 @@ void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr
 	billboards_handler.reset();
 	panel_leds.begin(time, BILLBOARD_PANEL_LEDS_STYLE, BILLBOARD_PANEL_LEDS_SHOW_TIME, BILLBOARD_PANEL_LEDS_BLANK_TIME);
 
-	char cash_display[10];
-	char house_display[10];
+	char cash_display[15];
+	char house_display[15];
 	char bank_display[15];
-	char gang_display[10];
+	char gang_display[15];
 	char time_display[15];
 
 	ltoa(purse, cash_display, 10);

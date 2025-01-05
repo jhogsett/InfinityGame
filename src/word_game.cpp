@@ -254,6 +254,7 @@ void word_game(){
 
 				// pay_house(use_purse(WORD_GAME_PLAY_BET));
 				// purse_change = true;
+				break;
 			default:
 				sprintf(display_buffer, FSTR("    %s    "), chosen_word);
 				title_prompt(display_buffer, SUCCESS_SHOW_TIMES, false, CORRECT_WORD_SHOW_TIME);
@@ -268,7 +269,7 @@ void word_game(){
 				pay_house(use_purse(WORD_GAME_PLAY_BET));
 				add_to_purse(house_payout(win));
 				purse_change = true;
-
+				break;
 		}
 
 
