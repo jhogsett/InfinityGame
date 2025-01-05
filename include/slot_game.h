@@ -34,6 +34,6 @@ extern bool triple_word_chosen();
 extern bool double_word_chosen();
 extern bool special_word_chosen();
 extern bool jackpot_words_chosen(byte word1, byte word2, byte word3);
-extern void slots_game();
+extern bool slots_game();
 
 #endif

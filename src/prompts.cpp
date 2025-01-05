@@ -22,7 +22,7 @@ void run_billboard(char **data) {
 }
 
 // show the billboard and cycle waiting for any button press
-void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr on_long_press) {
+void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr on_long_press) {
 	while (button_still_pressed())
 		;
 	reset_buttons_state();
@@ -34,10 +34,10 @@ void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr
 	billboards_handler.reset();
 	panel_leds.begin(time, BILLBOARD_PANEL_LEDS_STYLE, BILLBOARD_PANEL_LEDS_SHOW_TIME, BILLBOARD_PANEL_LEDS_BLANK_TIME);
 
-	char cash_display[10];
-	char house_display[10];
+	char cash_display[15];
+	char house_display[15];
 	char bank_display[15];
-	char gang_display[10];
+	char gang_display[15];
 	char time_display[15];
 
 	ltoa(purse, cash_display, 10);
@@ -70,8 +70,13 @@ void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr
 			all_leds.deactivate_leds(true);
 
 			if (long_press_state == 1) {
-				on_long_press();
-				return;
+				bool result = on_long_press();
+				if(result)
+					// if the long press handler returns true it means there was an idle timeout
+					// and the billboard should go directly to the idle state, not show the menu
+					break;
+				else
+					return;
 			} else {
 				on_press();
 				return;
@@ -222,8 +227,8 @@ int panel_led_prompt() {
 }
 
 // TODO button_led_prompt() blocks, so the loop here might not be needed (would be if there were LEDS or the display to run here)
-// returns if timed out waiting for input
-void branch_prompt(const char * prompt, voidFuncPtr on_option_1, voidFuncPtr on_option_2, voidFuncPtr on_option_3, voidFuncPtr on_long_press, const bool *states) {
+// returns the bool returned by the event handler function or false
+bool branch_prompt(const char * prompt, boolFuncPtr on_option_1, boolFuncPtr on_option_2, boolFuncPtr on_option_3, boolFuncPtr on_long_press, const bool *states) {
 	unsigned long prompt_timeout = millis() + PROMPT_TIMEOUT;
 	unsigned long time;
 
@@ -231,32 +236,30 @@ void branch_prompt(const char * prompt, voidFuncPtr on_option_1, voidFuncPtr on_
 		int choice = button_led_prompt(prompt, states);
 		switch (choice) {
 			case -1:
-				return;
+				break;
 			case 0:
 				if (on_long_press)
-					on_long_press();
-				// always return so long pressing is a way to go back
-				return;
+					return on_long_press();
+				else
+					return false;
 			case 1:
 				if (on_option_1) {
-					on_option_1();
-					return;
+					return on_option_1();
 				}
 				break;
 			case 2:
 				if (on_option_2) {
-					on_option_2();
-					return;
+					return on_option_2();
 				}
 				break;
 			case 3:
 				if (on_option_3) {
-					on_option_3();
-					return;
+					return on_option_3();
 				}
 			break;
 		}
 	}
+	return false;
 }
 
 // returns -1 on timeout or long press, otherwise current choice

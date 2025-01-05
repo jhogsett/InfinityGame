@@ -9,7 +9,7 @@ extern unsigned long debug_marker;
 
 extern void set_debug_marker(unsigned long marker);
 extern void clear_debug_marker();
-extern void debug_mode();
+extern bool debug_mode();
 #endif
 
 #endif

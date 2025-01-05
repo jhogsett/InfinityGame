@@ -62,7 +62,8 @@ void render_clock_string(byte seconds, byte minutes, byte hours) {
 		sprintf(display_buffer, FSTR("  %2d %02d %02d  "), effective_hours, minutes, seconds);
 }
 
-void clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
+// returns true if the clock timed out while being set
+bool clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
 	clock_hour = hours;
 	clock_minute = minutes;
 	clock_second = seconds;
@@ -76,7 +77,11 @@ void clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
 	unsigned long idle_timeout = time + IDLE_TIMEOUT;
 
 	// clock mode only times out if clock is the idle mode
-	while (!option_clock_on_idle || (time = millis()) < idle_timeout) {
+	while (true) {
+		if(settable)
+			if((time = millis()) >= idle_timeout)
+				return true;
+
 		seconds_to_time(time_in_seconds(), clock_second, clock_minute, clock_hour);
 
 		render_clock_string(clock_second, clock_minute, clock_hour);
@@ -90,7 +95,7 @@ void clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
 
 			all_leds.deactivate_leds(true);
 			if (long_press_state == 1) {
-				return;
+				return false;
 			} else {
 				if (settable) {
 					idle_timeout = time + IDLE_TIMEOUT;
@@ -103,7 +108,7 @@ void clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
 						establish_clock_basis(clock_second, clock_minute, clock_hour);
 					}
 			} else
-				return;
+				return false;
 			}
 		}
 	}

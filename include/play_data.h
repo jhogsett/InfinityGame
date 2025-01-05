@@ -13,7 +13,7 @@
 #define DEFAULT_PURSE 0L
 
 // All money originates in the bank
-#define DEFAULT_BANK 100000000L
+#define DEFAULT_BANK 1000000000L
 
 // All bets are paid to the house
 // All payouts are from the house
@@ -83,6 +83,6 @@ struct SavedData{
 
 extern void load_save_data();
 extern void save_data();
-extern void reset_options();
+extern bool reset_options();
 
 #endif

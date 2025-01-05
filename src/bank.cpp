@@ -1,9 +1,15 @@
 #include <Arduino.h>
 #include "buffers.h"
+#include "displays.h"
+#include "motor.h"
 #include "play_data.h"
 #include "prompts.h"
+#include "speaker.h"
 #include "utils.h"
 #include "bank.h"
+
+bool crime_wave = false;
+unsigned long crime_wave_started = 0L;
 
 // returns the amount deposited
 long bank_deposit(long dollars){
@@ -14,17 +20,13 @@ long bank_deposit(long dollars){
 // returns the amount withdrawn
 long bank_widthdrawl(long dollars){
 	bank -= dollars;
+
 	return dollars;
 }
 
 // returns the amount of the take
 long bank_robbery(long min_dollars, long max_dollars){
 	long take = random(min_dollars, max_dollars+1);
-
-	char buf[10];
-	ltoa(take, buf, 10);
-	sprintf(display_buffer, FSTR("BANK Vault Blasted $%s Taken"), buf);
-	title_prompt(display_buffer, 1, true, ALERT_SHOW_TIME);
 
 	return bank_widthdrawl(take);
 }
@@ -49,11 +51,6 @@ long house_payout(long dollars){
 long burglarize_house(long min_dollars, long max_dollars){
 	long take = random(min_dollars, max_dollars+1);
 
-	char buf[10];
-	ltoa(take, buf, 10);
-	sprintf(display_buffer, FSTR("HOUSE Safe CRACKED $%s Taken"), buf);
-	title_prompt(display_buffer, 1, true, ALERT_SHOW_TIME);
-
 	return house_payout(take);
 }
 
@@ -63,13 +60,20 @@ long use_purse(long dollars){
 
 	long total_loan = 0;
 	while(purse + total_loan < PLAYER_MINIMUM)
-		total_loan += borrow_money(PLAYER_LOAN);
+		total_loan += gang_payout(PLAYER_LOAN);
 	purse += total_loan;
 
+	// finish and reset a possible crime wave
+	unsigned long crime_wave_timeout = crime_wave_started + MINIMUM_CRIME_WAVE_TIME;
+	unsigned long time;
+	while((time = millis()) < crime_wave_timeout)
+		button_leds.step(time);
+	crime_wave = false;
+
 	if(total_loan){
-		char buf[10];
+		char buf[15];
 		ltoa(total_loan, buf, 10);
-		sprintf(display_buffer, FSTR("Loan from GANG $%s"), buf);
+		sprintf(display_buffer, FSTR("GANG LOAN for $%s"), buf);
 		title_prompt(display_buffer, 1, false, ALERT_SHOW_TIME);
 	}
 
@@ -85,11 +89,6 @@ long scam_purse(long min_dollars, long max_dollars){
 	min_dollars *= 100;
 	max_dollars *= 100;
 
-	char buf[10];
-	ltoa(take, buf, 10);
-	sprintf(display_buffer, FSTR("Player SCAMMED $%s Taken"), buf);
-	title_prompt(display_buffer, 1, true, ALERT_SHOW_TIME);
-
 	return house_payout(take);
 }
 
@@ -100,29 +99,40 @@ long add_to_purse(long dollars){
 	return dollars;
 }
 
-long borrow_money(long dollars){
+// returns the amount paid out
+long gang_payout(long dollars){
 	gang -= dollars;
 
-	long total_take = 0;
-	while(gang + total_take < GANG_MIMUMUM)
-		total_take += steal_money();
-	gang += total_take;
+	if(gang < GANG_MIMUMUM){
+		if(!crime_wave){
+			unsigned long time = millis();
+			crime_wave = true;
+			crime_wave_started = time;
+			strcpy(display_buffer, FSTR("$Crime Wave$"));
+			display.simple_show_string(display_buffer);
+			bool led_enables[] = {true, false, true};
+			button_leds.begin(time, ALERT_LEDS_STYLE, ALERT_LEDS_SHOW_TIME, ALERT_LEDS_BLANK_TIME, led_enables);
+		}
 
-	// char buf[10];
-	// ltoa(total_loan, buf, 10);
-	// sprintf(display_buffer, FSTR("Loan from GANG $%s"), buf);
-	// title_prompt(display_buffer, 1, false, ALERT_SHOW_TIME);
+		long total_take = 0;
+		while(gang + total_take < GANG_MIMUMUM){
+			total_take += steal_money();
+		}
+		unsigned long time = millis();
+		// display.loop_scroll_string(time, display_buffer, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
+		button_leds.step(time);
+		gang += total_take;
+	}
 
 	return dollars;
 }
 
-
 long steal_money(){
+	long take = 0L;
+
 	bool steal_from_bank = false;
 	bool steal_from_house = false;
 	bool steal_from_purse = false;
-
-	long take = 0L;
 
 	if(bank >= BANK_STEAL_MIN)
 		steal_from_bank = true;
@@ -133,21 +143,19 @@ long steal_money(){
 	if(purse >= PURSE_STEAL_MIN)
 		steal_from_purse = true;
 
-	while(take == 0L){
-		switch(random(2)){
-			case 0:
-				if(steal_from_bank)
-					take = bank_robbery();
-				break;
-			case 1:
-				if(steal_from_house)
-					take = burglarize_house();
-				break;
-			case 2:
-				if(steal_from_purse)
-					take = scam_purse();
-				break;
-		}
+	switch(random(3)){
+		case 0:
+			if(steal_from_bank)
+				take = bank_robbery();
+			break;
+		case 1:
+			if(steal_from_house)
+				take = burglarize_house();
+			break;
+		case 2:
+			if(steal_from_purse)
+				take = scam_purse();
+			break;
 	}
 
 	return take;

@@ -27,6 +27,6 @@ extern char chosen_word[];
 extern char scramble_word[];
 extern bool new_game;
 
-extern void word_game();
+extern bool word_game();
 
 #endif

@@ -56,7 +56,7 @@ void save_data(){
 	EEPROM.put(0, saved_data);
 }
 
-void reset_options(){
+bool reset_options(){
 	option_sound = true;
 	option_vibrate = true;
 	purse = DEFAULT_PURSE;
@@ -70,4 +70,5 @@ void reset_options(){
 	house = DEFAULT_HOUSE;
 	gang = DEFAULT_GANG;
 	save_data();
+	return false;
 }

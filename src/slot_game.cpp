@@ -81,7 +81,7 @@ bool jackpot_words_chosen(byte word1, byte word2, byte word3){
 	return choice1 == word1 && choice2 == word2 && choice3 == word3;
 }
 
-void slots_game(){
+bool slots_game(){
 	title_prompt(FSTR("Silly Slots"), TITLE_SHOW_TIMES, true);
 
 	randomizer.randomize();
@@ -94,19 +94,18 @@ void slots_game(){
 	bool rude;
 	const bool buttons[] = {false, true, false, true};
 	switch(button_led_prompt(FSTR("NICE    RUDE"), buttons)){
-	case -1:
-		return;
-	case 0:
-		return;
-	case 1:
-		rude = false;
-		break;
-	case 2:
-		rude = random(2) == 0 ? true : false;
-		break;
-	case 3:
-		rude = true;
-		break;
+		case -1:
+		case 0:
+			return false;
+		case 1:
+			rude = false;
+			break;
+		case 2:
+			rude = random(2) == 0 ? true : false;
+			break;
+		case 3:
+			rude = true;
+			break;
 	}
 
 	unsigned long idle_timeout = millis() + IDLE_TIMEOUT;
@@ -119,11 +118,25 @@ void slots_game(){
 
 		sprintf(display_buffer, FSTR("Bet %s Back"), standard_bet_str(current_bet));
 		const bool states[] = {false, true, false, false};
-		switch(button_led_prompt(display_buffer, states)){
+		int response = button_led_prompt(display_buffer, states);
+		switch(response){
 			case -1:
-				return;
+				return false;
 			case 0:
-				return;
+				// long press
+				if(validated_button_states[GREEN_ID]){
+					// set the bet to repeat and go
+					current_bet = BET_REPEAT;
+					break;
+				} else if(validated_button_states[AMBER_ID]){
+					// set the bet to all and go
+					current_bet = BET_ALL;
+					break;
+				} else if(validated_button_states[RED_ID]){
+					// go back
+					return false;
+				}
+				break;
 			case 1:
 				break;
 			case 2:
@@ -135,7 +148,7 @@ void slots_game(){
 				disp2.scroll_string(display_buffer, 1, OPTION_FLIP_SCROLL_TIME);
 				continue;
 			case 3:
-				return;
+				return false;
 		}
 
 		idle_timeout = millis() + IDLE_TIMEOUT;
@@ -191,4 +204,6 @@ void slots_game(){
 
 		display_purse();
 	}
+
+	return false;
 }

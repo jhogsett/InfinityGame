@@ -65,9 +65,9 @@ void setup(){
 		vibrate();
 }
 
-void main_menu(){
+bool main_menu(){
 	bool buttons[] = {false, true, true, true};
-	branch_prompt(FSTR("SlotWordTime"), slots_game, word_game, time_game, NULL, buttons);
+	return branch_prompt(FSTR("SlotWordTime"), slots_game, word_game, time_game, NULL, buttons);
 }
 
 void loop()

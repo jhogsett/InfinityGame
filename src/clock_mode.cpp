@@ -1,5 +1,5 @@
 #include "clock.h"
 
-void clock_mode(){
-	clock_prompt(0, 0, 12);
+bool clock_mode(){
+	return clock_prompt(0, 0, 12);
 }

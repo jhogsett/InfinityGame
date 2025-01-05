@@ -34,6 +34,12 @@
 #define TITLE_PANEL_LEDS_BLANK_TIME2    0
 #define TITLE_PANEL_LEDS_STYLE2 (LEDHandler::STYLE_PLAIN)
 
+// for showing panels leds quickly during an alert
+#define ALERT_LEDS_SHOW_TIME     250
+#define ALERT_LEDS_BLANK_TIME    0
+#define ALERT_LEDS_STYLE (LEDHandler::STYLE_MIRROR)
+
+
 // adjustments to match the panels LEDs to the display
 #define LED_INTENSITY1 32 // Green panel LED is a bit brighter than the Amber and Red LEDs
 #define LED_INTENSITY2 40 // Amber panel LED matched to Green
