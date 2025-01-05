@@ -36,7 +36,7 @@ void billboard_prompt(voidFuncPtr on_time_out, voidFuncPtr on_press, voidFuncPtr
 
 	char cash_display[10];
 	char house_display[10];
-	char bank_display[10];
+	char bank_display[15];
 	char gang_display[10];
 	char time_display[15];
 

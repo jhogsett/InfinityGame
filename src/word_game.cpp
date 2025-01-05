@@ -230,7 +230,9 @@ void word_game(){
 		break;
 	}
 
-	sprintf(display_buffer, FSTR("Use BUTTONS to ROTATE and FLIP WORD - Long Press to EXIT"));
+	sprintf(display_buffer, FSTR("Use BUTTONS to ROTATE and FLIP WORD"));
+	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
+	sprintf(display_buffer, FSTR("LONG PRESS to EXIT"));
 	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
 
 	unsigned long idle_timeout = millis() + IDLE_TIMEOUT;
