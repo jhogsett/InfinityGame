@@ -70,4 +70,5 @@ bool reset_options(){
 	house = DEFAULT_HOUSE;
 	gang = DEFAULT_GANG;
 	save_data();
+	return false;
 }

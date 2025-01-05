@@ -112,4 +112,6 @@ bool time_game(){
 
 	// while(button_led_prompt(display_buffer) == -1);
 	button_led_prompt(display_buffer);
+
+	return false;
 }

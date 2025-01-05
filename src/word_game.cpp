@@ -229,17 +229,17 @@ bool word_game(){
 		break;
 	}
 
-	sprintf(display_buffer, FSTR("Use BUTTONS to ROTATE and FLIP WORD"));
+	sprintf(display_buffer, FSTR("Buttons ROTATE and FLIP Word"));
 	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
-	sprintf(display_buffer, FSTR("LONG PRESS to EXIT"));
+	sprintf(display_buffer, FSTR("LONG PRESS EXITS"));
 	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
 
 	unsigned long idle_timeout = millis() + IDLE_TIMEOUT;
 	unsigned long time;
 
 	while((time = millis()) < idle_timeout){
+		pay_house(use_purse(WORD_GAME_PLAY_BET));
 		long win = 0;
-		// int bet = 0;
 		bool purse_change = false;
 		int round_result = word_game_round(rude);
 		switch(round_result){
@@ -265,7 +265,7 @@ bool word_game(){
 				if(win > 0)
 					display_win(win);
 
-				pay_house(use_purse(WORD_GAME_PLAY_BET));
+				// pay_house(use_purse(WORD_GAME_PLAY_BET));
 				add_to_purse(house_payout(win));
 				purse_change = true;
 				break;

@@ -23,8 +23,6 @@ bool debug_mode(){
 	button_led_prompt(display_buffer);
 	clear_debug_marker();
 
-	purse = 500000000L;
-
 	return false;
 }
 #endif

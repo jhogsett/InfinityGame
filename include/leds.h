@@ -35,7 +35,7 @@
 #define TITLE_PANEL_LEDS_STYLE2 (LEDHandler::STYLE_PLAIN)
 
 // for showing panels leds quickly during an alert
-#define ALERT_LEDS_SHOW_TIME     350
+#define ALERT_LEDS_SHOW_TIME     250
 #define ALERT_LEDS_BLANK_TIME    0
 #define ALERT_LEDS_STYLE (LEDHandler::STYLE_MIRROR)
 

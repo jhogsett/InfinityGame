@@ -9,6 +9,7 @@
 #include "bank.h"
 
 bool crime_wave = false;
+unsigned long crime_wave_started = 0L;
 
 // returns the amount deposited
 long bank_deposit(long dollars){
@@ -62,7 +63,11 @@ long use_purse(long dollars){
 		total_loan += gang_payout(PLAYER_LOAN);
 	purse += total_loan;
 
-	// reset a possible crime wave needs to come up with funds
+	// finish and reset a possible crime wave
+	unsigned long crime_wave_timeout = crime_wave_started + MINIMUM_CRIME_WAVE_TIME;
+	unsigned long time;
+	while((time = millis()) < crime_wave_timeout)
+		button_leds.step(time);
 	crime_wave = false;
 
 	if(total_loan){
@@ -100,11 +105,13 @@ long gang_payout(long dollars){
 
 	if(gang < GANG_MIMUMUM){
 		if(!crime_wave){
+			unsigned long time = millis();
 			crime_wave = true;
+			crime_wave_started = time;
 			strcpy(display_buffer, FSTR("$Crime Wave$"));
 			display.simple_show_string(display_buffer);
 			bool led_enables[] = {true, false, true};
-			button_leds.begin(millis(), ALERT_LEDS_STYLE, ALERT_LEDS_SHOW_TIME, ALERT_LEDS_BLANK_TIME, led_enables);
+			button_leds.begin(time, ALERT_LEDS_STYLE, ALERT_LEDS_SHOW_TIME, ALERT_LEDS_BLANK_TIME, led_enables);
 		}
 
 		long total_take = 0;
