@@ -28,7 +28,7 @@ typedef void (*voidFuncPtr)(void);
 #define NUM_BILLBOARDS 11
 const char template0[] PROGMEM = "InfinityGame";
 const char template1[] PROGMEM = "Press A Button to Play";
-const char template2[] PROGMEM = "Your WALLET $%s";
+const char template2[] PROGMEM = "Your WALLET $%s.00";
 const char template3[] PROGMEM = "Your Best Time %s ms";
 const char template4[] PROGMEM = "House SAFE $%s";
 const char template5[] PROGMEM = "Bank VAULT $%s";

@@ -94,11 +94,11 @@ void clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
 			} else {
 				if (settable) {
 					idle_timeout = time + IDLE_TIMEOUT;
-					if (button_states[GREEN_ID]) {
+					if (validated_button_states[GREEN_ID]) {
 						increment_time_basis(clock_second, clock_minute, clock_hour, 0, 0, 1);
-					} else if (button_states[AMBER_ID])
+					} else if (validated_button_states[AMBER_ID])
 						increment_time_basis(clock_second, clock_minute, clock_hour, 0, 1, 0);
-					else if (button_states[RED_ID]) {
+					else if (validated_button_states[RED_ID]) {
 						clock_second = 0;
 						establish_clock_basis(clock_second, clock_minute, clock_hour);
 					}

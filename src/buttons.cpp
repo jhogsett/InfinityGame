@@ -7,6 +7,7 @@
 
 volatile bool button_states[NUM_BUTTONS];
 volatile unsigned long press_time;
+bool validated_button_states[NUM_BUTTONS];
 
 // interupt if any button is pressed
 // saves the time pressed for debouncing, long press etc
@@ -57,10 +58,11 @@ bool button_pressed(){
 		return false;
 	}
 
-	// restore the saved button state
+	// save the validated button states
 	for(int i = 0; i < NUM_BUTTONS; i++)
-		button_states[i] = saved_button_states[i];
+		validated_button_states[i] = saved_button_states[i];
 
+	// is this necessary?
 	button_states[ANY_COLOR_ID] = false;
 	return true;
 }

@@ -116,11 +116,11 @@ int button_led_prompt(const char * prompt, const bool *states) {
 				return 0;
 			}
 			else {
-				if (button_states[GREEN_ID])
+				if (validated_button_states[GREEN_ID])
 					return GREEN_ID;
-				else if (button_states[AMBER_ID])
+				else if (validated_button_states[AMBER_ID])
 					return AMBER_ID;
-				else if (button_states[RED_ID])
+				else if (validated_button_states[RED_ID])
 					return RED_ID;
 			}
 		}
