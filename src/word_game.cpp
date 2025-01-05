@@ -245,7 +245,7 @@ bool word_game(){
 		switch(round_result){
 			case -1:
 				// timed out of long press
-				break;
+				return false;
 			case 0:
 				// exceeded max moves
 				sprintf(display_buffer, FSTR("Out Of Moves"));
