@@ -7,13 +7,15 @@
 #include "utils.h"
 #include "options_mode.h"
 
+#define MINUTE_MILLISECONDS (1000L * 60L)
+
 bool options_mode(){
 	bool buttons[] = {false, true, false, true};
 	return branch_prompt(FSTR("TOOLS   SET"), tools_menu, NULL, options_menu, NULL, buttons);
 }
 
 bool options_menu(){
-	const char *labels[] = {"Off", "On", "12H", "24H", "SLP", "CLK"};
+	const char *labels[] = {"Off", "On", "12H", "24H", "SLP", "CLK", "5M", "1M"};
 	int result = toggle_prompt(FSTR("SOUND   %s"), labels, option_sound ? 1 : 0, 3, 2) ? true : false;
 
 	if(result == -1)
@@ -46,5 +48,14 @@ bool options_menu(){
 	option_clock_on_idle = result;
 	save_data();
 
+	int idle_timeout_minutes = option_idle_time / MINUTE_MILLISECONDS;
+
+	result = toggle_prompt(FSTR("IDLE T.O. %s"), labels+6, idle_timeout_minutes == 1 ? 1 : 0, 3, 2) ? 1 : 5;
+
+	if(result == -1)
+		return false;
+	option_idle_time = MINUTE_MILLISECONDS * result;
+
+	save_data();
 	return false;
 }

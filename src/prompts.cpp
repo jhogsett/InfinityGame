@@ -71,6 +71,11 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 
 			if (long_press_state == 1) {
 				bool result = on_long_press();
+
+				// update anything that may have changed in the options and could affect
+				// the current running billboard prompt
+				idle_timeout = time + option_idle_time;
+
 				if(result)
 					// if the long press handler returns true it means there was an idle timeout
 					// and the billboard should go directly to the idle state, not show the menu
