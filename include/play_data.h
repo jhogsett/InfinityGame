@@ -74,8 +74,8 @@ extern long house;
 // Current gang
 extern long gang;
 
-// Idle Time in minutes
-extern int idle_time;
+// Idle Time in milliseconds
+extern unsigned long idle_time;
 
 // ##DATA Add 'extern's for new persisted play data veriables here
 
@@ -95,7 +95,7 @@ struct SavedData{
 	unsigned long best_time3;
 	long house;
 	long gang;
-	int idle_time;
+	unsigned long idle_time;
 
 	// ##DATA Add new persisted data types here
 };

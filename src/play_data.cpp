@@ -16,7 +16,7 @@ unsigned long best_time2 = (unsigned long)-1;
 unsigned long best_time3 = (unsigned long)-1;
 long house = DEFAULT_HOUSE;
 long gang = DEFAULT_GANG;
-int idle_time = DEFAULT_IDLE_TIME;
+unsigned long idle_time = DEFAULT_IDLE_TIME;
 
 // ##DATA Add new persisted play data veriables here
 
