@@ -20,14 +20,12 @@ long bank_deposit(long dollars){
 // returns the amount withdrawn
 long bank_widthdrawl(long dollars){
 	bank -= dollars;
-
 	return dollars;
 }
 
 // returns the amount of the take
 long bank_robbery(long min_dollars, long max_dollars){
 	long take = random(min_dollars, max_dollars+1);
-
 	return bank_widthdrawl(take);
 }
 
@@ -50,7 +48,6 @@ long house_payout(long dollars){
 // returns the amount burglarized
 long burglarize_house(long min_dollars, long max_dollars){
 	long take = random(min_dollars, max_dollars+1);
-
 	return house_payout(take);
 }
 
@@ -119,7 +116,6 @@ long gang_payout(long dollars){
 			total_take += steal_money();
 		}
 		unsigned long time = millis();
-		// display.loop_scroll_string(time, display_buffer, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
 		button_leds.step(time);
 		gang += total_take;
 	}

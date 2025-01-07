@@ -117,10 +117,10 @@ void LEDHandler::step(unsigned long time){
 void LEDHandler::activate_leds(const volatile bool * states, bool mirror){
 	int effective_pins = mirror ? (_num_leds / 2) : _num_leds;
 	for(int virtual_pin = 0; virtual_pin < effective_pins; virtual_pin++){
-	if(states[1 + virtual_pin])
-		activate_led(virtual_pin, mirror);
-	else
-		deactivate_led(virtual_pin, mirror);
+		if(states[1 + virtual_pin])
+			activate_led(virtual_pin, mirror);
+		else
+			deactivate_led(virtual_pin, mirror);
 	}
 }
 
