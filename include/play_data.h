@@ -30,8 +30,8 @@
 // the longest possible count of milliseconds
 #define DEFAULT_TIME ((unsigned long)-1)
 
-// default minutes until device goes into idle mode
-#define DEFAULT_IDLE_TIME 5
+// default milliseconds until device goes into idle mode
+#define DEFAULT_IDLE_TIME (5 * 60 * 1000)
 
 // ##DATA add new defaults on play data reset here
 
