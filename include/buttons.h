@@ -19,13 +19,16 @@
 
 // Max button LOWs during the debounce period reads on a button in a tight loop (experimental)
 // if the supposedly-pressed button is actually low this many times, the press is rejected as unreliable
-#define MAX_DROPS 1000
+#define MAX_DROPS 2000
 
 // An array used by the button ISR to capture the states of the 'any' button and the three real buttons
 // this array type is used in various places to determine or set the buttons states
 // The first array position represents the 'any' button
 // When using it to set display states for the button LEDs, the 'any' element must be present, but is unused
 extern volatile bool button_states[];
+
+// saves the button state that was validated by the debounce filter an unaltered since
+extern bool validated_button_states[];
 
 // the time using millis() that a button was pressed, used by the ISR
 extern volatile unsigned long press_time;

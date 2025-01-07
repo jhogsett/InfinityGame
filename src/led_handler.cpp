@@ -14,12 +14,23 @@ LEDHandler::LEDHandler(int first_pin, int num_leds, const int *intensity, int sh
 	_num_frames = 0;
 	_num_states = 0;
 	_blanking = false;
-	_active = 0; // virtual current active led or other state
+	_active = 0; 	   // virtual current active led or other state
+	_enabled = NULL;   // array of enabled leds for animation matching LED count
 }
 
-void LEDHandler::begin(unsigned long time, int style, int show_time, int blank_time){
+void LEDHandler::begin(unsigned long time, int style, int show_time, int blank_time, bool *enabled){
 	_show_time = show_time ? show_time : DEFAULT_SHOW_TIME;
 	_blank_time = blank_time ? blank_time : DEFAULT_BLANK_TIME;
+
+	// if enabled specified, disable it if none of the LEDs are enabled
+	bool detect = false;
+	for(int i = 0; i < _num_leds; i++){
+		if(enabled[i]){
+			detect = true;
+			break;
+		}
+	}
+	_enabled = detect ? enabled : NULL;
 
 	_style = style;
 
@@ -75,15 +86,27 @@ void LEDHandler::step(unsigned long time){
 	bool blanking_period = (_style & STYLE_BLANKING) && (_frame % 2);
 	if(!blanking_period){
 		if(_style & STYLE_RANDOM){
-			int r;
-			while( (r = random(_num_states)) == _active );
+			int r; // skkp prevention llgic here if neing e abled
+			while( (r = random(_num_states)) == _active )
+				;
 			_active = r;
 		} else {
 			_active++;
 			if(_active >= _num_states)
 				_active = 0;
+			while(_enabled && !_enabled[_active]){
+				_active++;
+				if(_active >= _num_states)
+					_active = 0;
+			}
+			// else {
+			// 	_active++;
+			// 	if(_active >= _num_states)
+			// 		_active = 0;
+			// }
 		}
-		activate_led(_active, _style & STYLE_MIRROR);
+		if(_enabled == NULL || _enabled[_active])
+			activate_led(_active, _style & STYLE_MIRROR);
 	}
 
 	_next_frame = time + (blanking_period ? _blank_time : _show_time);

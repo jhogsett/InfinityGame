@@ -9,6 +9,6 @@
 // Dollars won by beating the curernt time
 #define TIME_WIN 1000
 
-extern void time_game();
+extern bool time_game();
 
 #endif

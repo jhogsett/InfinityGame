@@ -1,6 +1,6 @@
 #ifndef __TIMER_MODE_H__
 #define __TIMER_MODE_H__
 
-extern void timer_mode();
+extern bool timer_mode();
 
 #endif

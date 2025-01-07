@@ -7,6 +7,16 @@ show moves in word game to explain wins
 option to show extra billboard details (house,bank,gang)
 idle time options 1, 5, 30
 
+word game:
+-- nX bonus for runs of wins
+
+
+
+
+
+
+
+
 made libs
 
 time game choose a color and the average is stored with it, allowing for three profiles

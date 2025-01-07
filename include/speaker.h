@@ -5,7 +5,7 @@
 #define INV_FREQUENCY 339
 // how many pulses to create a beep
 #define BEEP_PULSES 90
-// how many times to beep (with an equal sized paused in between)
+// how many times to beep (with an equal sized pause in between)
 #define BEEPS_TIMES 4
 // how many times to play the four-beeps to alert the user (that the Timer has elapsed)
 #define ALERT_TIMES 3

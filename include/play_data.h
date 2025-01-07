@@ -5,13 +5,27 @@
 
 // Current save data version
 // On start-up if this differs from the EEPROM value, the data is reset to defaults
-#define SAVE_DATA_VERSION 1
+#define SAVE_DATA_VERSION 2
 
-// Player cash in dollars on resetting defaults
-#define DEFAULT_PURSE 1000
+// All bets are paid from the player purse
+// all wins received are kept in the player purse
+// the player purse draws money from the syndiate when needed
+#define DEFAULT_PURSE 0L
 
-// Sum of all made bets (future use)
-#define DEFAULT_BANK 0
+// All money originates in the bank
+#define DEFAULT_BANK 1000000000L
+
+// All bets are paid to the house
+// All payouts are from the house
+// The house draws money from the bank when needed
+#define DEFAULT_HOUSE 0L
+
+// The gang robs money from the bank
+// Player cash comes from the gang
+#define DEFAULT_GANG 0L
+
+// the longest possible count of milliseconds
+#define DEFAULT_TIME ((unsigned long)-1)
 
 // Display time for interstitial displays during games
 #define ROUND_DELAY 750
@@ -36,8 +50,14 @@ extern bool option_clock_24h;
 // Whether to show the clock or sleep mode on idle
 extern bool option_clock_on_idle;
 
-// Current bank (sum of all made bets - future use)
+// Current bank
 extern unsigned long bank;
+
+// Current house
+extern long house;
+
+// Current gang
+extern long gang;
 
 // Additional slots for best times (future use)
 extern unsigned long best_time1;
@@ -57,10 +77,12 @@ struct SavedData{
 	unsigned long best_time1;
 	unsigned long best_time2;
 	unsigned long best_time3;
+	long house;
+	long gang;
 };
 
 extern void load_save_data();
 extern void save_data();
-extern void reset_options();
+extern bool reset_options();
 
 #endif

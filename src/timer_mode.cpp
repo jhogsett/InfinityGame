@@ -1,5 +1,5 @@
 #include "timer.h"
 
-void timer_mode(){
-	timer_prompt(0, 0, 0);
+bool timer_mode(){
+	return timer_prompt(0, 0, 0);
 }

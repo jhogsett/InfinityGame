@@ -4,6 +4,7 @@
 #include "displays.h"
 #include "leds.h"
 #include "play_data.h"
+#include "timeouts.h"
 #include "utils.h"
 #include "clock.h"
 
@@ -61,15 +62,26 @@ void render_clock_string(byte seconds, byte minutes, byte hours) {
 		sprintf(display_buffer, FSTR("  %2d %02d %02d  "), effective_hours, minutes, seconds);
 }
 
-void clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
+// returns true if the clock timed out while being set
+bool clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
 	clock_hour = hours;
 	clock_minute = minutes;
 	clock_second = seconds;
 
 	render_clock_string(clock_second, clock_minute, clock_hour);
 	display.show_string(display_buffer);
-	// clock mode never times out
+
+	display.begin_scroll_loop();
+
+	unsigned long time = millis();
+	unsigned long idle_timeout = time + IDLE_TIMEOUT;
+
+	// clock mode only times out if clock is the idle mode
 	while (true) {
+		if(settable)
+			if((time = millis()) >= idle_timeout)
+				return true;
+
 		seconds_to_time(time_in_seconds(), clock_second, clock_minute, clock_hour);
 
 		render_clock_string(clock_second, clock_minute, clock_hour);
@@ -83,19 +95,20 @@ void clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
 
 			all_leds.deactivate_leds(true);
 			if (long_press_state == 1) {
-				return;
+				return false;
 			} else {
 				if (settable) {
-					if (button_states[GREEN_ID]) {
+					idle_timeout = time + IDLE_TIMEOUT;
+					if (validated_button_states[GREEN_ID]) {
 						increment_time_basis(clock_second, clock_minute, clock_hour, 0, 0, 1);
-					} else if (button_states[AMBER_ID])
+					} else if (validated_button_states[AMBER_ID])
 						increment_time_basis(clock_second, clock_minute, clock_hour, 0, 1, 0);
-					else if (button_states[RED_ID]) {
+					else if (validated_button_states[RED_ID]) {
 						clock_second = 0;
 						establish_clock_basis(clock_second, clock_minute, clock_hour);
 					}
 			} else
-				return;
+				return false;
 			}
 		}
 	}

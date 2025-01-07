@@ -33,6 +33,6 @@ extern void establish_clock_basis(byte seconds, byte minutes, byte hours);
 extern long time_in_seconds();
 extern void increment_time_basis(byte &second, byte &minute, byte &hour, byte seconds, byte minutes, byte hours);
 extern void render_clock_string(byte seconds, byte minutes, byte hours);
-extern void clock_prompt(byte seconds, byte minutes, byte hours, byte settable=true);
+extern bool clock_prompt(byte seconds, byte minutes, byte hours, byte settable=true);
 
 #endif

@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "bank.h"
 #include "buffers.h"
 #include "buttons.h"
 #include "displays.h"
@@ -10,14 +11,14 @@
 #include "time_game.h"
 #include "debug.h"
 
-void time_game(){
+bool time_game(){
 	title_prompt(FSTR("The TimeGame"), TITLE_SHOW_TIMES, true);
 
 	int response;
 	const bool buttons[] = {false, true, false, true};
 	response = button_led_prompt(FSTR(" GO     Back"), buttons);
 	if(response == 0 || response == -1 || response == RED_ID)
-		return;
+		return false;
 
 	display.clear();
 	delay(ROUND_DELAY);
@@ -53,7 +54,7 @@ void time_game(){
 
 		while(digitalRead(ANY_BUTTON) == HIGH){
 #ifdef ENABLE_DEBUG_FEATURES
-			set_debug_marker(1);
+			// set_debug_marker(1);
 #endif
 			// button is glitched on by flashing LEDs?
 			panel_leds.step_flash(millis());
@@ -78,7 +79,7 @@ void time_game(){
 	if(fault){
 		sprintf(display_buffer, FSTR("FAULT - Button Problem - Try Again"));
 		while(button_led_prompt(display_buffer) == -1);
-		return;
+		return false;
 	}
 
 	while(button_pressed());
@@ -97,7 +98,8 @@ void time_game(){
 		// delay(ROUND_DELAY);
 
 		display_win(TIME_WIN);
-		purse += TIME_WIN;
+
+		add_to_purse(house_payout(TIME_WIN));
 		display_purse();
 
 		save_data();
@@ -110,4 +112,6 @@ void time_game(){
 
 	// while(button_led_prompt(display_buffer) == -1);
 	button_led_prompt(display_buffer);
+
+	return false;
 }

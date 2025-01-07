@@ -43,7 +43,7 @@ bool decrement_timer(byte &second, byte &minute, byte &hour, int seconds, int mi
 }
 
 // TODO timer mode should time out per sleep timeout after no activity
-void timer_prompt(byte seconds, byte minutes, byte hours) {
+bool timer_prompt(byte seconds, byte minutes, byte hours) {
 	unsigned long time = millis();
 	unsigned long idle_timeout = time + IDLE_TIMEOUT;
 
@@ -86,11 +86,11 @@ void timer_prompt(byte seconds, byte minutes, byte hours) {
 				;
 			all_leds.deactivate_leds(true);
 			if (long_press_state == 1) {
-				return;
+				break;
 			} else {
 				idle_timeout = time + IDLE_TIMEOUT;
 
-				if (button_states[GREEN_ID]) {
+				if (validated_button_states[GREEN_ID]) {
 					if (!running) {
 						running = true;
 						going_up = time_to_seconds(timer_second, timer_minute, timer_hour) == 0;
@@ -98,9 +98,9 @@ void timer_prompt(byte seconds, byte minutes, byte hours) {
 					} else {
 						running = false;
 					}
-				} else if (button_states[AMBER_ID]) {
+				} else if (validated_button_states[AMBER_ID]) {
 					increment_timer(timer_second, timer_minute, timer_hour, 0, 1, 0);
-				} else if (button_states[RED_ID]) {
+				} else if (validated_button_states[RED_ID]) {
 					increment_timer(timer_second, timer_minute, timer_hour, 1, 0, 0);
 				}
 
@@ -110,4 +110,5 @@ void timer_prompt(byte seconds, byte minutes, byte hours) {
 			}
 		}
 	}
+	return false;
 }
