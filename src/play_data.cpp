@@ -2,6 +2,8 @@
 #include <EEPROM.h>
 #include "play_data.h"
 
+// when adding new persisted play data, search for ##DATA
+
 bool option_sound = false;
 bool option_vibrate = false;
 long purse = DEFAULT_PURSE;
@@ -14,6 +16,10 @@ unsigned long best_time2 = (unsigned long)-1;
 unsigned long best_time3 = (unsigned long)-1;
 long house = DEFAULT_HOUSE;
 long gang = DEFAULT_GANG;
+unsigned long option_idle_time = DEFAULT_IDLE_TIME;
+
+// ##DATA Add new persisted play data veriables here
+
 
 void load_save_data(){
 	SavedData saved_data;
@@ -36,6 +42,9 @@ void load_save_data(){
 	best_time3 = saved_data.best_time3;
 	house = saved_data.house;
 	gang = saved_data.gang;
+	option_idle_time = saved_data.option_idle_time;
+
+	// ##DATA Load new persisted play data variables into memory here
 }
 
 void save_data(){
@@ -53,6 +62,10 @@ void save_data(){
 	saved_data.best_time3 = best_time3;
 	saved_data.house = house;
 	saved_data.gang = gang;
+	saved_data.option_idle_time = option_idle_time;
+
+	// ##DATA Store new persisted play data veriables in the persistent structure here
+
 	EEPROM.put(0, saved_data);
 }
 
@@ -69,6 +82,10 @@ bool reset_options(){
 	best_time3 = DEFAULT_TIME;
 	house = DEFAULT_HOUSE;
 	gang = DEFAULT_GANG;
+	option_idle_time = DEFAULT_IDLE_TIME;
+
+	// ##DATA Reset new persisted play data veriables to default variables here
+
 	save_data();
 	return false;
 }

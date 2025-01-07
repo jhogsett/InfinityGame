@@ -108,7 +108,7 @@ bool slots_game(){
 			break;
 	}
 
-	unsigned long idle_timeout = millis() + IDLE_TIMEOUT;
+	unsigned long idle_timeout = millis() + option_idle_time;
 	unsigned long time;
 	long last_bet_amount = 0L;
 
@@ -151,7 +151,7 @@ bool slots_game(){
 				return false;
 		}
 
-		idle_timeout = millis() + IDLE_TIMEOUT;
+		idle_timeout = millis() + option_idle_time;
 
 		long win = 0;
 		bool jackpot = false;

@@ -28,7 +28,7 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 	reset_buttons_state();
 
 	unsigned long time = millis();
-	unsigned long idle_timeout = time + IDLE_TIMEOUT;
+	unsigned long idle_timeout = time + option_idle_time;
 
 	all_leds.deactivate_leds(true);
 	billboards_handler.reset();
@@ -71,6 +71,11 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 
 			if (long_press_state == 1) {
 				bool result = on_long_press();
+
+				// update anything that may have changed in the options and could affect
+				// the current running billboard prompt
+				idle_timeout = time + option_idle_time;
+
 				if(result)
 					// if the long press handler returns true it means there was an idle timeout
 					// and the billboard should go directly to the idle state, not show the menu
@@ -143,7 +148,7 @@ int button_led_prompt(const char * prompt, const bool *states) {
 void title_prompt(const char * title, byte times, bool show_panel_leds, int show_delay, int leds_style, int leds_show_time, int leds_blank_time) {
 	unsigned long time = millis();
 	unsigned long timeout_time = time + PROMPT_TIMEOUT;
-	unsigned long idle_timeout = time + IDLE_TIMEOUT;
+	unsigned long idle_timeout = time + option_idle_time;
 
 	if (show_panel_leds)
 		panel_leds.begin(millis(), leds_style, leds_show_time, leds_blank_time);

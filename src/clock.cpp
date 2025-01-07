@@ -74,7 +74,7 @@ bool clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
 	display.begin_scroll_loop();
 
 	unsigned long time = millis();
-	unsigned long idle_timeout = time + IDLE_TIMEOUT;
+	unsigned long idle_timeout = time + option_idle_time;
 
 	// clock mode only times out if clock is the idle mode
 	while (true) {
@@ -98,7 +98,7 @@ bool clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
 				return false;
 			} else {
 				if (settable) {
-					idle_timeout = time + IDLE_TIMEOUT;
+					idle_timeout = time + option_idle_time;
 					if (validated_button_states[GREEN_ID]) {
 						increment_time_basis(clock_second, clock_minute, clock_hour, 0, 0, 1);
 					} else if (validated_button_states[AMBER_ID])
