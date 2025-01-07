@@ -199,6 +199,7 @@ void title_prompt(const char * title, byte times, bool show_panel_leds, int show
 }
 
 // prompt with panel leds showing only and cycle waiting for any button press
+// returns -1=timed out, 0=long press, button ID otherwise
 int panel_led_prompt() {
 	unsigned long time;
 	unsigned long timeout_time = millis() + PROMPT_TIMEOUT;
@@ -217,19 +218,34 @@ int panel_led_prompt() {
 	while (true) {
 		time = millis();
 		panel_leds.step(time);
-		if (!button_pressed())
-			continue;
 
-		all_leds.activate_leds(button_states, true);
-		while (button_still_pressed())
-			;
+			// if (!button_pressed())
+			// 	continue;
 
-		all_leds.deactivate_leds(true);
-		return 1;
+			// all_leds.activate_leds(button_states, true);
+			// while (button_still_pressed())
+			// 	;
+
+			// all_leds.deactivate_leds(true);
+			// return 1;
+
+		if (button_pressed()) {
+			all_leds.activate_leds(button_states, true);
+			int long_press_state;
+			while ((long_press_state = wait_on_long_press()) == 0)
+				;
+
+			all_leds.deactivate_leds(true);
+			if (long_press_state == 1){
+				return 0;
+			} else {
+				return 1; // any real button ID will do
+			}
 	}
 
 	return -1;
 }
+
 
 // TODO button_led_prompt() blocks, so the loop here might not be needed (would be if there were LEDS or the display to run here)
 // returns the bool returned by the event handler function or false
