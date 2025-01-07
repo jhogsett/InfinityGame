@@ -241,6 +241,7 @@ int panel_led_prompt() {
 			} else {
 				return 1; // any real button ID will do
 			}
+		}
 	}
 
 	return -1;
