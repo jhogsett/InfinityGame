@@ -43,31 +43,22 @@ void flip(char *buffer, int size){
 	}
 }
 
-#define MOVE_NONE 0
-#define MOVE_ROL 1
-#define MOVE_FLIP 2
-#define MOVE_ROR 3
-#define MOVE_MIN 1
-#define MOVE_MAX 3
+#define MOVE_ROTATE 0
+#define MOVE_FLIP 1
 
 int shuffle_word(char *buffer, int size, int min_times, int max_times){
 	int times = random(min_times, max_times+1);
-	int last_move = MOVE_NONE;
+
+	// choose a direction to rotate ahead of time
+	bool go_right = random(2) ? true : false;
 
 	for(int i = 0; i < times; i++){
-		int move;
-		while((move = random(MOVE_MIN, MOVE_MAX+1)) == last_move)
-			;
-		last_move = move;
-		switch(move){
-			case MOVE_ROL:
-				rotate_left(buffer, size);
+		switch(random(2) ? MOVE_FLIP : MOVE_ROTATE){
+			case MOVE_ROTATE:
+				go_right ? rotate_right(buffer, size) : rotate_left(buffer, size);
 				break;
 			case MOVE_FLIP:
 				flip(buffer, size);
-				break;
-			case MOVE_ROR:
-				rotate_right(buffer, size);
 				break;
 		}
 	}
