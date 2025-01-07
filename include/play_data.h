@@ -8,7 +8,7 @@
 // ##DATA Increment the save data version to force upgraded devices to auto-reset after programming
 // Current save data version
 // On start-up if this differs from the EEPROM value, the data is reset to defaults
-#define SAVE_DATA_VERSION 2
+#define SAVE_DATA_VERSION 3
 
 // All bets are paid from the player purse
 // all wins received are kept in the player purse
@@ -31,7 +31,7 @@
 #define DEFAULT_TIME ((unsigned long)-1)
 
 // default milliseconds until device goes into idle mode
-#define DEFAULT_IDLE_TIME (5 * 60 * 1000)
+#define DEFAULT_IDLE_TIME (5L * 60L * 1000)
 
 // ##DATA add new defaults on play data reset here
 
@@ -75,7 +75,7 @@ extern long house;
 extern long gang;
 
 // Idle Time in milliseconds
-extern unsigned long idle_time;
+extern unsigned long option_idle_time;
 
 // ##DATA Add 'extern's for new persisted play data veriables here
 
@@ -95,7 +95,7 @@ struct SavedData{
 	unsigned long best_time3;
 	long house;
 	long gang;
-	unsigned long idle_time;
+	unsigned long option_idle_time;
 
 	// ##DATA Add new persisted data types here
 };

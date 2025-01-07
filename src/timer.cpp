@@ -45,7 +45,7 @@ bool decrement_timer(byte &second, byte &minute, byte &hour, int seconds, int mi
 // TODO timer mode should time out per sleep timeout after no activity
 bool timer_prompt(byte seconds, byte minutes, byte hours) {
 	unsigned long time = millis();
-	unsigned long idle_timeout = time + IDLE_TIMEOUT;
+	unsigned long idle_timeout = time + option_idle_time;
 
 	// unsigned long next_second = millis() + 1000;
 	unsigned long next_second = 0;
@@ -68,7 +68,7 @@ bool timer_prompt(byte seconds, byte minutes, byte hours) {
 				increment_timer(timer_second, timer_minute, timer_hour);
 			else if (!decrement_timer(timer_second, timer_minute, timer_hour)){
 				running = false;
-				idle_timeout = time + IDLE_TIMEOUT;
+				idle_timeout = time + option_idle_time;
 				render_timer_string(timer_second, timer_minute, timer_hour, running);
 				display.show_string(display_buffer);
 				if(option_sound)
@@ -88,7 +88,7 @@ bool timer_prompt(byte seconds, byte minutes, byte hours) {
 			if (long_press_state == 1) {
 				break;
 			} else {
-				idle_timeout = time + IDLE_TIMEOUT;
+				idle_timeout = time + option_idle_time;
 
 				if (validated_button_states[GREEN_ID]) {
 					if (!running) {

@@ -155,7 +155,7 @@ int word_game_round(bool rude){
 	int scramble_moves = choose_word(rude);
 	int player_moves = 0;
 
-	unsigned long idle_timeout = millis() + IDLE_TIMEOUT;
+	unsigned long idle_timeout = millis() + option_idle_time;
 	unsigned long time;
 
 	while((time = millis()) < idle_timeout){
@@ -177,7 +177,7 @@ int word_game_round(bool rude){
 				break;
 		}
 
-		idle_timeout = millis() + IDLE_TIMEOUT;
+		idle_timeout = millis() + option_idle_time;
 
 		while(button_pressed())
 			;
@@ -234,7 +234,7 @@ bool word_game(){
 	sprintf(display_buffer, FSTR("LONG PRESS EXITS"));
 	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
 
-	unsigned long idle_timeout = millis() + IDLE_TIMEOUT;
+	unsigned long idle_timeout = millis() + option_idle_time;
 	unsigned long time;
 
 	while((time = millis()) < idle_timeout){
