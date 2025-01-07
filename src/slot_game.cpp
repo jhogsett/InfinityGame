@@ -92,8 +92,8 @@ bool slots_game(){
 	byte jackpot_choice3 = random(NUM_WORDS);
 
 	bool rude;
-	const bool buttons[] = {false, true, false, true};
-	switch(button_led_prompt(FSTR("NICE    RUDE"), buttons)){
+	const bool buttons[] = {false, true, true, true};
+	switch(button_led_prompt(FSTR("NICE OR RUDE"), buttons)){
 		case -1:
 		case 0:
 			return false;

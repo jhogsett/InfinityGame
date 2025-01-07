@@ -10,7 +10,7 @@ word game:
 -- nX bonus for runs of wins
 
 
-
+start out showing only the word's letters and blanks/underscores then keep adding more letters
 
 
 

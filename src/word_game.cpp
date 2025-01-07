@@ -204,8 +204,8 @@ bool word_game(){
 	title_prompt(FSTR("The WordGame"), TITLE_SHOW_TIMES, true);
 
 	bool rude;
-	const bool buttons[] = {false, true, false, true};
-	switch(button_led_prompt(FSTR("NICE    RUDE"), buttons)){
+	const bool buttons[] = {false, true, true, true};
+	switch(button_led_prompt(FSTR("NICE OR RUDE"), buttons)){
 	case -1:
 	case 0:
 		return false;
@@ -233,6 +233,9 @@ bool word_game(){
 		long win = 0;
 		bool purse_change = false;
 		int round_result = word_game_round(rude);
+
+		idle_timeout = millis() + option_idle_time;
+
 		switch(round_result){
 			case -1:
 				// timed out of long press
