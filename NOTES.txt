@@ -13,6 +13,11 @@ word game:
 start out showing only the word's letters and blanks/underscores then keep adding more letters
 
 
+save data after each set option in case of early exit
+
+
+long press from tools set somestimes goes directly to game menu
+
 
 
 

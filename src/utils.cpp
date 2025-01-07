@@ -2,9 +2,9 @@
 #include "buffers.h"
 #include "utils.h"
 
-char * load_f_string(const __FlashStringHelper* f_string){
+char * load_f_string(const __FlashStringHelper* f_string, char *override_buffer){
 	const char *p = (const char PROGMEM *)f_string;
-	return strcpy_P(fstring_buffer, p);
+	return strcpy_P(override_buffer ? override_buffer : fstring_buffer, p);
 }
 
 void micros_to_ms(char * buffer, unsigned long micros){

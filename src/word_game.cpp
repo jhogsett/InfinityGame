@@ -102,7 +102,8 @@ int choose_word(bool rude){
 
 	// https://pi.math.cornell.edu/~mec/2003-2004/cryptography/subs/frequencies.html
 	char letters[LETTERS_BUFFER_LEN];
-	strcpy(letters, FSTR("ETAOINSRHDLU"));
+	// strcpy(letters, FSTR("ETAOINSRHDLU"));
+	load_f_string(F("ETAOINSRHDLU"), letters);
 
 	char add_chars[ADD_CHARS_BUFFER_SIZE];
 	for(int i = 0; i < ADD_CHARS; i++)
@@ -113,7 +114,7 @@ int choose_word(bool rude){
 	}
 	add_chars[ADD_CHARS_BUFFER_SIZE-1] = '\0';
 
-	sprintf(scramble_word, "%s%s", chosen_word, add_chars);
+	sprintf(scramble_word, FSTR("%s%s"), chosen_word, add_chars);
 
 	int scramble_moves = 0;
 
@@ -220,7 +221,7 @@ bool word_game(){
 		break;
 	}
 
-	sprintf(display_buffer, FSTR("Buttons ROTATE and FLIP Word"));
+	sprintf(display_buffer, FSTR("Buttons ROTATE and FLIP"));
 	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
 	sprintf(display_buffer, FSTR("LONG PRESS EXITS"));
 	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);

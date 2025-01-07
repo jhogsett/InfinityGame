@@ -116,7 +116,7 @@ bool slots_game(){
 		bet_amounts[BET_ALL] = purse;
 		bet_amounts[BET_REPEAT] = last_bet_amount;
 
-		sprintf(display_buffer, FSTR("Bet %s Back"), standard_bet_str(current_bet));
+		sprintf(display_buffer, FSTR("BET %s Back"), standard_bet_str(current_bet));
 		const bool states[] = {false, true, false, false};
 		int response = button_led_prompt(display_buffer, states);
 		switch(response){

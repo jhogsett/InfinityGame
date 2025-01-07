@@ -20,7 +20,7 @@ void render_timer_string(byte seconds, byte minutes, byte hours, bool running) {
 	else
 		indicator = "RUN ";
 
-	if (timer_hour < 1)
+	if (timer_hour < 1) // TODO didn't see the DP
 		sprintf(display_buffer, FSTR("%s %02d %02d  "), indicator, timer_minute, timer_second);
 	else {
 		sprintf(display_buffer, FSTR("%s %02d. %02d  "), indicator, timer_hour, timer_minute);

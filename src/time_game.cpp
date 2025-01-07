@@ -24,7 +24,7 @@ bool time_game(){
 	delay(ROUND_DELAY);
 
 	unsigned long mean = 0;
-	bool fault = false;
+	// bool fault = false;
 	for(byte i = 0; i < ROUNDS; i++){
 		button_leds.activate_all(true);
 		display.scroll_string(FSTR("Wait 4 FLASH"), DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
@@ -76,11 +76,11 @@ bool time_game(){
 		display.clear();
 	}
 
-	if(fault){
-		sprintf(display_buffer, FSTR("FAULT - Button Problem - Try Again"));
-		while(button_led_prompt(display_buffer) == -1);
-		return false;
-	}
+	// if(fault){
+	// 	sprintf(display_buffer, FSTR("FAULT - Button Problem - Try Again"));
+	// 	while(button_led_prompt(display_buffer) == -1);
+	// 	return false;
+	// }
 
 	while(button_pressed());
 
@@ -104,6 +104,7 @@ bool time_game(){
 
 		save_data();
 
+		// # optimize strings
 		sprintf(display_buffer, FSTR("NEW BEST * %s ms"), copy_buffer);
 	} else {
 		micros_to_ms(copy_buffer, best_time);

@@ -7,7 +7,7 @@
 #include "utils.h"
 
 void display_purse(){
-	if(purse > 999999)
+	if(purse > 999999) // # optimize strings
 		sprintf(display_buffer, FSTR("CASH$%ld"), purse);
 	else
 		sprintf(display_buffer, FSTR("CASH $%ld"), purse);
@@ -25,7 +25,7 @@ void display_purse(){
 // }
 
 void display_win(long win){
-	if(win > 999999L)
+	if(win > 999999L) // # optimize strings
 		sprintf(display_buffer, FSTR("WIN$%ld"), win);
 	else if(win > 99999L)
 		sprintf(display_buffer, FSTR("WIN $%ld"), win);
