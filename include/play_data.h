@@ -30,6 +30,9 @@
 // the longest possible count of milliseconds
 #define DEFAULT_TIME ((unsigned long)-1)
 
+// default minutes until device goes into idle mode
+#define DEFAULT_IDLE_TIME 5
+
 // ##DATA add new defaults on play data reset here
 
 
@@ -71,6 +74,9 @@ extern long house;
 // Current gang
 extern long gang;
 
+// Idle Time in minutes
+extern int idle_time;
+
 // ##DATA Add 'extern's for new persisted play data veriables here
 
 
@@ -89,6 +95,7 @@ struct SavedData{
 	unsigned long best_time3;
 	long house;
 	long gang;
+	int idle_time;
 
 	// ##DATA Add new persisted data types here
 };
