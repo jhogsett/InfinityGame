@@ -70,7 +70,7 @@ long use_purse(long dollars){
 	if(total_loan){
 		char buf[15];
 		ltoa(total_loan, buf, 10);
-		sprintf(display_buffer, FSTR("Syndicate LOAN $%s"), buf);
+		sprintf(display_buffer, FSTR("Gang LOAN for $%s"), buf);
 		title_prompt(display_buffer, 1, false, ALERT_SHOW_TIME);
 	}
 

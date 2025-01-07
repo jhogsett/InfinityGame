@@ -205,7 +205,7 @@ bool word_game(){
 
 	bool rude;
 	const bool buttons[] = {false, true, true, true};
-	switch(button_led_prompt(FSTR("NICE OR RUDE"), buttons)){
+	switch(button_led_prompt(FSTR("NICE or RUDE"), buttons)){
 	case -1:
 	case 0:
 		return false;
