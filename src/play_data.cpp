@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <EEPROM.h>
+#include "bank.h"
 #include "play_data.h"
 
 // when adding new persisted play data, search for ##DATA
@@ -69,23 +70,32 @@ void save_data(){
 	EEPROM.put(0, saved_data);
 }
 
+typedef void (*VoidFunc)(void);
+
+void reset_device(){
+	VoidFunc p = NULL;
+	p();
+}
+
 bool reset_options(){
 	option_sound = true;
 	option_vibrate = true;
-	purse = DEFAULT_PURSE;
+	purse = DEFAULT_PURSE / MONEY_BASIS;
 	best_time = DEFAULT_TIME;
 	option_clock_24h = false;
 	option_clock_on_idle = false;
-	bank = DEFAULT_BANK;
+	bank = DEFAULT_BANK / MONEY_BASIS;
 	best_time1 = DEFAULT_TIME;
 	best_time2 = DEFAULT_TIME;
 	best_time3 = DEFAULT_TIME;
-	house = DEFAULT_HOUSE;
-	gang = DEFAULT_GANG;
+	house = DEFAULT_HOUSE / MONEY_BASIS;
+	gang = DEFAULT_GANG / MONEY_BASIS;
 	option_idle_time = DEFAULT_IDLE_TIME;
 
 	// ##DATA Reset new persisted play data veriables to default variables here
 
 	save_data();
+
+	reset_device();
 	return false;
 }

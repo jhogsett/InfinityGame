@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "bank.h"
 #include "betting.h"
 #include "buffers.h"
 #include "play_data.h"
@@ -7,22 +8,12 @@
 #include "utils.h"
 
 void display_purse(){
-	if(purse > 999999) // # optimize strings
-		sprintf(display_buffer, FSTR("CASH$%ld"), purse);
+	if(get_purse() > 999999) // # optimize strings
+		sprintf(display_buffer, FSTR("CASH$%ld"), get_purse());
 	else
-		sprintf(display_buffer, FSTR("CASH $%ld"), purse);
-	title_prompt(display_buffer, CASH_SHOW_TIMES, false, ROUND_DELAY);
+		sprintf(display_buffer, FSTR("CASH $%ld"), get_purse());
+	title_prompt(display_buffer, CASH_SHOW_TIMES, false, CASH_SHOW_DELAY);
 }
-
-// void display_bank(){
-// 	sprintf(display_buffer, FSTR("BANK $%ld"), bank);
-// 	title_prompt(display_buffer, CASH_SHOW_TIMES, false, ROUND_DELAY);
-// }
-
-// void display_house(){
-// 	sprintf(display_buffer, FSTR("HOUSE $%ld"), house);
-// 	title_prompt(display_buffer, CASH_SHOW_TIMES, false, ROUND_DELAY);
-// }
 
 void display_win(long win){
 	if(win > 999999L) // # optimize strings
@@ -40,7 +31,7 @@ void display_jackpot(long win){
 }
 
 char *numeric_bet_str(long bet){
-	sprintf(copy_buffer, FSTR("$%ld"), bet);
+	sprintf(copy_buffer, FSTR("%ld"), bet);
 	return copy_buffer;
 }
 

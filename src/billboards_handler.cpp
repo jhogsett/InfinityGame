@@ -20,7 +20,7 @@ void BillboardsHandler::reset(){
 	_n_next_template = _home_times == 0 ? 0 : 1;
 	_showing_home = false;
 	_blanking = true;
-	_blanking_until = 0;;
+	_blanking_until = 0;
 }
 
 void BillboardsHandler::update_buffer(char *string) {

@@ -1,6 +1,7 @@
 #ifndef __BANK_H__
 #define __BANK_H__
 
+#define MONEY_BASIS 100L
 #define HOUSE_BANK_WITHDRAWL 1000L
 #define PLAYER_LOAN 1000L
 #define BANK_MINIMUM 1000000L
@@ -21,6 +22,11 @@
 
 extern bool crime_wave;
 extern unsigned long crime_wave_started;
+
+extern long get_bank();
+extern long get_house();
+extern long get_purse();
+extern long get_gang();
 
 // returns amount deposited
 extern long bank_deposit(long dollars);

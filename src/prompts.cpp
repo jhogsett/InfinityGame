@@ -1,5 +1,6 @@
 
 #include <Arduino.h>
+#include "bank.h"
 #include "billboards_handler.h"
 #include "buffers.h"
 #include "buttons.h"
@@ -40,10 +41,10 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 	char gang_display[15];
 	char time_display[15];
 
-	ltoa(purse, cash_display, 10);
-	ltoa(house, house_display, 10);
-	ltoa(bank, bank_display, 10);
-	ltoa(gang, gang_display, 10);
+	ltoa(get_purse(), cash_display, 10);
+	ltoa(get_house(), house_display, 10);
+	ltoa(get_bank(), bank_display, 10);
+	ltoa(get_gang(), gang_display, 10);
 
 	if(best_time == DEFAULT_TIME){
 		// strcpy(time_display, FSTR("0.0000"));

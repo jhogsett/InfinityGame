@@ -19,7 +19,7 @@
 #define WORD_WIN_UNIT 100
 #define WIN_IN_1_BONUS 10
 
-#define WORD_GAME_PLAY_BET 5
+#define WORD_GAME_PLAY_BET 100
 
 // #define ENABLE_WIN_IN_1
 

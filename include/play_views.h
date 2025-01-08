@@ -6,6 +6,7 @@
 
 // number of times to show player's cash (or effective time of display if no scroll needed)
 #define CASH_SHOW_TIMES 1
+#define CASH_SHOW_DELAY 750
 
 // number of times to show player's win amount (or effective time of display if no scroll needed)
 #define WIN_SHOW_TIMES 2
