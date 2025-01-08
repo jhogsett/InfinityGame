@@ -36,8 +36,8 @@ const char template5[] PROGMEM = "Play The WordGame";
 const char template6[] PROGMEM = "Play The TimeGame";
 const char template7[] PROGMEM = "House SAFE $%s";
 const char template8[] PROGMEM = "Bank VAULT $%s";
-const char template9[] PROGMEM = "Gang STASH $%s";
-const char template10[] PROGMEM = "Long Press for Options";
+const char template9[] PROGMEM = "GANG STASH $%s";
+const char template10[] PROGMEM = "LONG PRESS for OPTIONS";
 const char *const templates[] PROGMEM = { template0, template1, template2, template3, template4, template5, template6, template7, template8, template9, template10 };
 
 // Identify array position for placing fill-in data

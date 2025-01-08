@@ -16,7 +16,7 @@
 #define SHUFFLE_TIMES_MIN 3
 #define SHUFFLE_TIMES_MAX 9
 
-#define BASE_WIN_CASE 5
+#define WORD_WIN_UNIT 100
 #define WIN_IN_1_BONUS 10
 
 #define WORD_GAME_PLAY_BET 5

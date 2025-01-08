@@ -205,7 +205,7 @@ bool word_game(){
 	title_prompt(FSTR("The WordGame"), TITLE_SHOW_TIMES, true);
 
 	bool rude;
-	const bool buttons[] = {false, true, true, true};
+	const bool buttons[] = {false, true, false, true};
 	switch(button_led_prompt(FSTR("NICE or RUDE"), buttons)){
 	case -1:
 	case 0:
@@ -256,7 +256,7 @@ bool word_game(){
 				sprintf(display_buffer, FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word);
 				title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);
 
-				win = (round_result-1) * BASE_WIN_CASE;
+				win = (round_result-1) * WORD_WIN_UNIT;
 				if(win > 0)
 					display_win(win);
 
@@ -271,7 +271,7 @@ bool word_game(){
 #ifdef ENABLE_WIN_IN_1
 		// if(round_result == -2){
 		// 	// win in one move
-		// 	win = WIN_IN_1_BONUS * BASE_WIN_CASE;
+		// 	win = WIN_IN_1_BONUS * WORD_WIN_UNIT;
 		// 	display_win(win);
 		// } else
 #endif

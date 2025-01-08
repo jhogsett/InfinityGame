@@ -19,6 +19,16 @@ save data after each set option in case of early exit
 long press from tools set somestimes goes directly to game menu
 
 
+ability to scroll off a display (and scroll on, like inserting 12 spaces before or after)
+also scroll in the other direction (for short strings)
+
+
+have a reels prompt that plays the game automatically
+
+
+money units could be $5 instead of $1 to expand range of signed long by 5X
+- whenever used for display, divide by 5
+
 
 
 made libs
