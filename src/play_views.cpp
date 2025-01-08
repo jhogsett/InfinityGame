@@ -9,24 +9,24 @@
 
 void display_purse(){
 	if(get_purse() > 999999) // # optimize strings
-		sprintf(display_buffer, FSTR("CASH$%ld"), get_purse());
+		sprintf(display_buffer, FSTR("CASH$%ld0"), purse);
 	else
-		sprintf(display_buffer, FSTR("CASH $%ld"), get_purse());
+		sprintf(display_buffer, FSTR("CASH $%ld0"), purse);
 	title_prompt(display_buffer, CASH_SHOW_TIMES, false, CASH_SHOW_DELAY);
 }
 
-void display_win(long win){
-	if(win > 999999L) // # optimize strings
+void display_win(unsigned long win){
+	if(win > 9999999L) // # optimize strings
 		sprintf(display_buffer, FSTR("WIN$%ld"), win);
-	else if(win > 99999L)
+	else if(win > 999999L)
 		sprintf(display_buffer, FSTR("WIN $%ld"), win);
 	else
-		sprintf(display_buffer, FSTR("WIN* $%ld"), win);
+		sprintf(display_buffer, FSTR("*WIN $%ld"), win);
 	title_prompt(display_buffer, WIN_SHOW_TIMES, true, ROUND_DELAY);
 }
 
-void display_jackpot(long win){
-	sprintf(display_buffer, FSTR("JACKPOT *** $%ld"), win);
+void display_jackpot(unsigned long win){
+	sprintf(display_buffer, FSTR("*** JACKPOT $%ld"), win);
 	title_prompt(display_buffer, JACKPOT_SHOW_TIMES, true, ROUND_DELAY);
 }
 

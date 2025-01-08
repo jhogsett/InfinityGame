@@ -47,7 +47,6 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 	ltoa(get_gang(), gang_display, 10);
 
 	if(best_time == DEFAULT_TIME){
-		// strcpy(time_display, FSTR("0.0000"));
 		load_f_string(F("0.0000"), time_display);
 
 	} else {

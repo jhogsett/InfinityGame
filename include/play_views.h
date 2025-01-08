@@ -17,8 +17,8 @@
 extern void display_purse();
 // extern void display_bank();
 // extern void display_house();
-extern void display_win(long win);
-extern void display_jackpot(long win);
+extern void display_win(unsigned long win);
+extern void display_jackpot(unsigned long win);
 extern char *numeric_bet_str(long bet);
 extern char *standard_bet_str(byte bet);
 
