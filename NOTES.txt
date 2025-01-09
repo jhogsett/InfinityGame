@@ -1,3 +1,5 @@
+do something on early press in tg
+
 word game:
 -- nX bonus for runs of wins
 

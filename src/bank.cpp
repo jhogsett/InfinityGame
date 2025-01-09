@@ -82,7 +82,7 @@ long use_purse(long money){
 
 	long total_loan = 0;
 	while(purse + total_loan < PLAYER_MINIMUM)
-		total_loan += gang_payout(PLAYER_LOAN);
+		total_loan += gang_payout(PLAYER_LOAN / MONEY_BASIS);
 	purse += total_loan;
 
 	// finish and reset a possible crime wave
@@ -94,7 +94,6 @@ long use_purse(long money){
 
 	if(total_loan){
 		// ltoa(total_loan, copy_buffer, 10);
-		                                               // TODO expand money basis for display
 		sprintf(display_buffer, FSTR("GANG LOAN $%s"), format_long(total_loan));
 		title_prompt(display_buffer, 1, false, ALERT_SHOW_TIME);
 	}

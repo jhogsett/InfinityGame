@@ -8,7 +8,7 @@
 #include "utils.h"
 
 void display_purse(){
-	sprintf(display_buffer, FSTR("CASH $%s"), format_long(get_purse() * MONEY_BASIS));
+	sprintf(display_buffer, FSTR("CASH $%s"), format_long(get_purse()));
 
 	// long purse = get_purse();
 	// if(purse > 999999) // # optimize strings
@@ -18,7 +18,7 @@ void display_purse(){
 }
 
 void display_win(unsigned long win){
-	sprintf(display_buffer, FSTR("*WIN $%s"), format_long(win * MONEY_BASIS));
+	sprintf(display_buffer, FSTR("*WIN $%s"), format_long(win));
 
 	// if(win > 9999999L) // # optimize strings
 	// 	sprintf(display_buffer, FSTR("WIN$%ld"), win);
@@ -30,19 +30,38 @@ void display_win(unsigned long win){
 }
 
 void display_jackpot(unsigned long win){
-	sprintf(display_buffer, FSTR("** JACKPOT $%s"), format_long(win * MONEY_BASIS));
+	sprintf(display_buffer, FSTR("** JACKPOT $%s"), format_long(win));
 	title_prompt(display_buffer, JACKPOT_SHOW_TIMES, true, ROUND_DELAY);
 }
 
-char *format_long(long num){
+// money units = 50
+// 20 = 1000 / money units for reduction
+// $123,456,789,250 / money units =
+// m=2,469,135,785 money units
+// can't multiply it by 50 due to long size
+// u = m % 20 (5)
+// m -= u (2,469,135,780)
+
+
+
+char *format_long(long num, long basis){
 	int negate = (num < 0L) ? -1 : 1;
 	if(negate < 0)
 		num *= -1L;
 
-	int units = num % 1000L;
-	int thous = ((num % 1000000L) - units) / 1000L;
-	int mills = ((num % 1000000000L) - thous) / 1000000L;
-	int bills =  ((num % 1000000000000L) - mills) / 1000000000L;
+	if(basis == 0)
+		basis = MONEY_BASIS;
+
+	// this captures and removes the lower three digits in the expanded basis of the number
+	// plus removes the basis factor and 1000 for the remaining splits
+	long basis_factor = 1000L / basis;
+	int units = num % (basis_factor);
+	num = (num - units) / (basis_factor);
+	units *= basis;
+
+	int thous = ((num % 1000L) - 0) / 1L;
+	int mills = ((num % 1000000L) - thous) / 1000L;
+	int bills = ((num % 1000000000L) - mills) / 1000000L;
 
 	if(bills > 0)
 		sprintf(copy_buffer, FSTR("%d,%03d,%03d,%03d"), bills*negate, mills, thous, units);
@@ -70,5 +89,5 @@ char *standard_bet_str(byte bet){
 		return copy_buffer;
 	} else
 		// return numeric_bet_str(bet_amounts[bet]);
-		return format_long(bet_amounts[bet] * MONEY_BASIS);
+		return format_long(bet_amounts[bet]);
 }

@@ -42,10 +42,10 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 	char gang_display[20];
 	char time_display[15];
 
-	strcpy(cash_display, format_long(get_purse() * MONEY_BASIS));
-	strcpy(house_display, format_long(get_house() * MONEY_BASIS));
-	strcpy(bank_display, format_long(get_bank() * MONEY_BASIS));
-	strcpy(gang_display, format_long(get_gang() * MONEY_BASIS));
+	strcpy(cash_display, format_long(get_purse()));
+	strcpy(house_display, format_long(get_house()));
+	strcpy(bank_display, format_long(get_bank()));
+	strcpy(gang_display, format_long(get_gang()));
 
 	// ltoa(get_purse(), cash_display, 10);
 	// ltoa(get_house(), house_display, 10);
