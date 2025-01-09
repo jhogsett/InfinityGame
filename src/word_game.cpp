@@ -226,9 +226,9 @@ bool word_game(){
 		break;
 	}
 
-	sprintf(display_buffer, FSTR("Buttons to ROTATE/FLIP"));
+	sprintf(display_buffer, FSTR("Buttons ROTATE/FLIP"));
 	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
-	sprintf(display_buffer, FSTR("LONG PRESS to EXIT"));
+	sprintf(display_buffer, FSTR("LONG PRESS EXITS"));
 	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
 
 	unsigned long idle_timeout = millis() + option_idle_time;

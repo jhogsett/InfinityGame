@@ -24,7 +24,7 @@
 
 // when displaying a title with LEDs, this is the on/off time
 // this is used for celebrating wins
-#define TITLE_PANEL_LEDS_SHOW_TIME     100
+#define TITLE_PANEL_LEDS_SHOW_TIME     150
 #define TITLE_PANEL_LEDS_BLANK_TIME    0
 #define TITLE_PANEL_LEDS_STYLE (LEDHandler::STYLE_RANDOM)
 
