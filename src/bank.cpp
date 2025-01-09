@@ -3,6 +3,7 @@
 #include "displays.h"
 #include "motor.h"
 #include "play_data.h"
+#include "play_views.h"
 #include "prompts.h"
 #include "speaker.h"
 #include "utils.h"
@@ -93,8 +94,8 @@ long use_purse(long dollars){
 	crime_wave = false;
 
 	if(total_loan){
-		ltoa(total_loan, copy_buffer, 10);
-		sprintf(display_buffer, FSTR("$%s GANG LOAN"), copy_buffer);
+		// ltoa(total_loan, copy_buffer, 10);
+		sprintf(display_buffer, FSTR("$%s GANG LOAN"), format_long(total_loan));
 		title_prompt(display_buffer, 1, false, ALERT_SHOW_TIME);
 	}
 

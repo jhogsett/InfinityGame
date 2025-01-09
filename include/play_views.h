@@ -19,6 +19,7 @@ extern void display_purse();
 // extern void display_house();
 extern void display_win(unsigned long win);
 extern void display_jackpot(unsigned long win);
+extern char *format_long(long num);
 extern char *numeric_bet_str(long bet);
 extern char *standard_bet_str(byte bet);
 
