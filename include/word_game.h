@@ -21,6 +21,12 @@
 
 #define WORD_GAME_PLAY_BET 100
 
+// activate streak bonus after two beats in a row
+#define MIN_STREAK_ACTIVATION 2
+
+// subtract this from the streak win count to arrive at the bonus amount
+#define STREAK_OFFSET 1
+
 extern char chosen_word[];
 extern char scramble_word[];
 extern bool new_game;
