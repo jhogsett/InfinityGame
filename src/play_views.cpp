@@ -18,7 +18,7 @@ void display_purse(){
 }
 
 void display_win(unsigned long win){
-	sprintf(display_buffer, FSTR("*WIN $ %s"), format_long(win));
+	sprintf(display_buffer, FSTR("*WIN $%s"), format_long(win));
 
 	// if(win > 9999999L) // # optimize strings
 	// 	sprintf(display_buffer, FSTR("WIN$%ld"), win);

@@ -18,7 +18,7 @@
 #define HOUSE_STEAL_MIN 100000L
 #define PURSE_STEAL_MIN 25000L
 #define ALERT_SHOW_TIME 1000
-#define MINIMUM_CRIME_WAVE_TIME 1000
+#define MINIMUM_CRIME_WAVE_TIME 2000
 
 extern bool crime_wave;
 extern unsigned long crime_wave_started;

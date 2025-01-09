@@ -132,7 +132,7 @@ long gang_payout(long dollars){
 			unsigned long time = millis();
 			crime_wave = true;
 			crime_wave_started = time;
-			load_f_string(F("*Crime Wave*"), display_buffer);
+			load_f_string(F("*CRIME WAVE*"), display_buffer);
 			display.simple_show_string(display_buffer);
 			bool led_enables[] = {true, false, true};
 			button_leds.begin(time, ALERT_LEDS_STYLE, ALERT_LEDS_SHOW_TIME, ALERT_LEDS_BLANK_TIME, led_enables);
