@@ -15,76 +15,75 @@ unsigned long crime_wave_started = 0L;
 // Properties
 
 long get_bank(){
-	return bank * MONEY_BASIS;
+	return bank;
 }
 
 long get_house(){
-	return house * MONEY_BASIS;
+	return house;
 }
 
 long get_purse(){
-	return purse * MONEY_BASIS;
+	return purse;
 }
 
 long get_gang(){
-	return gang * MONEY_BASIS;
+	return gang;
 }
 
 // Bank operations
 
 // returns the amount deposited
-long bank_deposit(long dollars){
-	bank += dollars / MONEY_BASIS;
-	return dollars;
+long bank_deposit(long money){
+	bank += money;
+	return money;
 }
 
 // returns the amount withdrawn
-long bank_widthdrawl(long dollars){
-	bank -= dollars / MONEY_BASIS;
-	return dollars;
+long bank_widthdrawl(long money){
+	bank -= money;
+	return money;
 }
 
 // returns the amount of the take
-long bank_robbery(long min_dollars, long max_dollars){
-	long take = random(min_dollars, max_dollars+1);
+long bank_robbery(long min_money, long max_money){
+	long take = random(min_money, max_money+1);
 	return bank_widthdrawl(take);
 }
 
 // House operations
 
 // returns the amount paid
-long pay_house(long dollars){
-	house += dollars / MONEY_BASIS;
-	return dollars;
+long pay_house(long money){
+	house += money;
+	return money;
 }
 
 // returns the amount paid out
-long house_payout(long dollars){
-	house -= dollars / MONEY_BASIS;
+long house_payout(long money){
+	house -= money;
 
-	while(house * MONEY_BASIS < HOUSE_MINIMUM)
-		house += bank_widthdrawl(HOUSE_BANK_WITHDRAWL) / MONEY_BASIS;
+	while(house < HOUSE_MINIMUM)
+		house += bank_widthdrawl(HOUSE_BANK_WITHDRAWL);
 
-	return dollars;
+	return money;
 }
 
 // returns the amount burglarized
-long burglarize_house(long min_dollars, long max_dollars){
-	long take = random(min_dollars, max_dollars+1);
+long burglarize_house(long min_money, long max_money){
+	long take = random(min_money, max_money+1);
 	return house_payout(take);
 }
 
 // Player Cash operations
 
 // returns the amount used
-long use_purse(long dollars){
-	purse -= dollars / MONEY_BASIS;
+long use_purse(long money){
+	purse -= money;
 
-	// TODO do the math in MONEY_BASIS units
 	long total_loan = 0;
-	while((purse * MONEY_BASIS) + total_loan < PLAYER_MINIMUM)
+	while(purse + total_loan < PLAYER_MINIMUM)
 		total_loan += gang_payout(PLAYER_LOAN);
-	purse += total_loan / MONEY_BASIS;
+	purse += total_loan;
 
 	// finish and reset a possible crime wave
 	unsigned long crime_wave_timeout = crime_wave_started + MINIMUM_CRIME_WAVE_TIME;
@@ -95,11 +94,12 @@ long use_purse(long dollars){
 
 	if(total_loan){
 		// ltoa(total_loan, copy_buffer, 10);
-		sprintf(display_buffer, FSTR("$%s GANG LOAN"), format_long(total_loan));
+		                                               // TODO expand money basis for display
+		sprintf(display_buffer, FSTR("GANG LOAN $%s"), format_long(total_loan));
 		title_prompt(display_buffer, 1, false, ALERT_SHOW_TIME);
 	}
 
-	return dollars;
+	return money;
 }
 
 // // returns the amount burglarized
@@ -116,18 +116,18 @@ long use_purse(long dollars){
 
 
 // returns the amount added
-long add_to_purse(long dollars){
-	purse += dollars / MONEY_BASIS;
-	return dollars;
+long add_to_purse(long money){
+	purse += money;
+	return money;
 }
 
 // Gang operations
 
 // returns the amount paid out
-long gang_payout(long dollars){
-	gang -= dollars / MONEY_BASIS;
+long gang_payout(long money){
+	gang -= money;
 
-	if(gang * MONEY_BASIS < GANG_MIMUMUM){
+	if(gang < GANG_MIMUMUM){
 		if(!crime_wave){
 			unsigned long time = millis();
 			crime_wave = true;
@@ -139,15 +139,15 @@ long gang_payout(long dollars){
 		}
 
 		long total_take = 0;
-		while((gang * MONEY_BASIS) + total_take < GANG_MIMUMUM){
+		while(gang + total_take < GANG_MIMUMUM){
 			total_take += steal_money();
 		}
 		unsigned long time = millis();
 		button_leds.step(time);
-		gang += total_take / MONEY_BASIS;
+		gang += total_take;
 	}
 
-	return dollars;
+	return money;
 }
 
 long steal_money(){
