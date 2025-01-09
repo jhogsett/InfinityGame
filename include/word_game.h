@@ -21,8 +21,6 @@
 
 #define WORD_GAME_PLAY_BET 100
 
-// #define ENABLE_WIN_IN_1
-
 extern char chosen_word[];
 extern char scramble_word[];
 extern bool new_game;

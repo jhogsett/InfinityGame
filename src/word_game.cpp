@@ -134,8 +134,8 @@ int choose_word(bool rude){
 	return scramble_moves;
 }
 
-// returns -1 on time out or long press, 0 if player exceeds maximum moves, otherwise winning factor
-// returns -2 if user wins in one move
+// returns -1 on time out or long press, 0 of not beaten, otherwise winning factor 0 or more
+// returns -2 if player exceeds maximum moves
 int word_game_round(bool rude){
 	int instruction_times = new_game ? CONTROLS_SHOW_TIMES : 1;
 	int instruction_show_leds = new_game;
@@ -177,7 +177,7 @@ int word_game_round(bool rude){
 			;
 
 		if(player_moves > MAX_MOVES){
-			return 0;
+			return -2;
 		} else {
 			player_moves++;
 		}
@@ -186,22 +186,18 @@ int word_game_round(bool rude){
 		format_scamble_word(show_word);
 
 		if(strcmp(show_word, chosen_word) == 0){
-#ifdef ENABLE_WIN_IN_1
-			if(player_moves == 1)
-				return -2;
-#endif
 			// word found
 			sprintf(display_buffer, FSTR("    %s    "), chosen_word);
 			title_prompt(display_buffer, SUCCESS_SHOW_TIMES, false, CORRECT_WORD_SHOW_TIME);
 
-			sprintf(display_buffer, FSTR("YOUR MOVES %d"), player_moves);
+			sprintf(display_buffer, FSTR("  MOVES %d"), player_moves);
 			title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
 
 			// compute winning factor
 			int factor = scramble_moves - player_moves;
-			if(factor < 1)
-				factor = 1;
-			return factor + 1; // hack return 1+ the factor and subtract on use, otherwise every time is a win
+			if(factor < 0)
+				factor = 0;
+			return factor;
 		}
 	}
 	return -1;
@@ -239,7 +235,7 @@ bool word_game(){
 	unsigned long time;
 
 	while((time = millis()) < idle_timeout){
-		pay_house(use_purse(WORD_GAME_PLAY_BET));
+		// pay_house(use_purse(WORD_GAME_PLAY_BET));
 		long win = 0;
 		bool purse_change = false;
 		int round_result = word_game_round(rude);
@@ -247,16 +243,21 @@ bool word_game(){
 		idle_timeout = millis() + option_idle_time;
 
 		switch(round_result){
-			case -1:
-				// timed out of long press
-				return false;
-			case 0:
+			case -2:
 				// exceeded max moves
 				sprintf(display_buffer, FSTR("Out Of Moves"));
 				title_prompt(display_buffer, EXCEEDED_SHOW_TIMES, false, ROUND_DELAY);
 
 				// pay_house(use_purse(WORD_GAME_PLAY_BET));
 				// purse_change = true;
+				break;
+			case -1:
+				// timed out or long press
+				// refund their bet
+				add_to_purse(WORD_GAME_PLAY_BET);
+				return false;
+			case 0:
+				// player didn't beat the moves
 				break;
 			default:
 				// sprintf(display_buffer, FSTR("    %s    "), chosen_word);
@@ -265,7 +266,7 @@ bool word_game(){
 				sprintf(display_buffer, FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word);
 				title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);
 
-				win = (round_result-1) * WORD_WIN_UNIT;
+				win = (round_result) * WORD_WIN_UNIT;
 				if(win > 0)
 					display_win(win);
 
@@ -274,16 +275,6 @@ bool word_game(){
 				purse_change = true;
 				break;
 		}
-
-
-		// int win = 0;
-#ifdef ENABLE_WIN_IN_1
-		// if(round_result == -2){
-		// 	// win in one move
-		// 	win = WIN_IN_1_BONUS * WORD_WIN_UNIT;
-		// 	display_win(win);
-		// } else
-#endif
 
 		if(purse_change){
 			save_data();
