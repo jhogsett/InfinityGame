@@ -11,7 +11,7 @@ long purse = DEFAULT_PURSE / MONEY_BASIS;
 unsigned long best_time = (unsigned long)-1;
 bool option_clock_24h = false;
 bool option_clock_on_idle = false;
-unsigned long bank = DEFAULT_BANK / MONEY_BASIS;
+unsigned long bank = DEFAULT_BANK; // / MONEY_BASIS;
 unsigned long best_time1 = (unsigned long)-1;
 unsigned long best_time2 = (unsigned long)-1;
 unsigned long best_time3 = (unsigned long)-1;
@@ -84,7 +84,7 @@ bool reset_options(){
 	best_time = DEFAULT_TIME;
 	option_clock_24h = false;
 	option_clock_on_idle = true;
-	bank = DEFAULT_BANK / MONEY_BASIS;
+	bank = DEFAULT_BANK; // / MONEY_BASIS;
 	best_time1 = DEFAULT_TIME;
 	best_time2 = DEFAULT_TIME;
 	best_time3 = DEFAULT_TIME;
