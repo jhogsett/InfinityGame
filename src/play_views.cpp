@@ -8,10 +8,11 @@
 #include "utils.h"
 
 void display_purse(){
-	if(get_purse() > 999999) // # optimize strings
-		sprintf(display_buffer, FSTR("CASH$%ld0"), purse);
+	long purse = get_purse();
+	if(purse > 999999) // # optimize strings
+		sprintf(display_buffer, FSTR("CASH$%ld"), purse);
 	else
-		sprintf(display_buffer, FSTR("CASH $%ld0"), purse);
+		sprintf(display_buffer, FSTR("CASH $%ld"), purse);
 	title_prompt(display_buffer, CASH_SHOW_TIMES, false, CASH_SHOW_DELAY);
 }
 

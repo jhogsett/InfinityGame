@@ -102,7 +102,6 @@ int choose_word(bool rude){
 
 	// https://pi.math.cornell.edu/~mec/2003-2004/cryptography/subs/frequencies.html
 	char letters[LETTERS_BUFFER_LEN];
-	// strcpy(letters, FSTR("ETAOINSRHDLU"));
 	load_f_string(F("ETAOINSRHDLU"), letters);
 
 	char add_chars[ADD_CHARS_BUFFER_SIZE];
@@ -147,6 +146,9 @@ int word_game_round(bool rude){
 	int scramble_moves = choose_word(rude);
 	int player_moves = 0;
 
+	sprintf(display_buffer, FSTR("BEAT %d MOVES"), scramble_moves);
+	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
+
 	unsigned long idle_timeout = millis() + option_idle_time;
 	unsigned long time;
 
@@ -180,7 +182,6 @@ int word_game_round(bool rude){
 			player_moves++;
 		}
 
-		// word found, compute winning factor
 		char show_word[WORD_BUFFER_SIZE];
 		format_scamble_word(show_word);
 
@@ -189,6 +190,14 @@ int word_game_round(bool rude){
 			if(player_moves == 1)
 				return -2;
 #endif
+			// word found
+			sprintf(display_buffer, FSTR("    %s    "), chosen_word);
+			title_prompt(display_buffer, SUCCESS_SHOW_TIMES, false, CORRECT_WORD_SHOW_TIME);
+
+			sprintf(display_buffer, FSTR("YOUR MOVES %d"), player_moves);
+			title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
+
+			// compute winning factor
 			int factor = scramble_moves - player_moves;
 			if(factor < 1)
 				factor = 1;
@@ -221,9 +230,9 @@ bool word_game(){
 		break;
 	}
 
-	sprintf(display_buffer, FSTR("Buttons ROTATE and FLIP"));
+	sprintf(display_buffer, FSTR("Buttons to ROTATE/FLIP"));
 	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
-	sprintf(display_buffer, FSTR("LONG PRESS EXITS"));
+	sprintf(display_buffer, FSTR("LONG PRESS to EXIT"));
 	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
 
 	unsigned long idle_timeout = millis() + option_idle_time;
@@ -250,8 +259,8 @@ bool word_game(){
 				// purse_change = true;
 				break;
 			default:
-				sprintf(display_buffer, FSTR("    %s    "), chosen_word);
-				title_prompt(display_buffer, SUCCESS_SHOW_TIMES, false, CORRECT_WORD_SHOW_TIME);
+				// sprintf(display_buffer, FSTR("    %s    "), chosen_word);
+				// title_prompt(display_buffer, SUCCESS_SHOW_TIMES, false, CORRECT_WORD_SHOW_TIME);
 
 				sprintf(display_buffer, FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word);
 				title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);

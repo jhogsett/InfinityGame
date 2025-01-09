@@ -94,6 +94,10 @@ bool time_game(){
 		best_time = mean;
 		micros_to_ms(copy_buffer, mean);
 		sprintf(display_buffer, FSTR("NEW BEST * %s ms"), copy_buffer);
+
+		// save this display to show again
+		strcpy(copy_buffer, display_buffer);
+
 		title_prompt(display_buffer, 1, true, ROUND_DELAY);
 		// delay(ROUND_DELAY);
 
@@ -105,7 +109,10 @@ bool time_game(){
 		save_data();
 
 		// # optimize strings
-		sprintf(display_buffer, FSTR("NEW BEST * %s ms"), copy_buffer);
+		// sprintf(display_buffer, FSTR("NEW BEST * %s ms"), copy_buffer);
+
+		// show the saved string
+		strcpy(display_buffer, copy_buffer);
 	} else {
 		micros_to_ms(copy_buffer, best_time);
 		sprintf(display_buffer, FSTR("* Best Time %s ms"), copy_buffer);
