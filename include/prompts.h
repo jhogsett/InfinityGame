@@ -21,7 +21,7 @@ typedef bool (*boolFuncPtr)(void);
 // show a display string for 700ms before beginning scrolling for ease of reading
 #define DISPLAY_SHOW_TIME 900
 // scroll the display every 90ms for ease of reading
-#define DISPLAY_SCROLL_TIME 70
+#define DISPLAY_SCROLL_TIME 80
 // scroll flipped options every 100ms
 #define OPTION_FLIP_SCROLL_TIME 100
 

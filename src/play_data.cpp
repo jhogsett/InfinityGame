@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <EEPROM.h>
+#include "bank.h"
 #include "play_data.h"
 
 bool option_sound = false;
@@ -62,8 +63,8 @@ bool reset_options(){
 	purse = DEFAULT_PURSE;
 	best_time = DEFAULT_TIME;
 	option_clock_24h = false;
-	option_clock_on_idle = false;
-	bank = DEFAULT_BANK;
+	option_clock_on_idle = true;
+	bank = DEFAULT_BANK / MONEY_BASIS;
 	best_time1 = DEFAULT_TIME;
 	best_time2 = DEFAULT_TIME;
 	best_time3 = DEFAULT_TIME;
