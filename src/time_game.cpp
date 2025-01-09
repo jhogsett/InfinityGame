@@ -24,7 +24,7 @@ bool time_game(){
 	delay(ROUND_DELAY);
 
 	unsigned long mean = 0;
-	bool fault = false;
+	// bool fault = false;
 	for(byte i = 0; i < ROUNDS; i++){
 		button_leds.activate_all(true);
 		display.scroll_string(FSTR("Wait 4 FLASH"), DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
@@ -76,11 +76,11 @@ bool time_game(){
 		display.clear();
 	}
 
-	if(fault){
-		sprintf(display_buffer, FSTR("FAULT - Button Problem - Try Again"));
-		while(button_led_prompt(display_buffer) == -1);
-		return false;
-	}
+	// if(fault){
+	// 	sprintf(display_buffer, FSTR("FAULT - Button Problem - Try Again"));
+	// 	while(button_led_prompt(display_buffer) == -1);
+	// 	return false;
+	// }
 
 	while(button_pressed());
 
@@ -93,18 +93,27 @@ bool time_game(){
 	if(mean < best_time){
 		best_time = mean;
 		micros_to_ms(copy_buffer, mean);
-		sprintf(display_buffer, FSTR("NEW BEST * %s ms"), copy_buffer);
+		sprintf(display_buffer, FSTR("* NEW BEST %s ms"), copy_buffer);
+
+		// save this display to show again
+		// strcpy(copy_buffer, display_buffer);
+
 		title_prompt(display_buffer, 1, true, ROUND_DELAY);
 		// delay(ROUND_DELAY);
 
-		display_win(TIME_WIN);
+		display_win(TIME_WIN / MONEY_BASIS);
 
-		add_to_purse(house_payout(TIME_WIN));
+		add_to_purse(house_payout(TIME_WIN / MONEY_BASIS));
 		display_purse();
 
 		save_data();
 
-		sprintf(display_buffer, FSTR("NEW BEST * %s ms"), copy_buffer);
+		// # optimize strings
+		// sprintf(display_buffer, FSTR("NEW BEST * %s ms"), copy_buffer);
+
+		// show the saved string
+		// strcpy(display_buffer, copy_buffer);
+		sprintf(display_buffer, FSTR("* NEW BEST %s ms"), copy_buffer);
 	} else {
 		micros_to_ms(copy_buffer, best_time);
 		sprintf(display_buffer, FSTR("* Best Time %s ms"), copy_buffer);

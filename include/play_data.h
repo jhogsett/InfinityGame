@@ -3,9 +3,12 @@
 
 #include <Arduino.h>
 
+// when adding new persisted play data, search for ##DATA
+
+// ##DATA Increment the save data version to force upgraded devices to auto-reset after programming
 // Current save data version
 // On start-up if this differs from the EEPROM value, the data is reset to defaults
-#define SAVE_DATA_VERSION 2
+#define SAVE_DATA_VERSION 3
 
 // All bets are paid from the player purse
 // all wins received are kept in the player purse
@@ -27,8 +30,15 @@
 // the longest possible count of milliseconds
 #define DEFAULT_TIME ((unsigned long)-1)
 
+// default milliseconds until device goes into idle mode
+#define DEFAULT_IDLE_TIME (5L * 60L * 1000L)
+
+// ##DATA add new defaults on play data reset here
+
+
 // Display time for interstitial displays during games
 #define ROUND_DELAY 750
+
 
 extern byte save_data_version;
 
@@ -53,16 +63,22 @@ extern bool option_clock_on_idle;
 // Current bank
 extern unsigned long bank;
 
+// Additional slots for best times (future use)
+extern unsigned long best_time1;
+extern unsigned long best_time2;
+extern unsigned long best_time3;
+
 // Current house
 extern long house;
 
 // Current gang
 extern long gang;
 
-// Additional slots for best times (future use)
-extern unsigned long best_time1;
-extern unsigned long best_time2;
-extern unsigned long best_time3;
+// Idle Time in milliseconds
+extern unsigned long option_idle_time;
+
+// ##DATA Add 'extern's for new persisted play data veriables here
+
 
 // Saved data structure version 1
 struct SavedData{
@@ -79,6 +95,9 @@ struct SavedData{
 	unsigned long best_time3;
 	long house;
 	long gang;
+	unsigned long option_idle_time;
+
+	// ##DATA Add new persisted data types here
 };
 
 extern void load_save_data();

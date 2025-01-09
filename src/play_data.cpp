@@ -3,18 +3,24 @@
 #include "bank.h"
 #include "play_data.h"
 
+// when adding new persisted play data, search for ##DATA
+
 bool option_sound = false;
 bool option_vibrate = false;
-long purse = DEFAULT_PURSE;
+long purse = DEFAULT_PURSE / MONEY_BASIS;
 unsigned long best_time = (unsigned long)-1;
 bool option_clock_24h = false;
 bool option_clock_on_idle = false;
-unsigned long bank = DEFAULT_BANK;
+unsigned long bank = DEFAULT_BANK / MONEY_BASIS;
 unsigned long best_time1 = (unsigned long)-1;
 unsigned long best_time2 = (unsigned long)-1;
 unsigned long best_time3 = (unsigned long)-1;
-long house = DEFAULT_HOUSE;
-long gang = DEFAULT_GANG;
+long house = DEFAULT_HOUSE / MONEY_BASIS;
+long gang = DEFAULT_GANG / MONEY_BASIS;
+unsigned long option_idle_time = DEFAULT_IDLE_TIME;
+
+// ##DATA Add new persisted play data veriables here
+
 
 void load_save_data(){
 	SavedData saved_data;
@@ -37,6 +43,9 @@ void load_save_data(){
 	best_time3 = saved_data.best_time3;
 	house = saved_data.house;
 	gang = saved_data.gang;
+	option_idle_time = saved_data.option_idle_time;
+
+	// ##DATA Load new persisted play data variables into memory here
 }
 
 void save_data(){
@@ -54,13 +63,24 @@ void save_data(){
 	saved_data.best_time3 = best_time3;
 	saved_data.house = house;
 	saved_data.gang = gang;
+	saved_data.option_idle_time = option_idle_time;
+
+	// ##DATA Store new persisted play data veriables in the persistent structure here
+
 	EEPROM.put(0, saved_data);
+}
+
+typedef void (*VoidFunc)(void);
+
+void reset_device(){
+	VoidFunc p = NULL;
+	p();
 }
 
 bool reset_options(){
 	option_sound = true;
 	option_vibrate = true;
-	purse = DEFAULT_PURSE;
+	purse = DEFAULT_PURSE / MONEY_BASIS;
 	best_time = DEFAULT_TIME;
 	option_clock_24h = false;
 	option_clock_on_idle = true;
@@ -68,8 +88,14 @@ bool reset_options(){
 	best_time1 = DEFAULT_TIME;
 	best_time2 = DEFAULT_TIME;
 	best_time3 = DEFAULT_TIME;
-	house = DEFAULT_HOUSE;
-	gang = DEFAULT_GANG;
+	house = DEFAULT_HOUSE / MONEY_BASIS;
+	gang = DEFAULT_GANG / MONEY_BASIS;
+	option_idle_time = DEFAULT_IDLE_TIME;
+
+	// ##DATA Reset new persisted play data veriables to default variables here
+
 	save_data();
+
+	reset_device();
 	return false;
 }

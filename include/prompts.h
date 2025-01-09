@@ -31,21 +31,21 @@ const char template0[] PROGMEM = "InfinityGame";
 const char template1[] PROGMEM = "Press A Button to Play";
 const char template2[] PROGMEM = "Your WALLET $%s";
 const char template3[] PROGMEM = "Your Best Time %s ms";
-const char template4[] PROGMEM = "Play Silly Slots";
-const char template5[] PROGMEM = "Play The WordGame";
-const char template6[] PROGMEM = "Play The TimeGame";
-const char template7[] PROGMEM = "House SAFE $%s";
-const char template8[] PROGMEM = "Bank VAULT $%s";
-const char template9[] PROGMEM = "Gang STASH $%s";
-const char template10[] PROGMEM = "Long Press for Options";
+const char template4[] PROGMEM = "House SAFE $%s";
+const char template5[] PROGMEM = "Bank VAULT $%s";
+const char template6[] PROGMEM = "GANG STASH $%s";
+const char template7[] PROGMEM = "Play Silly Slots";
+const char template8[] PROGMEM = "Play The WordGame";
+const char template9[] PROGMEM = "Play The TimeGame";
+const char template10[] PROGMEM = "LONG PRESS for OPTIONS";
 const char *const templates[] PROGMEM = { template0, template1, template2, template3, template4, template5, template6, template7, template8, template9, template10 };
 
 // Identify array position for placing fill-in data
 #define BILLBOARD_CASH 2
 #define BILLBOARD_TIME 3
-#define BILLBOARD_HOUSE 7
-#define BILLBOARD_BANK 8
-#define BILLBOARD_GANG 9
+#define BILLBOARD_HOUSE 4
+#define BILLBOARD_BANK 5
+#define BILLBOARD_GANG 6
 
 extern BillboardsHandler billboards_handler;
 extern char *billboard_data[NUM_BILLBOARDS];

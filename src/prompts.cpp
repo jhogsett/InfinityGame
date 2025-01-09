@@ -1,11 +1,13 @@
 
 #include <Arduino.h>
+#include "bank.h"
 #include "billboards_handler.h"
 #include "buffers.h"
 #include "buttons.h"
 #include "displays.h"
 #include "leds.h"
 #include "play_data.h"
+#include "play_views.h"
 #include "prompts.h"
 #include "timeouts.h"
 #include "utils.h"
@@ -28,25 +30,31 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 	reset_buttons_state();
 
 	unsigned long time = millis();
-	unsigned long idle_timeout = time + IDLE_TIMEOUT;
+	unsigned long idle_timeout = time + option_idle_time;
 
 	all_leds.deactivate_leds(true);
 	billboards_handler.reset();
 	panel_leds.begin(time, BILLBOARD_PANEL_LEDS_STYLE, BILLBOARD_PANEL_LEDS_SHOW_TIME, BILLBOARD_PANEL_LEDS_BLANK_TIME);
 
-	char cash_display[15];
-	char house_display[15];
-	char bank_display[15];
-	char gang_display[15];
+	char cash_display[20];
+	char house_display[20];
+	char bank_display[20];
+	char gang_display[20];
 	char time_display[15];
 
-	ltoa(purse, cash_display, 10);
-	ltoa(house, house_display, 10);
-	ltoa(bank, bank_display, 10);
-	ltoa(gang, gang_display, 10);
+	strcpy(cash_display, format_long(get_purse()));
+	strcpy(house_display, format_long(get_house()));
+	strcpy(bank_display, format_long(get_bank()));
+	strcpy(gang_display, format_long(get_gang()));
+
+	// ltoa(get_purse(), cash_display, 10);
+	// ltoa(get_house(), house_display, 10);
+	// ltoa(get_bank(), bank_display, 10);
+	// ltoa(get_gang(), gang_display, 10);
 
 	if(best_time == DEFAULT_TIME){
-		strcpy(time_display, FSTR("0.0000"));
+		load_f_string(F("0.0000"), time_display);
+
 	} else {
 		micros_to_ms(time_display, best_time);
 	}
@@ -71,6 +79,11 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 
 			if (long_press_state == 1) {
 				bool result = on_long_press();
+
+				// update anything that may have changed in the options and could affect
+				// the current running billboard prompt
+				idle_timeout = time + option_idle_time;
+
 				if(result)
 					// if the long press handler returns true it means there was an idle timeout
 					// and the billboard should go directly to the idle state, not show the menu
@@ -143,7 +156,7 @@ int button_led_prompt(const char * prompt, const bool *states) {
 void title_prompt(const char * title, byte times, bool show_panel_leds, int show_delay, int leds_style, int leds_show_time, int leds_blank_time) {
 	unsigned long time = millis();
 	unsigned long timeout_time = time + PROMPT_TIMEOUT;
-	unsigned long idle_timeout = time + IDLE_TIMEOUT;
+	unsigned long idle_timeout = time + option_idle_time;
 
 	if (show_panel_leds)
 		panel_leds.begin(millis(), leds_style, leds_show_time, leds_blank_time);
@@ -194,6 +207,7 @@ void title_prompt(const char * title, byte times, bool show_panel_leds, int show
 }
 
 // prompt with panel leds showing only and cycle waiting for any button press
+// returns -1=timed out, 0=long press, button ID otherwise
 int panel_led_prompt() {
 	unsigned long time;
 	unsigned long timeout_time = millis() + PROMPT_TIMEOUT;
@@ -212,19 +226,35 @@ int panel_led_prompt() {
 	while (true) {
 		time = millis();
 		panel_leds.step(time);
-		if (!button_pressed())
-			continue;
 
-		all_leds.activate_leds(button_states, true);
-		while (button_still_pressed())
-			;
+			// if (!button_pressed())
+			// 	continue;
 
-		all_leds.deactivate_leds(true);
-		return 1;
+			// all_leds.activate_leds(button_states, true);
+			// while (button_still_pressed())
+			// 	;
+
+			// all_leds.deactivate_leds(true);
+			// return 1;
+
+		if (button_pressed()) {
+			all_leds.activate_leds(button_states, true);
+			int long_press_state;
+			while ((long_press_state = wait_on_long_press()) == 0)
+				;
+
+			all_leds.deactivate_leds(true);
+			if (long_press_state == 1){
+				return 0;
+			} else {
+				return 1; // any real button ID will do
+			}
+		}
 	}
 
 	return -1;
 }
+
 
 // TODO button_led_prompt() blocks, so the loop here might not be needed (would be if there were LEDS or the display to run here)
 // returns the bool returned by the event handler function or false
