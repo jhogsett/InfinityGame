@@ -1,11 +1,13 @@
 
 #include <Arduino.h>
+#include "bank.h"
 #include "billboards_handler.h"
 #include "buffers.h"
 #include "buttons.h"
 #include "displays.h"
 #include "leds.h"
 #include "play_data.h"
+#include "play_views.h"
 #include "prompts.h"
 #include "timeouts.h"
 #include "utils.h"
@@ -34,19 +36,25 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 	billboards_handler.reset();
 	panel_leds.begin(time, BILLBOARD_PANEL_LEDS_STYLE, BILLBOARD_PANEL_LEDS_SHOW_TIME, BILLBOARD_PANEL_LEDS_BLANK_TIME);
 
-	char cash_display[15];
-	char house_display[15];
-	char bank_display[15];
-	char gang_display[15];
+	char cash_display[20];
+	char house_display[20];
+	char bank_display[20];
+	char gang_display[20];
 	char time_display[15];
 
-	ltoa(purse, cash_display, 10);
-	ltoa(house, house_display, 10);
-	ltoa(bank, bank_display, 10);
-	ltoa(gang, gang_display, 10);
+	strcpy(cash_display, format_long(get_purse()));
+	strcpy(house_display, format_long(get_house()));
+	strcpy(bank_display, format_long(get_bank()));
+	strcpy(gang_display, format_long(get_gang()));
+
+	// ltoa(get_purse(), cash_display, 10);
+	// ltoa(get_house(), house_display, 10);
+	// ltoa(get_bank(), bank_display, 10);
+	// ltoa(get_gang(), gang_display, 10);
 
 	if(best_time == DEFAULT_TIME){
-		strcpy(time_display, FSTR("0.0000"));
+		load_f_string(F("0.0000"), time_display);
+
 	} else {
 		micros_to_ms(time_display, best_time);
 	}

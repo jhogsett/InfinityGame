@@ -15,7 +15,7 @@
 #define DEBOUNCE_TIME 5
 
 // Time in milliseconds for a button to be pressed for it to be a long press and active alternate actions
-#define LONG_PRESS_TIME 1500
+#define LONG_PRESS_TIME 1250
 
 // Max button LOWs during the debounce period reads on a button in a tight loop (experimental)
 // if the supposedly-pressed button is actually low this many times, the press is rejected as unreliable
