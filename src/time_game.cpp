@@ -93,17 +93,17 @@ bool time_game(){
 	if(mean < best_time){
 		best_time = mean;
 		micros_to_ms(copy_buffer, mean);
-		sprintf(display_buffer, FSTR("NEW BEST * %s ms"), copy_buffer);
+		sprintf(display_buffer, FSTR("* NEW BEST %s ms"), copy_buffer);
 
 		// save this display to show again
-		strcpy(copy_buffer, display_buffer);
+		// strcpy(copy_buffer, display_buffer);
 
 		title_prompt(display_buffer, 1, true, ROUND_DELAY);
 		// delay(ROUND_DELAY);
 
-		display_win(TIME_WIN);
+		display_win(TIME_WIN / MONEY_BASIS);
 
-		add_to_purse(house_payout(TIME_WIN));
+		add_to_purse(house_payout(TIME_WIN / MONEY_BASIS));
 		display_purse();
 
 		save_data();
@@ -112,7 +112,8 @@ bool time_game(){
 		// sprintf(display_buffer, FSTR("NEW BEST * %s ms"), copy_buffer);
 
 		// show the saved string
-		strcpy(display_buffer, copy_buffer);
+		// strcpy(display_buffer, copy_buffer);
+		sprintf(display_buffer, FSTR("* NEW BEST %s ms"), copy_buffer);
 	} else {
 		micros_to_ms(copy_buffer, best_time);
 		sprintf(display_buffer, FSTR("* Best Time %s ms"), copy_buffer);

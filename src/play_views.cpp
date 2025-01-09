@@ -8,7 +8,7 @@
 #include "utils.h"
 
 void display_purse(){
-	sprintf(display_buffer, FSTR("CASH $%s"), format_long(get_purse()));
+	sprintf(display_buffer, FSTR("CASH $%s"), format_long(get_purse() * MONEY_BASIS));
 
 	// long purse = get_purse();
 	// if(purse > 999999) // # optimize strings
@@ -18,7 +18,7 @@ void display_purse(){
 }
 
 void display_win(unsigned long win){
-	sprintf(display_buffer, FSTR("*WIN $%s"), format_long(win));
+	sprintf(display_buffer, FSTR("*WIN $%s"), format_long(win * MONEY_BASIS));
 
 	// if(win > 9999999L) // # optimize strings
 	// 	sprintf(display_buffer, FSTR("WIN$%ld"), win);
@@ -30,7 +30,7 @@ void display_win(unsigned long win){
 }
 
 void display_jackpot(unsigned long win){
-	sprintf(display_buffer, FSTR("** JACKPOT $%s"), format_long(win));
+	sprintf(display_buffer, FSTR("** JACKPOT $%s"), format_long(win * MONEY_BASIS));
 	title_prompt(display_buffer, JACKPOT_SHOW_TIMES, true, ROUND_DELAY);
 }
 
@@ -56,10 +56,10 @@ char *format_long(long num){
 	return copy_buffer;
 }
 
-char *numeric_bet_str(long bet){
-	sprintf(copy_buffer, FSTR("%ld"), bet);
-	return copy_buffer;
-}
+// char *numeric_bet_str(long bet){
+// 	sprintf(copy_buffer, FSTR("%ld"), bet);
+// 	return copy_buffer;
+// }
 
 char *standard_bet_str(byte bet){
 	if(bet == BET_ALL){
@@ -69,5 +69,6 @@ char *standard_bet_str(byte bet){
 		sprintf(copy_buffer, FSTR("RPT"));
 		return copy_buffer;
 	} else
-		return numeric_bet_str(bet_amounts[bet]);
+		// return numeric_bet_str(bet_amounts[bet]);
+		return format_long(bet_amounts[bet] * MONEY_BASIS);
 }

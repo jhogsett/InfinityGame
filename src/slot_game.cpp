@@ -153,7 +153,6 @@ bool slots_game(){
 
 		idle_timeout = millis() + option_idle_time;
 
-		long win = 0;
 		bool jackpot = false;
 
 		last_bet_amount = bet_amounts[current_bet];
@@ -174,27 +173,28 @@ bool slots_game(){
 		sprintf(display_buffer, FSTR("%s%s%s"), words[choice1], words[choice2], words[choice3]);
 		title_prompt(display_buffer);
 
+		long win_factor = 0;
 		if(jackpot_words_chosen(jackpot_choice1, jackpot_choice2, jackpot_choice3)){
-			win = WIN_JACKPOT;
+			win_factor = WIN_JACKPOT;
 			jackpot = true;
 		} else if(triple_word_chosen()){
-			win = WIN_TRIPLE;
+			win_factor = WIN_TRIPLE;
 			if(special_word_chosen())
-				win *= WIN_WORD_BONUS;
+				win_factor *= WIN_WORD_BONUS;
 		} else if(double_word_chosen()){
-			win = WIN_DOUBLE;
+			win_factor = WIN_DOUBLE;
 			if(special_word_chosen())
-				win *= WIN_WORD_BONUS;
+				win_factor *= WIN_WORD_BONUS;
 		} else if(choice1 < WIN_WORD_CUTOFF || choice2 < WIN_WORD_CUTOFF || choice3 < WIN_WORD_CUTOFF) {
-			win = WIN_WORD;
+			win_factor = WIN_WORD;
 		}
 
-		win *= bet_amounts[current_bet];
+		long win = bet_amounts[current_bet] * win_factor;
 
 		if(jackpot)
-			display_jackpot(win);
+			display_jackpot(win); // todo fix for to expand money basis
 		else if(win)
-			display_win(win);
+			display_win(win); // todo fix for to expand money basis
 		else
 			// see the non-winning results in lieu of being told you lost
 			delay(ROUND_DELAY);

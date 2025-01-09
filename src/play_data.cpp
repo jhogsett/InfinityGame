@@ -7,16 +7,16 @@
 
 bool option_sound = false;
 bool option_vibrate = false;
-long purse = DEFAULT_PURSE;
+long purse = DEFAULT_PURSE / MONEY_BASIS;
 unsigned long best_time = (unsigned long)-1;
 bool option_clock_24h = false;
 bool option_clock_on_idle = false;
-unsigned long bank = DEFAULT_BANK;
+unsigned long bank = DEFAULT_BANK / MONEY_BASIS;
 unsigned long best_time1 = (unsigned long)-1;
 unsigned long best_time2 = (unsigned long)-1;
 unsigned long best_time3 = (unsigned long)-1;
-long house = DEFAULT_HOUSE;
-long gang = DEFAULT_GANG;
+long house = DEFAULT_HOUSE / MONEY_BASIS;
+long gang = DEFAULT_GANG / MONEY_BASIS;
 unsigned long option_idle_time = DEFAULT_IDLE_TIME;
 
 // ##DATA Add new persisted play data veriables here

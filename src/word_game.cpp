@@ -149,6 +149,8 @@ int word_game_round(bool rude){
 	sprintf(display_buffer, FSTR("BEAT %d MOVES"), scramble_moves);
 	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
 
+	pay_house(use_purse(WORD_GAME_PLAY_BET / MONEY_BASIS));
+
 	unsigned long idle_timeout = millis() + option_idle_time;
 	unsigned long time;
 
@@ -226,7 +228,7 @@ bool word_game(){
 		break;
 	}
 
-	sprintf(display_buffer, FSTR("Buttons ROTATE/FLIP"));
+	sprintf(display_buffer, FSTR("BUTTONS ROTATE/FLIP"));
 	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
 	sprintf(display_buffer, FSTR("LONG PRESS EXITS"));
 	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
@@ -235,9 +237,9 @@ bool word_game(){
 	unsigned long time;
 
 	while((time = millis()) < idle_timeout){
-		// pay_house(use_purse(WORD_GAME_PLAY_BET));
+		// pay_house(use_purse(WORD_GAME_PLAY_BET / MONEY_BASIS));
 		long win = 0;
-		bool purse_change = false;
+		// bool purse_change = false;
 		int round_result = word_game_round(rude);
 
 		idle_timeout = millis() + option_idle_time;
@@ -254,7 +256,8 @@ bool word_game(){
 			case -1:
 				// timed out or long press
 				// refund their bet
-				add_to_purse(WORD_GAME_PLAY_BET);
+				add_to_purse(WORD_GAME_PLAY_BET / MONEY_BASIS);
+				save_data();
 				return false;
 			case 0:
 				// player didn't beat the moves
@@ -266,20 +269,20 @@ bool word_game(){
 				sprintf(display_buffer, FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word);
 				title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);
 
-				win = (round_result) * WORD_WIN_UNIT;
+				win = (round_result) * (WORD_WIN_UNIT / MONEY_BASIS);
 				if(win > 0)
 					display_win(win);
 
 				// pay_house(use_purse(WORD_GAME_PLAY_BET));
 				add_to_purse(house_payout(win));
-				purse_change = true;
+				// purse_change = true;
 				break;
 		}
 
-		if(purse_change){
-			save_data();
-			display_purse();
-		}
+		// if(purse_change){
+		save_data();
+		display_purse();
+		// }
 	}
 	return false;
 }
