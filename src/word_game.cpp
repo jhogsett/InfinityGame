@@ -281,10 +281,11 @@ bool word_game(){
 				if(streak > MIN_STREAK_ACTIVATION)
 					win *= (streak - STREAK_OFFSET);
 
-				if(win > 0)
+				if(win > 0){
 					display_win(win);
+					streak++;
+				}
 
-				streak++;
 				if(streak > MIN_STREAK_ACTIVATION){
 					sprintf(display_buffer, FSTR("%3dX BONUS"), streak - STREAK_OFFSET);
 					title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);

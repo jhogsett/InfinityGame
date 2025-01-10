@@ -13,7 +13,7 @@
 #define MAX_MOVES 20
 #define ADD_CHARS 4
 #define SCRAMBLE_SIZE 8
-#define SHUFFLE_TIMES_MIN 3
+#define SHUFFLE_TIMES_MIN 4
 #define SHUFFLE_TIMES_MAX 9
 
 // in MONEY_BASIS units
