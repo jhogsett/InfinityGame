@@ -6,6 +6,11 @@
 #define BET_ALL 3
 #define BET_REPEAT 4
 
+// in MONEY_BASIS_UNITS
+#define ROLLING_BET_1 (100L / MONEY_BASIS)
+#define ROLLING_BET_2 (250L / MONEY_BASIS)
+#define ROLLING_BET_3 (500L / MONEY_BASIS)
+
 extern long bet_amounts[];
 extern long current_bet;
 

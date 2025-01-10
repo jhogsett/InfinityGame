@@ -82,7 +82,7 @@ long use_purse(long money){
 
 	long total_loan = 0;
 	while(purse + total_loan < PLAYER_MINIMUM)
-		total_loan += gang_payout(PLAYER_LOAN / MONEY_BASIS);
+		total_loan += gang_payout(PLAYER_LOAN);
 	purse += total_loan;
 
 	// finish and reset a possible crime wave
@@ -156,13 +156,13 @@ long steal_money(){
 	bool steal_from_house = false;
 	// bool steal_from_purse = false;
 
-	if(bank * MONEY_BASIS >= BANK_STEAL_MIN)
+	if(bank >= BANK_STEAL_MIN)
 		steal_from_bank = true;
 
-	if(house * MONEY_BASIS >= HOUSE_STEAL_MIN)
+	if(house >= HOUSE_STEAL_MIN)
 		steal_from_house = true;
 
-	// if(purse * MONEY_BASIS >= PURSE_STEAL_MIN)
+	// if(purse  >= PURSE_STEAL_MIN)
 	// 	steal_from_purse = true;
 
 	switch(random(2)){

@@ -101,9 +101,9 @@ bool time_game(){
 		title_prompt(display_buffer, 1, true, ROUND_DELAY);
 		// delay(ROUND_DELAY);
 
-		display_win(TIME_WIN / MONEY_BASIS);
+		display_win(TIME_WIN);
 
-		add_to_purse(house_payout(TIME_WIN / MONEY_BASIS));
+		add_to_purse(house_payout(TIME_WIN));
 		display_purse();
 
 		save_data();
