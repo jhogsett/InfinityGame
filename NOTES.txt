@@ -1,5 +1,9 @@
 do something on early press in tg
 
+gang loan on starup if no cash
+
+show panel led on long press acceptance like buzz until unpressed
+
 word game:
 -- nX bonus for runs of wins
 

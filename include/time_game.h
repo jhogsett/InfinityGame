@@ -6,8 +6,10 @@
 #define MAX_DELAY 5000
 // Number of time game rounds
 #define ROUNDS 3
+
 // Dollars won by beating the curernt time
-#define TIME_WIN 1000
+// in MONEY_BASIS units
+#define TIME_WIN (1000L / MONEY_BASIS)
 
 extern bool time_game();
 

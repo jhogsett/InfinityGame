@@ -15,8 +15,10 @@
 // the player purse draws money from the syndiate when needed
 #define DEFAULT_PURSE 0L
 
-// All money originates in the bank
-#define DEFAULT_BANK 1000000000L
+// All money originates in the bank, this is in money basis units
+#define DEFAULT_BANK 2000000000L
+// #define DEFAULT_BANK 1000000000L
+// #define DEFAULT_BANK 100000000000L
 
 // All bets are paid to the house
 // All payouts are from the house
@@ -25,7 +27,7 @@
 
 // The gang robs money from the bank
 // Player cash comes from the gang
-#define DEFAULT_GANG 0L
+#define DEFAULT_GANG (2000L / MONEY_BASIS)
 
 // the longest possible count of milliseconds
 #define DEFAULT_TIME ((unsigned long)-1)

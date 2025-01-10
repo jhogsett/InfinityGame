@@ -7,16 +7,16 @@
 
 bool option_sound = false;
 bool option_vibrate = false;
-long purse = DEFAULT_PURSE / MONEY_BASIS;
+long purse = DEFAULT_PURSE;
 unsigned long best_time = (unsigned long)-1;
 bool option_clock_24h = false;
 bool option_clock_on_idle = false;
-unsigned long bank = DEFAULT_BANK / MONEY_BASIS;
+unsigned long bank = DEFAULT_BANK;
 unsigned long best_time1 = (unsigned long)-1;
 unsigned long best_time2 = (unsigned long)-1;
 unsigned long best_time3 = (unsigned long)-1;
-long house = DEFAULT_HOUSE / MONEY_BASIS;
-long gang = DEFAULT_GANG / MONEY_BASIS;
+long house = DEFAULT_HOUSE;
+long gang = DEFAULT_GANG;
 unsigned long option_idle_time = DEFAULT_IDLE_TIME;
 
 // ##DATA Add new persisted play data veriables here
@@ -80,16 +80,16 @@ void reset_device(){
 bool reset_options(){
 	option_sound = true;
 	option_vibrate = true;
-	purse = DEFAULT_PURSE / MONEY_BASIS;
+	purse = DEFAULT_PURSE;
 	best_time = DEFAULT_TIME;
 	option_clock_24h = false;
-	option_clock_on_idle = false;
-	bank = DEFAULT_BANK / MONEY_BASIS;
+	option_clock_on_idle = true;
+	bank = DEFAULT_BANK;
 	best_time1 = DEFAULT_TIME;
 	best_time2 = DEFAULT_TIME;
 	best_time3 = DEFAULT_TIME;
-	house = DEFAULT_HOUSE / MONEY_BASIS;
-	gang = DEFAULT_GANG / MONEY_BASIS;
+	house = DEFAULT_HOUSE;
+	gang = DEFAULT_GANG;
 	option_idle_time = DEFAULT_IDLE_TIME;
 
 	// ##DATA Reset new persisted play data veriables to default variables here

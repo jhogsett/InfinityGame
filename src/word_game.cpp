@@ -149,7 +149,7 @@ int word_game_round(bool rude){
 	sprintf(display_buffer, FSTR("BEAT %d MOVES"), scramble_moves);
 	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
 
-	pay_house(use_purse(WORD_GAME_PLAY_BET / MONEY_BASIS));
+	pay_house(use_purse(WORD_GAME_PLAY_BET));
 
 	unsigned long idle_timeout = millis() + option_idle_time;
 	unsigned long time;
@@ -233,11 +233,13 @@ bool word_game(){
 	sprintf(display_buffer, FSTR("LONG PRESS EXITS"));
 	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
 
+	int streak = 0; // -1 means canceled
+
 	unsigned long idle_timeout = millis() + option_idle_time;
 	unsigned long time;
 
 	while((time = millis()) < idle_timeout){
-		// pay_house(use_purse(WORD_GAME_PLAY_BET / MONEY_BASIS));
+		// pay_house(use_purse(WORD_GAME_PLAY_BET));
 		long win = 0;
 		// bool purse_change = false;
 		int round_result = word_game_round(rude);
@@ -247,6 +249,8 @@ bool word_game(){
 		switch(round_result){
 			case -2:
 				// exceeded max moves
+				if(streak > MIN_STREAK_ACTIVATION)
+					streak = -1;
 				sprintf(display_buffer, FSTR("Out Of Moves"));
 				title_prompt(display_buffer, EXCEEDED_SHOW_TIMES, false, ROUND_DELAY);
 
@@ -256,11 +260,13 @@ bool word_game(){
 			case -1:
 				// timed out or long press
 				// refund their bet
-				add_to_purse(WORD_GAME_PLAY_BET / MONEY_BASIS);
+				add_to_purse(WORD_GAME_PLAY_BET);
 				save_data();
 				return false;
 			case 0:
 				// player didn't beat the moves
+				if(streak > MIN_STREAK_ACTIVATION)
+					streak = -1;
 				break;
 			default:
 				// sprintf(display_buffer, FSTR("    %s    "), chosen_word);
@@ -269,14 +275,32 @@ bool word_game(){
 				sprintf(display_buffer, FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word);
 				title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);
 
-				win = (round_result) * (WORD_WIN_UNIT / MONEY_BASIS);
-				if(win > 0)
+				win = (round_result) * (WORD_WIN_UNIT);
+
+				// apply the current streak bonus before showing next activation
+				if(streak > MIN_STREAK_ACTIVATION)
+					win *= (streak - STREAK_OFFSET);
+
+				if(win > 0){
 					display_win(win);
+					streak++;
+				}
+
+				if(streak > MIN_STREAK_ACTIVATION){
+					sprintf(display_buffer, FSTR("%3dX BONUS"), streak - STREAK_OFFSET);
+					title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);
+				}
 
 				// pay_house(use_purse(WORD_GAME_PLAY_BET));
 				add_to_purse(house_payout(win));
 				// purse_change = true;
 				break;
+		}
+
+		if(streak == -1){
+			streak = 0;
+			// sprintf(display_buffer, FSTR(""), chosen_word, chosen_word, chosen_word);
+			title_prompt(load_f_string(F(" Bonus Gone"), display_buffer), SUCCESS_SHOW_TIMES, false, ROUND_DELAY);
 		}
 
 		// if(purse_change){

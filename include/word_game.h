@@ -13,13 +13,21 @@
 #define MAX_MOVES 20
 #define ADD_CHARS 4
 #define SCRAMBLE_SIZE 8
-#define SHUFFLE_TIMES_MIN 3
+#define SHUFFLE_TIMES_MIN 4
 #define SHUFFLE_TIMES_MAX 9
 
-#define WORD_WIN_UNIT 100
+// in MONEY_BASIS units
+#define WORD_WIN_UNIT (100L / MONEY_BASIS)
+#define WORD_GAME_PLAY_BET (100L / MONEY_BASIS)
+
 #define WIN_IN_1_BONUS 10
 
-#define WORD_GAME_PLAY_BET 100
+
+// activate streak bonus after two beats in a row
+#define MIN_STREAK_ACTIVATION 2
+
+// subtract this from the streak win count to arrive at the bonus amount
+#define STREAK_OFFSET 1
 
 extern char chosen_word[];
 extern char scramble_word[];
