@@ -82,7 +82,7 @@ long use_purse(long money){
 
 	long total_loan = 0;
 	while(purse + total_loan < PLAYER_MINIMUM)
-		total_loan += gang_payout(PLAYER_LOAN);
+		total_loan += gang_loan(PLAYER_LOAN);
 	purse += total_loan;
 
 	// finish and reset a possible crime wave
@@ -123,7 +123,10 @@ long add_to_purse(long money){
 // Gang operations
 
 // returns the amount paid out
-long gang_payout(long money){
+// the gang keeps their cut
+long gang_loan(long money){
+    long gang_cut = money / GANG_LOAN_CUT;
+    money -= gang_cut;
 	gang -= money;
 
 	if(gang < GANG_MIMUMUM){
