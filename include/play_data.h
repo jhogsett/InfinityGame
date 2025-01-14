@@ -10,20 +10,19 @@
 // On start-up if this differs from the EEPROM value, the data is reset to defaults
 #define SAVE_DATA_VERSION 3
 
+// All money originates in the bank, this is in money basis units
+#define DEFAULT_OUTSTANDING (DEFAULT_GANG + DEFAULT_HOUSE + DEFAULT_PURSE)
+#define DEFAULT_BANK (2000000000L - DEFAULT_OUTSTANDING)
+
 // All bets are paid from the player purse
 // all wins received are kept in the player purse
-// the player purse draws money from the syndiate when needed
-#define DEFAULT_PURSE 0L
-
-// All money originates in the bank, this is in money basis units
-#define DEFAULT_BANK 2000000000L
-// #define DEFAULT_BANK 1000000000L
-// #define DEFAULT_BANK 100000000000L
+// the player purse draws money from the gang when needed
+#define DEFAULT_PURSE  (1000L / MONEY_BASIS)
 
 // All bets are paid to the house
 // All payouts are from the house
 // The house draws money from the bank when needed
-#define DEFAULT_HOUSE 0L
+#define DEFAULT_HOUSE (0L / MONEY_BASIS)
 
 // The gang robs money from the bank
 // Player cash comes from the gang
