@@ -26,7 +26,7 @@
 
 // The gang robs money from the bank
 // Player cash comes from the gang
-#define DEFAULT_GANG (2000L / MONEY_BASIS)
+#define DEFAULT_GANG (10000L / MONEY_BASIS)
 
 // the longest possible count of milliseconds
 #define DEFAULT_TIME ((unsigned long)-1)
