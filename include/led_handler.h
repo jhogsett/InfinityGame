@@ -25,6 +25,8 @@ public:
 	static const int STYLE_MIRROR   = 0x04; // same output for panel and button LEDs
 	// for STYLE_MIRROR, the secondary LEDs mirroring the first are expected to be in the upper half of the set of LED pins
 	// static const int STYLE_STALLING = 0x08; // blanking period between rounds
+    // TODO add a style for all activated dur the show period
+    // TODO add a style for make before break showing style
 
 	static const int DEFAULT_SHOW_TIME  = 250;
 	static const int DEFAULT_BLANK_TIME = 250;

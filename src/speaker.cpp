@@ -3,6 +3,7 @@
 #include "speaker.h"
 
 void beep(int inv_freq, int pulses){
+	pinMode(SPEAKER_PIN, OUTPUT);
 	for(int j = 0; j < pulses; j++){
 		digitalWrite(SPEAKER_PIN, HIGH);
 		delayMicroseconds(inv_freq);

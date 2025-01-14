@@ -8,7 +8,7 @@
 // how many times to beep (with an equal sized pause in between)
 #define BEEPS_TIMES 4
 // how many times to play the four-beeps to alert the user (that the Timer has elapsed)
-#define ALERT_TIMES 3
+#define ALERT_TIMES 4
 // delay between the four-beeps
 #define ALERT_DELAY 600
 

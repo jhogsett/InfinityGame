@@ -239,9 +239,7 @@ bool word_game(){
 	unsigned long time;
 
 	while((time = millis()) < idle_timeout){
-		// pay_house(use_purse(WORD_GAME_PLAY_BET));
 		long win = 0;
-		// bool purse_change = false;
 		int round_result = word_game_round(rude);
 
 		idle_timeout = millis() + option_idle_time;
@@ -249,13 +247,9 @@ bool word_game(){
 		switch(round_result){
 			case -2:
 				// exceeded max moves
-				if(streak > MIN_STREAK_ACTIVATION)
-					streak = -1;
-				sprintf(display_buffer, FSTR("Out Of Moves"));
+                streak = -1;
+				sprintf(display_buffer, FSTR("OUT OF MOVES"));
 				title_prompt(display_buffer, EXCEEDED_SHOW_TIMES, false, ROUND_DELAY);
-
-				// pay_house(use_purse(WORD_GAME_PLAY_BET));
-				// purse_change = true;
 				break;
 			case -1:
 				// timed out or long press
@@ -265,13 +259,9 @@ bool word_game(){
 				return false;
 			case 0:
 				// player didn't beat the moves
-				if(streak > MIN_STREAK_ACTIVATION)
-					streak = -1;
+                streak = -1;
 				break;
 			default:
-				// sprintf(display_buffer, FSTR("    %s    "), chosen_word);
-				// title_prompt(display_buffer, SUCCESS_SHOW_TIMES, false, CORRECT_WORD_SHOW_TIME);
-
 				sprintf(display_buffer, FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word);
 				title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);
 
@@ -286,27 +276,22 @@ bool word_game(){
 					streak++;
 				}
 
+				add_to_purse(house_payout(win));
+                save_data();
+                display_purse();
+
 				if(streak > MIN_STREAK_ACTIVATION){
 					sprintf(display_buffer, FSTR("%3dX BONUS"), streak - STREAK_OFFSET);
 					title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);
 				}
 
-				// pay_house(use_purse(WORD_GAME_PLAY_BET));
-				add_to_purse(house_payout(win));
-				// purse_change = true;
 				break;
 		}
 
 		if(streak == -1){
 			streak = 0;
-			// sprintf(display_buffer, FSTR(""), chosen_word, chosen_word, chosen_word);
-			title_prompt(load_f_string(F(" Bonus Gone"), display_buffer), SUCCESS_SHOW_TIMES, false, ROUND_DELAY);
+			title_prompt(load_f_string(F(" BONUS VOID"), display_buffer), SUCCESS_SHOW_TIMES, false, ROUND_DELAY);
 		}
-
-		// if(purse_change){
-		save_data();
-		display_purse();
-		// }
 	}
 	return false;
 }

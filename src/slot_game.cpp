@@ -26,7 +26,7 @@ void slots_round(bool rude){
 		text = FSTR("    FUCK  SHIT  CUNT  COCK  PISS  TITS  FART  POOP  DICK  ANAL");
 		words = rude_words;
 	} else {
-		text = FSTR("    WEED  VAPE  BEER  WINE  TACO  GOLD  MINT  PORK  JADE  CAKE");
+		text = FSTR("    WEED  VAPE  BEER  WINE  TACO  GOLD  MINT  LOOT  JADE  RUBY");
 		words = nice_words;
 	}
 
