@@ -20,7 +20,7 @@ void render_timer_string(byte seconds, byte minutes, byte hours, bool running) {
 	else
 		indicator = "RUN ";
 
-	if (timer_hour < 1) // TODO didn't see the DP
+	if (timer_hour < 1)
 		sprintf(display_buffer, FSTR("%s %02d %02d  "), indicator, timer_minute, timer_second);
 	else {
 		sprintf(display_buffer, FSTR("%s %02d. %02d  "), indicator, timer_hour, timer_minute);
@@ -99,9 +99,15 @@ bool timer_prompt(byte seconds, byte minutes, byte hours) {
 						running = false;
 					}
 				} else if (validated_button_states[AMBER_ID]) {
-					increment_timer(timer_second, timer_minute, timer_hour, 0, 1, 0);
+                    if (timer_hour < 1)
+    					increment_timer(timer_second, timer_minute, timer_hour, 0, 1, 0);
+                    else
+    					increment_timer(timer_second, timer_minute, timer_hour, 0, 0, 1);
 				} else if (validated_button_states[RED_ID]) {
-					increment_timer(timer_second, timer_minute, timer_hour, 1, 0, 0);
+                    if (timer_hour < 1)
+    					increment_timer(timer_second, timer_minute, timer_hour, 1, 0, 0);
+                    else
+    					increment_timer(timer_second, timer_minute, timer_hour, 0, 1, 0);
 				}
 
 			render_timer_string(timer_second, timer_minute, timer_hour, running);
