@@ -95,12 +95,6 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 // prompt with text and cycle waiting for a button response
 // returns -1=timed out, 0=long press, button ID otherwise
 int button_led_prompt(const char * prompt, const bool *states) {
-	// // eat an already pressed button on arrival here
-	// while (((time = millis()) < timeout_time) && button_still_pressed()) {
-	// 	display.loop_scroll_string(time, prompt, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
-	// }
-	// reset_buttons_state();
-
 	if (states)
 		button_leds.activate_leds(states);
 	else
