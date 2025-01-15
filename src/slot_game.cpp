@@ -15,53 +15,38 @@
 
 byte choice1, choice2, choice3;
 
-void slots_round(bool rude){
+bool run_slot_reel(HT16K33Disp * disp, unsigned long time, char * text, char **words, byte &choice){
+	bool running = disp->loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME);
+	if(!running){
+		randomizer.randomize();
+		choice = random(NUM_WORDS);
+		disp->show_string(words[choice]);
+	}
+	return running;
+}
+
+void slots_round(char * text, char **words){
 	disp1.begin_scroll_loop(1);
 	disp2.begin_scroll_loop(2);
 	disp3.begin_scroll_loop(3);
-
-	char * text;
-	const char **words;
-	if(rude){
-		text = FSTR("    FUCK  SHIT  CUNT  COCK  PISS  TITS  FART  POOP  DICK  ANAL");
-		words = rude_words;
-	} else {
-		text = FSTR("    WEED  VAPE  BEER  WINE  TACO  GOLD  MINT  LOOT  JADE  RUBY");
-		words = nice_words;
-	}
 
 	bool running1 = true;
 	bool running2 = true;
 	bool running3 = true;
 	while(running1 || running2 || running3){
-	unsigned long time = millis();
+		unsigned long time = millis();
 
-	if(running1){
-		running1 = disp1.loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME);
-		if(!running1){
-			randomizer.randomize();
-			choice1 = random(NUM_WORDS);
-			disp1.show_string(words[choice1]);
+		if(running1){
+			running1 = run_slot_reel(&disp1, time, text, words, choice1);
 		}
-	}
 
-	if(running2){
-		running2 = disp2.loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME);
-		if(!running2){
-			randomizer.randomize();
-			choice2 = random(NUM_WORDS);
-			disp2.show_string(words[choice2]);
+		if(running2){
+			running2 = run_slot_reel(&disp2, time, text, words, choice2);
 		}
-	}
 
-	if(running3){
-		running3 = disp3.loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME);
-		if(!running3){
-			randomizer.randomize();
-			choice3 = random(NUM_WORDS);
-			disp3.show_string(words[choice3]);
+		if(running3){
+			running3 = run_slot_reel(&disp3, time, text, words, choice3);
 		}
-	}
 	}
 }
 
@@ -107,6 +92,21 @@ bool slots_game(){
 			rude = true;
 			break;
 	}
+
+	char **words = rude ? rude_words : nice_words;
+	char text[REEL_BUFFER_LEN];
+	sprintf(text, "    %s  %s  %s  %s  %s  %s  %s  %s  %s  %s",
+			words[0],
+			words[1],
+			words[2],
+			words[3],
+			words[4],
+			words[5],
+			words[6],
+			words[7],
+			words[8],
+			words[9]);
+
 
 	unsigned long idle_timeout = millis() + option_idle_time;
 	unsigned long time;
@@ -159,16 +159,10 @@ bool slots_game(){
 		pay_house(use_purse(last_bet_amount));
 		save_data();
 
-		slots_round(rude);
+		slots_round(text, words);
 
 		while(button_pressed())
 			;
-
-		const char **words;
-		if(rude)
-			words = rude_words;
-		else
-			words = nice_words;
 
 		sprintf(display_buffer, FSTR("%s%s%s"), words[choice1], words[choice2], words[choice3]);
 		title_prompt(display_buffer);
@@ -192,9 +186,9 @@ bool slots_game(){
 		long win = bet_amounts[current_bet] * win_factor;
 
 		if(jackpot)
-			display_jackpot(win); // todo fix for to expand money basis
+			display_jackpot(win);
 		else if(win)
-			display_win(win); // todo fix for to expand money basis
+			display_win(win);
 		else
 			// see the non-winning results in lieu of being told you lost
 			delay(ROUND_DELAY);

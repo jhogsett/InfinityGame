@@ -8,10 +8,6 @@
 #include "utils.h"
 #include "clock.h"
 
-
-
-// #define DEFAULT_TIME_BASIS (1000L * 12L * 3600L)
-
 unsigned long clock_basis = 0L;
 unsigned long time_basis = DEFAULT_TIME_BASIS;
 byte clock_hour, clock_minute, clock_second;
@@ -56,10 +52,7 @@ void render_clock_string(byte seconds, byte minutes, byte hours) {
 			effective_hours = 12;
 	}
 
-	if (effective_hours < 10)
-		sprintf(display_buffer, FSTR("   %1d %02d %02d  "), effective_hours, minutes, seconds);
-	else
-		sprintf(display_buffer, FSTR("  %2d %02d %02d  "), effective_hours, minutes, seconds);
+	sprintf(display_buffer, FSTR("  %2d %02d %02d  "), effective_hours, minutes, seconds);
 }
 
 // returns true if the clock timed out while being set
@@ -87,29 +80,29 @@ bool clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
 		render_clock_string(clock_second, clock_minute, clock_hour);
 		display.show_string(display_buffer);
 
-		if (button_pressed()) {
-			all_leds.activate_leds(button_states, true);
-			int long_press_state;
-			while ((long_press_state = wait_on_long_press()) == 0)
-				;
-
-			all_leds.deactivate_leds(true);
-			if (long_press_state == 1) {
+		int button_id;
+		if((button_id = handle_long_press()) != -1){
+			if(button_id == 0)
 				return false;
-			} else {
+			else {
 				if (settable) {
 					idle_timeout = time + option_idle_time;
-					if (validated_button_states[GREEN_ID]) {
-						increment_time_basis(clock_second, clock_minute, clock_hour, 0, 0, 1);
-					} else if (validated_button_states[AMBER_ID])
-						increment_time_basis(clock_second, clock_minute, clock_hour, 0, 1, 0);
-					else if (validated_button_states[RED_ID]) {
-						clock_second = 0;
-						establish_clock_basis(clock_second, clock_minute, clock_hour);
+
+					switch(button_id){
+						case GREEN_ID:
+							increment_time_basis(clock_second, clock_minute, clock_hour, 0, 0, 1);
+							break;
+						case AMBER_ID:
+							increment_time_basis(clock_second, clock_minute, clock_hour, 0, 1, 0);
+							break;
+						case RED_ID:
+							clock_second = 0;
+							establish_clock_basis(clock_second, clock_minute, clock_hour);
+							break;
 					}
-			} else
-				return false;
-			}
+				} else
+					return false;
+				}
 		}
 	}
 }

@@ -9,23 +9,11 @@
 
 void display_purse(){
 	sprintf(display_buffer, FSTR("CASH $%s"), format_long(get_purse()));
-
-	// long purse = get_purse();
-	// if(purse > 999999) // # optimize strings
-	// else
-	// 	sprintf(display_buffer, FSTR("CASH $%ld"), purse);
 	title_prompt(display_buffer, CASH_SHOW_TIMES, false, CASH_SHOW_DELAY);
 }
 
 void display_win(unsigned long win){
 	sprintf(display_buffer, FSTR("*WIN $%s"), format_long(win));
-
-	// if(win > 9999999L) // # optimize strings
-	// 	sprintf(display_buffer, FSTR("WIN$%ld"), win);
-	// else if(win > 999999L)
-	// 	sprintf(display_buffer, FSTR("WIN $%ld"), win);
-	// else
-	// 	sprintf(display_buffer, FSTR("*WIN $%ld"), win);
 	title_prompt(display_buffer, WIN_SHOW_TIMES, true, ROUND_DELAY);
 }
 
@@ -33,16 +21,6 @@ void display_jackpot(unsigned long win){
 	sprintf(display_buffer, FSTR("** JACKPOT $%s"), format_long(win));
 	title_prompt(display_buffer, JACKPOT_SHOW_TIMES, true, ROUND_DELAY);
 }
-
-// money units = 50
-// 20 = 1000 / money units for reduction
-// $123,456,789,250 / money units =
-// m=2,469,135,785 money units
-// can't multiply it by 50 due to long size
-// u = m % 20 (5)
-// m -= u (2,469,135,780)
-
-
 
 char *format_long(long num, long basis){
 	int negate = (num < 0L) ? -1 : 1;
@@ -75,11 +53,6 @@ char *format_long(long num, long basis){
 	return copy_buffer;
 }
 
-// char *numeric_bet_str(long bet){
-// 	sprintf(copy_buffer, FSTR("%ld"), bet);
-// 	return copy_buffer;
-// }
-
 char *standard_bet_str(byte bet){
 	if(bet == BET_ALL){
 		sprintf(copy_buffer, FSTR("ALL"));
@@ -88,6 +61,5 @@ char *standard_bet_str(byte bet){
 		sprintf(copy_buffer, FSTR("RPT"));
 		return copy_buffer;
 	} else
-		// return numeric_bet_str(bet_amounts[bet]);
 		return format_long(bet_amounts[bet]);
 }

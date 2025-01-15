@@ -93,7 +93,6 @@ long use_purse(long money){
 	crime_wave = false;
 
 	if(total_loan){
-		// ltoa(total_loan, copy_buffer, 10);
 		sprintf(display_buffer, FSTR("GANG LOAN $%s"), format_long(total_loan));
 		title_prompt(display_buffer, 1, false, ALERT_SHOW_TIME);
 	}

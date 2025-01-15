@@ -24,7 +24,6 @@ bool time_game(){
 	delay(ROUND_DELAY);
 
 	unsigned long mean = 0;
-	// bool fault = false;
 	for(byte i = 0; i < ROUNDS; i++){
 		button_leds.activate_all(true);
 		display.scroll_string(FSTR("Wait 4 FLASH"), DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
@@ -36,8 +35,6 @@ bool time_game(){
 		delay(del);
 
 		while(digitalRead(ANY_BUTTON) == HIGH){
-			// player already pressing button
-			// set_debug_marker(1);
 			;
 		}
 
@@ -46,11 +43,6 @@ bool time_game(){
 
 		// panel_leds.flash_leds();
 		panel_leds.step_flash(millis());
-
-		// if(digitalRead(ANY_BUTTON) == HIGH){
-		// 	fault = true;
-		// 	break;
-		// }
 
 		while(digitalRead(ANY_BUTTON) == HIGH){
 #ifdef ENABLE_DEBUG_FEATURES
@@ -76,30 +68,22 @@ bool time_game(){
 		display.clear();
 	}
 
-	// if(fault){
-	// 	sprintf(display_buffer, FSTR("FAULT - Button Problem - Try Again"));
-	// 	while(button_led_prompt(display_buffer) == -1);
-	// 	return false;
-	// }
-
 	while(button_pressed());
 
 	mean /= ROUNDS;
 	micros_to_ms(copy_buffer, mean);
 	sprintf(display_buffer, FSTR("SCORE %s ms"), copy_buffer);
 	title_prompt(display_buffer, 1, false, ROUND_DELAY);
-	// delay(ROUND_DELAY);
 
 	if(mean < best_time){
 		best_time = mean;
 		micros_to_ms(copy_buffer, mean);
 		sprintf(display_buffer, FSTR("* NEW BEST %s ms"), copy_buffer);
 
-		// save this display to show again
+		// TODO save this display to show again
 		// strcpy(copy_buffer, display_buffer);
 
 		title_prompt(display_buffer, 1, true, ROUND_DELAY);
-		// delay(ROUND_DELAY);
 
 		display_win(TIME_WIN);
 
@@ -119,7 +103,6 @@ bool time_game(){
 		sprintf(display_buffer, FSTR("* Best Time %s ms"), copy_buffer);
 	}
 
-	// while(button_led_prompt(display_buffer) == -1);
 	button_led_prompt(display_buffer);
 
 	return false;

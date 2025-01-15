@@ -1,8 +1,10 @@
 #include <Arduino.h>
 #include "buttons.h"
 #include "hardware.h"
+#include "leds.h"
 #include "motor.h"
 #include "play_data.h"
+#include "speaker.h"
 #include "debug.h"
 
 volatile bool button_states[NUM_BUTTONS];
@@ -25,11 +27,6 @@ bool button_pressed(){
 	// do nothing if no button has been presssed according to the ISR
     if(!button_states[ANY_COLOR_ID])
 		return false;
-
-	// rereading these may be redundant
-	// button_states[GREEN_ID] = digitalRead(GREEN_BUTTON);
-	// button_states[AMBER_ID] = digitalRead(AMBER_BUTTON);
-	// button_states[RED_ID] = digitalRead(RED_BUTTON);
 
 	// enforce a debounce period
     // if the button is unpressed during this time, cancel the press
@@ -87,11 +84,38 @@ int wait_on_long_press(){
 		if(button_still_pressed()){
 			if(option_vibrate)
 				vibrate();
+			else if(option_sound)
+				beep();
 			return 1;
 		}
 		else
 			return -1;
 	}
+}
+
+// returns 0 on long press, -1 if no button pressed, otherwise validated button ID
+int handle_long_press(bool show_leds){
+	if (button_pressed()) {
+		if(show_leds)
+			all_leds.activate_leds(button_states, true);
+		int long_press_state;
+		while ((long_press_state = wait_on_long_press()) == 0)
+			;
+		if(show_leds)
+			all_leds.deactivate_leds(true);
+		if (long_press_state == 1){
+			return 0;
+		}
+		else {
+			if (validated_button_states[GREEN_ID])
+				return GREEN_ID;
+			else if (validated_button_states[AMBER_ID])
+				return AMBER_ID;
+			else if (validated_button_states[RED_ID])
+				return RED_ID;
+		}
+	}
+	return -1;
 }
 
 void reset_buttons_state(){

@@ -21,15 +21,12 @@
 // Default best on power-up
 #define DEFAULT_BET 10
 
-// // Number of words in each words list
-// #define NUM_WORDS 10
-
-// extern const char *rude_words[];
-// extern const char *nice_words[];
+#define REEL_BUFFER_LEN (2 + (NUM_WORDS * 6) + 1)
 
 extern byte choice1, choice2, choice3;
 
-extern void slots_round(bool rude);
+extern bool run_slot_reel(HT16K33Disp * disp, unsigned long time, char * text, char **words, byte &choice);
+extern void slots_round(char * text, char **words);
 extern bool triple_word_chosen();
 extern bool double_word_chosen();
 extern bool special_word_chosen();
