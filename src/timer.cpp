@@ -79,42 +79,79 @@ bool timer_prompt(byte seconds, byte minutes, byte hours) {
 			next_second = time + 1000;
 		}
 
-		if (button_pressed()) {
-			all_leds.activate_leds(button_states, true);
-			int long_press_state;
-			while ((long_press_state = wait_on_long_press()) == 0)
-				;
-			all_leds.deactivate_leds(true);
-			if (long_press_state == 1) {
+		int button_id;
+		if((button_id = handle_long_press()) != -1){
+			if(button_id == 0)
 				break;
-			} else {
+			else {
 				idle_timeout = time + option_idle_time;
-
-				if (validated_button_states[GREEN_ID]) {
-					if (!running) {
-						running = true;
-						going_up = time_to_seconds(timer_second, timer_minute, timer_hour) == 0;
-						next_second = millis() + 1000;
-					} else {
-						running = false;
-					}
-				} else if (validated_button_states[AMBER_ID]) {
-                    if (timer_hour < 1)
-    					increment_timer(timer_second, timer_minute, timer_hour, 0, 1, 0);
-                    else
-    					increment_timer(timer_second, timer_minute, timer_hour, 0, 0, 1);
-				} else if (validated_button_states[RED_ID]) {
-                    if (timer_hour < 1)
-    					increment_timer(timer_second, timer_minute, timer_hour, 1, 0, 0);
-                    else
-    					increment_timer(timer_second, timer_minute, timer_hour, 0, 1, 0);
+				switch(button_id){
+						case GREEN_ID:
+						if (!running) {
+							running = true;
+							going_up = time_to_seconds(timer_second, timer_minute, timer_hour) == 0;
+							next_second = millis() + 1000;
+						} else {
+							running = false;
+						}
+						break;
+					case AMBER_ID:
+						if (timer_hour < 1)
+							increment_timer(timer_second, timer_minute, timer_hour, 0, 1, 0);
+						else
+							increment_timer(timer_second, timer_minute, timer_hour, 0, 0, 1);
+						break;
+					case RED_ID:
+						if (timer_hour < 1)
+							increment_timer(timer_second, timer_minute, timer_hour, 1, 0, 0);
+						else
+							increment_timer(timer_second, timer_minute, timer_hour, 0, 1, 0);
+						break;
 				}
 
-			render_timer_string(timer_second, timer_minute, timer_hour, running);
-
-			display.show_string(display_buffer);
+				render_timer_string(timer_second, timer_minute, timer_hour, running);
+				display.show_string(display_buffer);
 			}
 		}
+
+
+		// if (button_pressed()) {
+
+		// 	all_leds.activate_leds(button_states, true);
+		// 	int long_press_state;
+		// 	while ((long_press_state = wait_on_long_press()) == 0)
+		// 		;
+		// 	all_leds.deactivate_leds(true);
+		// 	if (long_press_state == 1) {
+		// 		break;
+
+		// 	} else {
+		// 		idle_timeout = time + option_idle_time;
+
+		// 		if (validated_button_states[GREEN_ID]) {
+		// 			if (!running) {
+		// 				running = true;
+		// 				going_up = time_to_seconds(timer_second, timer_minute, timer_hour) == 0;
+		// 				next_second = millis() + 1000;
+		// 			} else {
+		// 				running = false;
+		// 			}
+		// 		} else if (validated_button_states[AMBER_ID]) {
+        //             if (timer_hour < 1)
+    	// 				increment_timer(timer_second, timer_minute, timer_hour, 0, 1, 0);
+        //             else
+    	// 				increment_timer(timer_second, timer_minute, timer_hour, 0, 0, 1);
+		// 		} else if (validated_button_states[RED_ID]) {
+        //             if (timer_hour < 1)
+    	// 				increment_timer(timer_second, timer_minute, timer_hour, 1, 0, 0);
+        //             else
+    	// 				increment_timer(timer_second, timer_minute, timer_hour, 0, 1, 0);
+		// 		}
+
+		// 	render_timer_string(timer_second, timer_minute, timer_hour, running);
+		// 	display.show_string(display_buffer);
+		// 	}
+		// }
 	}
 	return false;
 }

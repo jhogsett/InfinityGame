@@ -68,16 +68,9 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 	while ((time = millis()) < idle_timeout) {
 		run_billboard(billboard_data);
 
-		if (button_pressed()) {
-			all_leds.activate_leds(button_states, true);
-			int long_press_state;
-
-			while ((long_press_state = wait_on_long_press()) == 0)
-				;
-
-			all_leds.deactivate_leds(true);
-
-			if (long_press_state == 1) {
+		int button_id;
+		if((button_id = handle_long_press()) != -1){
+			if(button_id == 0){
 				bool result = on_long_press();
 
 				// update anything that may have changed in the options and could affect
@@ -95,6 +88,33 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 				return;
 			}
 		}
+		// if (button_pressed()) {
+		// 	all_leds.activate_leds(button_states, true);
+		// 	int long_press_state;
+
+		// 	while ((long_press_state = wait_on_long_press()) == 0)
+		// 		;
+
+		// 	all_leds.deactivate_leds(true);
+
+		// 	if (long_press_state == 1) {
+		// 		bool result = on_long_press();
+
+		// 		// update anything that may have changed in the options and could affect
+		// 		// the current running billboard prompt
+		// 		idle_timeout = time + option_idle_time;
+
+		// 		if(result)
+		// 			// if the long press handler returns true it means there was an idle timeout
+		// 			// and the billboard should go directly to the idle state, not show the menu
+		// 			break;
+		// 		else
+		// 			return;
+		// 	} else {
+		// 		on_press();
+		// 		return;
+		// 	}
+		// }
 	}
 
 	on_time_out();
@@ -123,26 +143,31 @@ int button_led_prompt(const char * prompt, const bool *states) {
 	while ((time = millis()) < timeout_time) {
 		display.loop_scroll_string(time, prompt, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
 
-		if (button_pressed()) {
-			all_leds.activate_leds(button_states, true);
-			int long_press_state;
-			while ((long_press_state = wait_on_long_press()) == 0)
-				;
+		int button_id;
+		if((button_id = handle_long_press()) != -1)
+			return button_id;
 
-			all_leds.deactivate_leds(true);
-			if (long_press_state == 1){
-				return 0;
-			}
-			else {
-				if (validated_button_states[GREEN_ID])
-					return GREEN_ID;
-				else if (validated_button_states[AMBER_ID])
-					return AMBER_ID;
-				else if (validated_button_states[RED_ID])
-					return RED_ID;
-			}
-		}
-		// restore button leds in case of debounce time failure
+		// if (button_pressed()) {
+		// 	all_leds.activate_leds(button_states, true);
+		// 	int long_press_state;
+		// 	while ((long_press_state = wait_on_long_press()) == 0)
+		// 		;
+
+		// 	all_leds.deactivate_leds(true);
+		// 	if (long_press_state == 1){
+		// 		return 0;
+		// 	}
+		// 	else {
+		// 		if (validated_button_states[GREEN_ID])
+		// 			return GREEN_ID;
+		// 		else if (validated_button_states[AMBER_ID])
+		// 			return AMBER_ID;
+		// 		else if (validated_button_states[RED_ID])
+		// 			return RED_ID;
+		// 	}
+		// }
+
+		// restore requested button leds in case of debounce time failure
 		if (states)
 			button_leds.activate_leds(states);
 	}
@@ -153,6 +178,7 @@ int button_led_prompt(const char * prompt, const bool *states) {
 // but cancelable with a button press
 // show_panel_leds = true to have them cycle
 // show_delay = ensure delay between multiple titles
+// TODO should return a signal that long press has happened
 void title_prompt(const char * title, byte times, bool show_panel_leds, int show_delay, int leds_style, int leds_show_time, int leds_blank_time) {
 	unsigned long time = millis();
 	unsigned long timeout_time = time + PROMPT_TIMEOUT;
@@ -178,11 +204,15 @@ void title_prompt(const char * title, byte times, bool show_panel_leds, int show
 		if (display.loop_scroll_string(time, title, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME)) {
 			if (show_panel_leds)
 				panel_leds.step(time);
-			if (button_pressed()) {
-				while ((wait_on_long_press()) == 0)
-					;
+
+			if(handle_long_press() != -1)
 				break;
-			}
+
+			// if (button_pressed()) {
+			// 	while ((wait_on_long_press()) == 0) // TODO should return a signal that long press has happened
+			// 		;
+			// 	break;
+			// }
 		} else
 			break;
 	}
@@ -194,11 +224,15 @@ void title_prompt(const char * title, byte times, bool show_panel_leds, int show
 		while ((time = millis()) < show_timeout) {
 			if (show_panel_leds)
 				panel_leds.step(time);
-			if (button_pressed()) {
-				while ((wait_on_long_press()) == 0)
-					;
+
+			if(handle_long_press() != -1)
 				break;
-			}
+
+			// if (button_pressed()) {
+			// 	while ((wait_on_long_press()) == 0) // TODO should return a signal that long press has happened
+			// 		;
+			// 	break;
+			// }
 		}
 	}
 
@@ -208,7 +242,7 @@ void title_prompt(const char * title, byte times, bool show_panel_leds, int show
 
 // prompt with panel leds showing only and cycle waiting for any button press
 // returns -1=timed out, 0=long press, button ID otherwise
-int panel_led_prompt() {
+int panel_led_prompt(){
 	unsigned long time;
 	unsigned long timeout_time = millis() + PROMPT_TIMEOUT;
 
@@ -237,19 +271,23 @@ int panel_led_prompt() {
 			// all_leds.deactivate_leds(true);
 			// return 1;
 
-		if (button_pressed()) {
-			all_leds.activate_leds(button_states, true);
-			int long_press_state;
-			while ((long_press_state = wait_on_long_press()) == 0)
-				;
+		int button_id;
+		if((button_id = handle_long_press()) != -1)
+			return button_id;
 
-			all_leds.deactivate_leds(true);
-			if (long_press_state == 1){
-				return 0;
-			} else {
-				return 1; // any real button ID will do
-			}
-		}
+		// if (button_pressed()) {
+		// 	all_leds.activate_leds(button_states, true);
+		// 	int long_press_state;
+		// 	while ((long_press_state = wait_on_long_press()) == 0)
+		// 		;
+
+		// 	all_leds.deactivate_leds(true);
+		// 	if (long_press_state == 1){
+		// 		return 0;
+		// 	} else {
+		// 		return 1; // any real button ID will do
+		// 	}
+		// }
 	}
 
 	return -1;
