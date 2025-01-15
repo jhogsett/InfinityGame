@@ -23,10 +23,6 @@ void run_billboard(char **data) {
 
 // show the billboard and cycle, waiting for any button press
 void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr on_long_press) {
-	// while (button_still_pressed())
-	// 	;
-	// reset_buttons_state();
-
 	unsigned long time = millis();
 	unsigned long idle_timeout = time + option_idle_time;
 
