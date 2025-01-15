@@ -84,7 +84,6 @@ bool time_game(){
 		// strcpy(copy_buffer, display_buffer);
 
 		title_prompt(display_buffer, 1, true, ROUND_DELAY);
-		// delay(ROUND_DELAY);
 
 		display_win(TIME_WIN);
 
@@ -104,7 +103,6 @@ bool time_game(){
 		sprintf(display_buffer, FSTR("* Best Time %s ms"), copy_buffer);
 	}
 
-	// while(button_led_prompt(display_buffer) == -1);
 	button_led_prompt(display_buffer);
 
 	return false;

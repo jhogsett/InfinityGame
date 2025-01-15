@@ -134,7 +134,7 @@ int button_led_prompt(const char * prompt, const bool *states) {
 // but cancelable with a button press
 // show_panel_leds = true to have them cycle
 // show_delay = ensure delay between multiple titles
-// return true if long-pressed
+// returns true if long-pressed
 bool title_prompt(const char * title, byte times, bool show_panel_leds, int show_delay, int leds_style, int leds_show_time, int leds_blank_time) {
 	unsigned long time = millis();
 	unsigned long idle_timeout = time + option_idle_time;

@@ -140,14 +140,22 @@ int word_game_round(bool rude){
 	int instruction_times = new_game ? CONTROLS_SHOW_TIMES : 1;
 	int instruction_show_leds = new_game;
 	sprintf(display_buffer, FSTR("ROL FLIP ROR"));
-	title_prompt(display_buffer, instruction_times, instruction_show_leds, ROUND_DELAY, TITLE_PANEL_LEDS_STYLE2, TITLE_PANEL_LEDS_SHOW_TIME2, TITLE_PANEL_LEDS_BLANK_TIME2);
+	if(title_prompt(display_buffer,
+					instruction_times,
+					instruction_show_leds,
+					ROUND_DELAY,
+					TITLE_PANEL_LEDS_STYLE2,
+					TITLE_PANEL_LEDS_SHOW_TIME2,
+					TITLE_PANEL_LEDS_BLANK_TIME2))
+		return -1;
 	new_game = false;
 
 	int scramble_moves = choose_word(rude);
 	int player_moves = 0;
 
 	sprintf(display_buffer, FSTR("BEAT %d MOVES"), scramble_moves);
-	title_prompt(display_buffer, BEAT_SHOW_TIMES, false, BEAT_SHOW_DELAY);
+	if(title_prompt(display_buffer, BEAT_SHOW_TIMES, false, BEAT_SHOW_DELAY))
+		return -1;
 
 	pay_house(use_purse(WORD_GAME_PLAY_BET));
 
@@ -229,9 +237,12 @@ bool word_game(){
 	}
 
 	sprintf(display_buffer, FSTR("BUTTONS ROTATE/FLIP"));
-	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
+	if(title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY))
+		return false;
+
 	sprintf(display_buffer, FSTR("LONG PRESS EXITS"));
-	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
+	if(title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY))
+		return false;
 
 	int streak = 0; // -1 means canceled
 
