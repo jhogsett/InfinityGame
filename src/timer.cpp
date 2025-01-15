@@ -113,45 +113,6 @@ bool timer_prompt(byte seconds, byte minutes, byte hours) {
 				display.show_string(display_buffer);
 			}
 		}
-
-
-		// if (button_pressed()) {
-
-		// 	all_leds.activate_leds(button_states, true);
-		// 	int long_press_state;
-		// 	while ((long_press_state = wait_on_long_press()) == 0)
-		// 		;
-		// 	all_leds.deactivate_leds(true);
-		// 	if (long_press_state == 1) {
-		// 		break;
-
-		// 	} else {
-		// 		idle_timeout = time + option_idle_time;
-
-		// 		if (validated_button_states[GREEN_ID]) {
-		// 			if (!running) {
-		// 				running = true;
-		// 				going_up = time_to_seconds(timer_second, timer_minute, timer_hour) == 0;
-		// 				next_second = millis() + 1000;
-		// 			} else {
-		// 				running = false;
-		// 			}
-		// 		} else if (validated_button_states[AMBER_ID]) {
-        //             if (timer_hour < 1)
-    	// 				increment_timer(timer_second, timer_minute, timer_hour, 0, 1, 0);
-        //             else
-    	// 				increment_timer(timer_second, timer_minute, timer_hour, 0, 0, 1);
-		// 		} else if (validated_button_states[RED_ID]) {
-        //             if (timer_hour < 1)
-    	// 				increment_timer(timer_second, timer_minute, timer_hour, 1, 0, 0);
-        //             else
-    	// 				increment_timer(timer_second, timer_minute, timer_hour, 0, 1, 0);
-		// 		}
-
-		// 	render_timer_string(timer_second, timer_minute, timer_hour, running);
-		// 	display.show_string(display_buffer);
-		// 	}
-		// }
 	}
 	return false;
 }

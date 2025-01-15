@@ -88,33 +88,6 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 				return;
 			}
 		}
-		// if (button_pressed()) {
-		// 	all_leds.activate_leds(button_states, true);
-		// 	int long_press_state;
-
-		// 	while ((long_press_state = wait_on_long_press()) == 0)
-		// 		;
-
-		// 	all_leds.deactivate_leds(true);
-
-		// 	if (long_press_state == 1) {
-		// 		bool result = on_long_press();
-
-		// 		// update anything that may have changed in the options and could affect
-		// 		// the current running billboard prompt
-		// 		idle_timeout = time + option_idle_time;
-
-		// 		if(result)
-		// 			// if the long press handler returns true it means there was an idle timeout
-		// 			// and the billboard should go directly to the idle state, not show the menu
-		// 			break;
-		// 		else
-		// 			return;
-		// 	} else {
-		// 		on_press();
-		// 		return;
-		// 	}
-		// }
 	}
 
 	on_time_out();
@@ -146,26 +119,6 @@ int button_led_prompt(const char * prompt, const bool *states) {
 		int button_id;
 		if((button_id = handle_long_press()) != -1)
 			return button_id;
-
-		// if (button_pressed()) {
-		// 	all_leds.activate_leds(button_states, true);
-		// 	int long_press_state;
-		// 	while ((long_press_state = wait_on_long_press()) == 0)
-		// 		;
-
-		// 	all_leds.deactivate_leds(true);
-		// 	if (long_press_state == 1){
-		// 		return 0;
-		// 	}
-		// 	else {
-		// 		if (validated_button_states[GREEN_ID])
-		// 			return GREEN_ID;
-		// 		else if (validated_button_states[AMBER_ID])
-		// 			return AMBER_ID;
-		// 		else if (validated_button_states[RED_ID])
-		// 			return RED_ID;
-		// 	}
-		// }
 
 		// restore requested button leds in case of debounce time failure
 		if (states)
@@ -207,12 +160,6 @@ void title_prompt(const char * title, byte times, bool show_panel_leds, int show
 
 			if(handle_long_press() != -1)
 				break;
-
-			// if (button_pressed()) {
-			// 	while ((wait_on_long_press()) == 0) // TODO should return a signal that long press has happened
-			// 		;
-			// 	break;
-			// }
 		} else
 			break;
 	}
@@ -227,12 +174,6 @@ void title_prompt(const char * title, byte times, bool show_panel_leds, int show
 
 			if(handle_long_press() != -1)
 				break;
-
-			// if (button_pressed()) {
-			// 	while ((wait_on_long_press()) == 0) // TODO should return a signal that long press has happened
-			// 		;
-			// 	break;
-			// }
 		}
 	}
 

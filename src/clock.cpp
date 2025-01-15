@@ -108,45 +108,6 @@ void render_clock_string(byte seconds, byte minutes, byte hours) {
 				} else
 					return false;
 				}
-
-		// if (button_pressed()) {
-		// 	all_leds.activate_leds(button_states, true);
-		// 	int long_press_state;
-		// 	while ((long_press_state = wait_on_long_press()) == 0)
-		// 		;
-
-		// 	all_leds.deactivate_leds(true);
-		// 	if (long_press_state == 1) {
-		// 		return false;
-		// } else {
-		// 	if (settable) {
-		// 		idle_timeout = time + option_idle_time;
-
-		// 		switch(button_id){
-		// 			case GREEN_ID:
-		// 				increment_time_basis(clock_second, clock_minute, clock_hour, 0, 0, 1);
-		// 				break;
-		// 			case AMBER_ID:
-		// 				increment_time_basis(clock_second, clock_minute, clock_hour, 0, 1, 0);
-		// 				break;
-		// 			case RED_ID:
-		// 				clock_second = 0;
-		// 				establish_clock_basis(clock_second, clock_minute, clock_hour);
-		// 				break;
-		// 		}
-
-				// if (validated_button_states[GREEN_ID]) {
-				// 	increment_time_basis(clock_second, clock_minute, clock_hour, 0, 0, 1);
-				// } else if (validated_button_states[AMBER_ID])
-				// 	increment_time_basis(clock_second, clock_minute, clock_hour, 0, 1, 0);
-				// else if (validated_button_states[RED_ID]) {
-				// 	clock_second = 0;
-				// 	establish_clock_basis(clock_second, clock_minute, clock_hour);
-				// }
-
-			// } else
-			// 	return false;
-			// }
 		}
 	}
 }
