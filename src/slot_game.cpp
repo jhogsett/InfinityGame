@@ -15,7 +15,7 @@
 
 byte choice1, choice2, choice3;
 
-bool run_slot_reel(HT16K33Disp * disp, unsigned long time, char * text, const char **words, byte &choice){
+bool run_slot_reel(HT16K33Disp * disp, unsigned long time, char * text, char **words, byte &choice){
 	bool running = disp->loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME);
 	if(!running){
 		randomizer.randomize();
@@ -25,21 +25,10 @@ bool run_slot_reel(HT16K33Disp * disp, unsigned long time, char * text, const ch
 	return running;
 }
 
-void slots_round(bool rude){
+void slots_round(char * text, char **words){
 	disp1.begin_scroll_loop(1);
 	disp2.begin_scroll_loop(2);
 	disp3.begin_scroll_loop(3);
-
-	// TODO build up a string from the word lists
-	char * text;
-	const char **words;
-	if(rude){
-		text = FSTR("    FUCK  SHIT  CUNT  COCK  PISS  TITS  FART  POOP  DICK  ANAL");
-		words = rude_words;
-	} else {
-		text = FSTR("    WEED  VAPE  BEER  WINE  TACO  GOLD  MINT  LOOT  JADE  RUBY");
-		words = nice_words;
-	}
 
 	bool running1 = true;
 	bool running2 = true;
@@ -104,11 +93,20 @@ bool slots_game(){
 			break;
 	}
 
-	const char **words;
-	if(rude)
-		words = rude_words;
-	else
-		words = nice_words;
+	char **words = rude ? rude_words : nice_words;
+	char text[REEL_BUFFER_LEN];
+	sprintf(text, "    %s  %s  %s  %s  %s  %s  %s  %s  %s  %s",
+			words[0],
+			words[1],
+			words[2],
+			words[3],
+			words[4],
+			words[5],
+			words[6],
+			words[7],
+			words[8],
+			words[9]);
+
 
 	unsigned long idle_timeout = millis() + option_idle_time;
 	unsigned long time;
@@ -161,7 +159,7 @@ bool slots_game(){
 		pay_house(use_purse(last_bet_amount));
 		save_data();
 
-		slots_round(rude);
+		slots_round(text, words);
 
 		while(button_pressed())
 			;
