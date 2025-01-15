@@ -15,11 +15,22 @@
 
 byte choice1, choice2, choice3;
 
+bool run_slot_reel(HT16K33Disp * disp, unsigned long time, char * text, const char **words, byte &choice){
+	bool running = disp->loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME);
+	if(!running){
+		randomizer.randomize();
+		choice = random(NUM_WORDS);
+		disp->show_string(words[choice]);
+	}
+	return running;
+}
+
 void slots_round(bool rude){
 	disp1.begin_scroll_loop(1);
 	disp2.begin_scroll_loop(2);
 	disp3.begin_scroll_loop(3);
 
+	// TODO build up a string from the word lists
 	char * text;
 	const char **words;
 	if(rude){
@@ -34,34 +45,19 @@ void slots_round(bool rude){
 	bool running2 = true;
 	bool running3 = true;
 	while(running1 || running2 || running3){
-	unsigned long time = millis();
+		unsigned long time = millis();
 
-	if(running1){
-		running1 = disp1.loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME);
-		if(!running1){
-			randomizer.randomize();
-			choice1 = random(NUM_WORDS);
-			disp1.show_string(words[choice1]);
+		if(running1){
+			running1 = run_slot_reel(&disp1, time, text, words, choice1);
 		}
-	}
 
-	if(running2){
-		running2 = disp2.loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME);
-		if(!running2){
-			randomizer.randomize();
-			choice2 = random(NUM_WORDS);
-			disp2.show_string(words[choice2]);
+		if(running2){
+			running2 = run_slot_reel(&disp2, time, text, words, choice2);
 		}
-	}
 
-	if(running3){
-		running3 = disp3.loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME);
-		if(!running3){
-			randomizer.randomize();
-			choice3 = random(NUM_WORDS);
-			disp3.show_string(words[choice3]);
+		if(running3){
+			running3 = run_slot_reel(&disp3, time, text, words, choice3);
 		}
-	}
 	}
 }
 
@@ -107,6 +103,12 @@ bool slots_game(){
 			rude = true;
 			break;
 	}
+
+	const char **words;
+	if(rude)
+		words = rude_words;
+	else
+		words = nice_words;
 
 	unsigned long idle_timeout = millis() + option_idle_time;
 	unsigned long time;
@@ -164,12 +166,6 @@ bool slots_game(){
 		while(button_pressed())
 			;
 
-		const char **words;
-		if(rude)
-			words = rude_words;
-		else
-			words = nice_words;
-
 		sprintf(display_buffer, FSTR("%s%s%s"), words[choice1], words[choice2], words[choice3]);
 		title_prompt(display_buffer);
 
@@ -192,9 +188,9 @@ bool slots_game(){
 		long win = bet_amounts[current_bet] * win_factor;
 
 		if(jackpot)
-			display_jackpot(win); // todo fix for to expand money basis
+			display_jackpot(win);
 		else if(win)
-			display_win(win); // todo fix for to expand money basis
+			display_win(win);
 		else
 			// see the non-winning results in lieu of being told you lost
 			delay(ROUND_DELAY);

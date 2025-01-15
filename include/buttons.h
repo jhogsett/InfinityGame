@@ -36,8 +36,10 @@ extern volatile unsigned long press_time;
 extern void button_pressed_i();
 extern bool button_pressed();
 extern bool button_still_pressed();
-extern int wait_on_long_press();
 extern int handle_long_press(bool show_leds=true);
 extern void reset_buttons_state();
+
+// private
+// extern int wait_on_long_press();
 
 #endif
