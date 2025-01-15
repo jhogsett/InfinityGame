@@ -147,7 +147,7 @@ int word_game_round(bool rude){
 	int player_moves = 0;
 
 	sprintf(display_buffer, FSTR("BEAT %d MOVES"), scramble_moves);
-	title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
+	title_prompt(display_buffer, BEAT_SHOW_TIMES, false, BEAT_SHOW_DELAY);
 
 	pay_house(use_purse(WORD_GAME_PLAY_BET));
 
@@ -193,7 +193,7 @@ int word_game_round(bool rude){
 			title_prompt(display_buffer, SUCCESS_SHOW_TIMES, false, CORRECT_WORD_SHOW_TIME);
 
 			sprintf(display_buffer, FSTR("  MOVES %d"), player_moves);
-			title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY);
+			title_prompt(display_buffer, MOVES_SHOW_TIMES, false, MOVES_SHOW_DELAY);
 
 			// compute winning factor
 			int factor = scramble_moves - player_moves;
@@ -247,9 +247,12 @@ bool word_game(){
 		switch(round_result){
 			case -2:
 				// exceeded max moves
-                streak = -1;
+				if(streak > MIN_STREAK_ACTIVATION)
+                    streak = -1;
+                else
+                    streak = 0;
 				sprintf(display_buffer, FSTR("OUT OF MOVES"));
-				title_prompt(display_buffer, EXCEEDED_SHOW_TIMES, false, ROUND_DELAY);
+				title_prompt(display_buffer, EXCEEDED_SHOW_TIMES, false, EXCEEDED_SHOW_DELAY);
 				break;
 			case -1:
 				// timed out or long press
@@ -259,11 +262,14 @@ bool word_game(){
 				return false;
 			case 0:
 				// player didn't beat the moves
-                streak = -1;
+				if(streak > MIN_STREAK_ACTIVATION)
+                    streak = -1;
+                else
+                    streak = 0;
 				break;
 			default:
 				sprintf(display_buffer, FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word);
-				title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);
+				title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, SUCCESS_SHOW_DELAY);
 
 				win = (round_result) * (WORD_WIN_UNIT);
 
@@ -282,7 +288,7 @@ bool word_game(){
 
 				if(streak > MIN_STREAK_ACTIVATION){
 					sprintf(display_buffer, FSTR("%3dX BONUS"), streak - STREAK_OFFSET);
-					title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, ROUND_DELAY);
+					title_prompt(display_buffer, BONUS_SHOW_TIMES, true, BONUS_SHOW_DELAY);
 				}
 
 				break;
@@ -290,7 +296,7 @@ bool word_game(){
 
 		if(streak == -1){
 			streak = 0;
-			title_prompt(load_f_string(F(" BONUS VOID"), display_buffer), SUCCESS_SHOW_TIMES, false, ROUND_DELAY);
+			title_prompt(load_f_string(F(" BONUS OVER"), display_buffer), BONUS_SHOW_TIMES, false, BONUS_SHOW_DELAY);
 		}
 	}
 	return false;
