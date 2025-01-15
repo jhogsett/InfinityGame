@@ -56,7 +56,7 @@ void render_clock_string(byte seconds, byte minutes, byte hours) {
 }
 
 // returns true if the clock timed out while being set
-	bool clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
+bool clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
 	clock_hour = hours;
 	clock_minute = minutes;
 	clock_second = seconds;
@@ -79,11 +79,6 @@ void render_clock_string(byte seconds, byte minutes, byte hours) {
 
 		render_clock_string(clock_second, clock_minute, clock_hour);
 		display.show_string(display_buffer);
-
-		// int button_id;
-		// if((button_id = handle_long_press()) == 0)
-		// 	return false;
-
 
 		int button_id;
 		if((button_id = handle_long_press()) != -1){
