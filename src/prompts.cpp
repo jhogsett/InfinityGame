@@ -18,16 +18,14 @@ char *billboard_data[NUM_BILLBOARDS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL
 void run_billboard(char **data) {
 	unsigned long time = millis();
 	panel_leds.step(time);
-	// button_leds.step(time);
-	// all_leds.step(time);
 	billboards_handler.run(time, &display, data);
 }
 
-// show the billboard and cycle waiting for any button press
+// show the billboard and cycle, waiting for any button press
 void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr on_long_press) {
-	while (button_still_pressed())
-		;
-	reset_buttons_state();
+	// while (button_still_pressed())
+	// 	;
+	// reset_buttons_state();
 
 	unsigned long time = millis();
 	unsigned long idle_timeout = time + option_idle_time;
@@ -47,11 +45,6 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 	strcpy(bank_display, format_long(get_bank()));
 	strcpy(gang_display, format_long(get_gang()));
 
-	// ltoa(get_purse(), cash_display, 10);
-	// ltoa(get_house(), house_display, 10);
-	// ltoa(get_bank(), bank_display, 10);
-	// ltoa(get_gang(), gang_display, 10);
-
 	if(best_time == DEFAULT_TIME){
 		load_f_string(F("0.0000"), time_display);
 
@@ -64,6 +57,11 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 	billboard_data[BILLBOARD_HOUSE] = house_display;
 	billboard_data[BILLBOARD_BANK] = bank_display;
 	billboard_data[BILLBOARD_GANG] = gang_display;
+
+	// run the billboard while waiting for user to unpress button
+	while (button_still_pressed()){
+		run_billboard(billboard_data);
+	}
 
 	while ((time = millis()) < idle_timeout) {
 		run_billboard(billboard_data);
@@ -97,21 +95,26 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 // prompt with text and cycle waiting for a button response
 // returns -1=timed out, 0=long press, button ID otherwise
 int button_led_prompt(const char * prompt, const bool *states) {
-	unsigned long time;
-	unsigned long timeout_time = millis() + PROMPT_TIMEOUT;
-
-	display.begin_scroll_loop();
-
-	// eat an already pressed button on arrival here
-	while (((time = millis()) < timeout_time) && button_still_pressed()) {
-		display.loop_scroll_string(time, prompt, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
-	}
-	reset_buttons_state();
+	// // eat an already pressed button on arrival here
+	// while (((time = millis()) < timeout_time) && button_still_pressed()) {
+	// 	display.loop_scroll_string(time, prompt, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
+	// }
+	// reset_buttons_state();
 
 	if (states)
 		button_leds.activate_leds(states);
 	else
 		all_leds.deactivate_leds(true);
+
+	unsigned long time;
+	unsigned long timeout_time = millis() + PROMPT_TIMEOUT;
+
+	display.begin_scroll_loop();
+
+	// run the prompt while waiting for user to unpress button
+	while (button_still_pressed()){
+		display.loop_scroll_string(millis(), prompt, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
+	}
 
 	while ((time = millis()) < timeout_time) {
 		display.loop_scroll_string(time, prompt, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
@@ -131,26 +134,24 @@ int button_led_prompt(const char * prompt, const bool *states) {
 // but cancelable with a button press
 // show_panel_leds = true to have them cycle
 // show_delay = ensure delay between multiple titles
-// TODO should return a signal that long press has happened
-void title_prompt(const char * title, byte times, bool show_panel_leds, int show_delay, int leds_style, int leds_show_time, int leds_blank_time) {
+// return true if long-pressed
+bool title_prompt(const char * title, byte times, bool show_panel_leds, int show_delay, int leds_style, int leds_show_time, int leds_blank_time) {
 	unsigned long time = millis();
-	unsigned long timeout_time = time + PROMPT_TIMEOUT;
 	unsigned long idle_timeout = time + option_idle_time;
 
 	if (show_panel_leds)
 		panel_leds.begin(millis(), leds_style, leds_show_time, leds_blank_time);
+
 	display.begin_scroll_loop(times);
 
-	// eat an already pressed button on arrival here
-	while (((time = millis()) < timeout_time) && button_still_pressed()) {
+	// run the prompt while waiting for user to unpress button
+	while (button_still_pressed()){
+		time = millis();
 		display.loop_scroll_string(time, title, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
 
 		if (show_panel_leds)
 			panel_leds.step(time);
 	}
-	reset_buttons_state();
-
-	all_leds.deactivate_leds(true);
 
 	// breaking out of the loop is handled by the display call
 	while ((time = millis()) < idle_timeout) {
@@ -158,8 +159,16 @@ void title_prompt(const char * title, byte times, bool show_panel_leds, int show
 			if (show_panel_leds)
 				panel_leds.step(time);
 
-			if(handle_long_press() != -1)
-				break;
+			int button_id;
+			if((button_id = handle_long_press()) != -1){
+				if (show_panel_leds)
+					panel_leds.deactivate_leds();
+
+				if(button_id == 0)
+					return true;
+				else
+					return false;
+			}
 		} else
 			break;
 	}
@@ -172,13 +181,20 @@ void title_prompt(const char * title, byte times, bool show_panel_leds, int show
 			if (show_panel_leds)
 				panel_leds.step(time);
 
-			if(handle_long_press() != -1)
-				break;
+			int button_id;
+			if((button_id = handle_long_press()) != -1){
+				if (show_panel_leds)
+					panel_leds.deactivate_leds();
+
+				if(button_id == 0)
+					return true;
+				else
+					return false;
+			}
 		}
 	}
 
-	if (show_panel_leds)
-		panel_leds.deactivate_leds();
+	return false;
 }
 
 // prompt with panel leds showing only and cycle waiting for any button press
@@ -202,33 +218,9 @@ int panel_led_prompt(){
 		time = millis();
 		panel_leds.step(time);
 
-			// if (!button_pressed())
-			// 	continue;
-
-			// all_leds.activate_leds(button_states, true);
-			// while (button_still_pressed())
-			// 	;
-
-			// all_leds.deactivate_leds(true);
-			// return 1;
-
 		int button_id;
 		if((button_id = handle_long_press()) != -1)
 			return button_id;
-
-		// if (button_pressed()) {
-		// 	all_leds.activate_leds(button_states, true);
-		// 	int long_press_state;
-		// 	while ((long_press_state = wait_on_long_press()) == 0)
-		// 		;
-
-		// 	all_leds.deactivate_leds(true);
-		// 	if (long_press_state == 1){
-		// 		return 0;
-		// 	} else {
-		// 		return 1; // any real button ID will do
-		// 	}
-		// }
 	}
 
 	return -1;

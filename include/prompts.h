@@ -53,7 +53,7 @@ extern char *billboard_data[NUM_BILLBOARDS];
 void run_billboard(char **data);
 void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr on_long_press);
 int button_led_prompt(const char * prompt, const bool *states = NULL);
-void title_prompt(const char * title, byte times = 1, bool show_panel_leds = false, int show_delay=0, int leds_style=TITLE_PANEL_LEDS_STYLE, int leds_show_time=TITLE_PANEL_LEDS_SHOW_TIME, int leds_blank_time=TITLE_PANEL_LEDS_BLANK_TIME);
+bool title_prompt(const char * title, byte times = 1, bool show_panel_leds = false, int show_delay=0, int leds_style=TITLE_PANEL_LEDS_STYLE, int leds_show_time=TITLE_PANEL_LEDS_SHOW_TIME, int leds_blank_time=TITLE_PANEL_LEDS_BLANK_TIME);
 int panel_led_prompt();
 bool branch_prompt(const char * prompt, boolFuncPtr on_option_1, boolFuncPtr on_option_2, boolFuncPtr on_option_3, boolFuncPtr on_long_press = NULL, const bool *states = NULL);
 int toggle_prompt(const char * prompt, const char **labels, byte current_choice, byte toggle_position, byte num_choices);
