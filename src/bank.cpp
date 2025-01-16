@@ -14,6 +14,10 @@ unsigned long crime_wave_started = 0L;
 
 // Properties
 
+long get_sum(){
+    return get_bank() + get_house() + get_gang() + get_purse();
+}
+
 long get_bank(){
 	return bank;
 }
@@ -28,6 +32,10 @@ long get_purse(){
 
 long get_gang(){
 	return gang;
+}
+
+long get_vig(){
+	return vig;
 }
 
 // Bank operations
@@ -84,6 +92,7 @@ long use_purse(long money){
 	while(purse + total_loan < PLAYER_MINIMUM)
 		total_loan += gang_loan(PLAYER_LOAN);
 	purse += total_loan;
+    vig += total_loan + (total_loan / VIG_DIVISOR);
 
 	// finish and reset a possible crime wave
 	unsigned long crime_wave_timeout = crime_wave_started + MINIMUM_CRIME_WAVE_TIME;
@@ -115,6 +124,14 @@ long use_purse(long money){
 
 // returns the amount added
 long add_to_purse(long money){
+    if(vig > 0){
+        long cut = money / VIG_DIVISOR;
+        if(vig <= cut)
+            cut = vig;
+        vig -= cut;
+        money -= cut;
+        gang += cut;
+    }
 	purse += money;
 	return money;
 }
@@ -122,12 +139,7 @@ long add_to_purse(long money){
 // Gang operations
 
 // returns the amount paid out
-// the gang keeps their cut
 long gang_loan(long money){
-    long gang_cut = money / GANG_LOAN_CUT;
-    money -= gang_cut;
-	gang -= money;
-
 	if(gang < GANG_MIMUMUM){
 		if(!crime_wave){
 			unsigned long time = millis();
@@ -148,6 +160,7 @@ long gang_loan(long money){
 		gang += total_take;
 	}
 
+    gang -= money;
 	return money;
 }
 

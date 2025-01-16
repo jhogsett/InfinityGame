@@ -22,11 +22,11 @@
 // All bets are paid to the house
 // All payouts are from the house
 // The house draws money from the bank when needed
-#define DEFAULT_HOUSE (0L / MONEY_BASIS)
+#define DEFAULT_HOUSE (1000000L / MONEY_BASIS)
 
 // The gang robs money from the bank
 // Player cash comes from the gang
-#define DEFAULT_GANG (10000L / MONEY_BASIS)
+#define DEFAULT_GANG (100000L / MONEY_BASIS)
 
 // the longest possible count of milliseconds
 #define DEFAULT_TIME ((unsigned long)-1)
@@ -34,7 +34,9 @@
 // default milliseconds until device goes into idle mode
 #define DEFAULT_IDLE_TIME (5L * 60L * 1000L)
 
-// ##DATA add new defaults on play data reset here
+#define DEFAULT_VIG 0L
+
+// ##DATA add new defaults on play data reset above here
 
 
 // Display time for interstitial displays during games
@@ -78,6 +80,9 @@ extern long gang;
 // Idle Time in milliseconds
 extern unsigned long option_idle_time;
 
+// Current vig
+extern long vig;
+
 // ##DATA Add 'extern's for new persisted play data veriables here
 
 
@@ -97,8 +102,9 @@ struct SavedData{
 	long house;
 	long gang;
 	unsigned long option_idle_time;
+    long vig;
 
-	// ##DATA Add new persisted data types here
+	// ##DATA Add new persisted data types above here
 };
 
 extern void load_save_data();

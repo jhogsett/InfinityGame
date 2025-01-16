@@ -8,12 +8,16 @@
 #define CASH_SHOW_TIMES 1
 #define CASH_SHOW_DELAY 750
 
+#define BALANCES_SHOW_TIMES 1
+#define BALANCES_SHOW_DELAY 750
+
 // number of times to show player's win amount (or effective time of display if no scroll needed)
 #define WIN_SHOW_TIMES 1
 
 // number of times to show player's jackpot win (or effective time of display if no scroll needed)
 #define JACKPOT_SHOW_TIMES 2
 
+extern bool display_balances();
 extern void display_purse();
 // extern void display_bank();
 // extern void display_house();

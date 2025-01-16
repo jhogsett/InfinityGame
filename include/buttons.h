@@ -15,7 +15,7 @@
 #define DEBOUNCE_TIME 20
 
 // Time in millisecond to pause after a validated button press to ignore tailing off button noise/ringing?
-#define QUIET_PERIOD 150
+#define QUIET_PERIOD 200
 
 // Time in milliseconds for a button to be pressed for it to be a long press and active alternate actions
 #define LONG_PRESS_TIME 1250

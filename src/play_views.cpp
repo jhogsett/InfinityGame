@@ -7,6 +7,43 @@
 #include "prompts.h"
 #include "utils.h"
 
+// TODO refactor
+bool display_balances(){
+    long balance;
+    const char * label;
+    for(int i = 0; i < 6; i++){
+        switch(i){
+            case 0:
+                balance = get_purse();
+                label = "CASH";
+                break;
+            case 1:
+                balance = get_vig();
+                label = "VIG";
+                break;
+            case 2:
+                balance = get_house();
+                label = "HOUSE";
+                break;
+            case 3:
+                balance = get_gang();
+                label = "GANG";
+                break;
+            case 4:
+                balance = get_bank();
+                label = "BANK";
+                break;
+            case 5:
+                balance = get_sum();
+                label = "SUM";
+                break;
+        }
+        sprintf(display_buffer, FSTR("%s $%s"), label, format_long(balance));
+        title_prompt(display_buffer, BALANCES_SHOW_TIMES, false, BALANCES_SHOW_DELAY);
+    }
+    return false;
+}
+
 void display_purse(){
 	sprintf(display_buffer, FSTR("CASH $%s"), format_long(get_purse()));
 	title_prompt(display_buffer, CASH_SHOW_TIMES, false, CASH_SHOW_DELAY);

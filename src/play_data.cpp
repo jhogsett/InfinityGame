@@ -18,6 +18,7 @@ unsigned long best_time3 = (unsigned long)-1;
 long house = DEFAULT_HOUSE;
 long gang = DEFAULT_GANG;
 unsigned long option_idle_time = DEFAULT_IDLE_TIME;
+long vig = DEFAULT_VIG;
 
 // ##DATA Add new persisted play data veriables here
 
@@ -44,6 +45,7 @@ void load_save_data(){
 	house = saved_data.house;
 	gang = saved_data.gang;
 	option_idle_time = saved_data.option_idle_time;
+    vig = saved_data.vig;
 
 	// ##DATA Load new persisted play data variables into memory here
 }
@@ -64,6 +66,7 @@ void save_data(){
 	saved_data.house = house;
 	saved_data.gang = gang;
 	saved_data.option_idle_time = option_idle_time;
+    saved_data.vig = vig;
 
 	// ##DATA Store new persisted play data veriables in the persistent structure here
 
@@ -91,6 +94,7 @@ bool reset_options(){
 	house = DEFAULT_HOUSE;
 	gang = DEFAULT_GANG;
 	option_idle_time = DEFAULT_IDLE_TIME;
+    vig = DEFAULT_VIG;
 
 	// ##DATA Reset new persisted play data veriables to default variables here
 
