@@ -59,6 +59,8 @@ bool button_pressed(){
 	for(int i = 0; i < NUM_BUTTONS; i++)
 		validated_button_states[i] = saved_button_states[i];
 
+    delay(QUIET_PERIOD);
+
 	// is this necessary?
 	button_states[ANY_COLOR_ID] = false;
 	return true;
