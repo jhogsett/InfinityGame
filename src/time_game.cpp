@@ -19,7 +19,7 @@ bool time_game(){
 
     int mode = MODE_FLASH;
 	const char *labels[] = {"LEDS", "BEEP", "BUZZ"};
-	mode = toggle_prompt(FSTR("Stimulus.%s"), labels, mode, 3, 3);
+	mode = toggle_prompt(FSTR("Stimul.  %s"), labels, mode, 3, 3);
     if(mode == -1)
         return false;
 
@@ -39,7 +39,7 @@ bool time_game(){
 	sprintf(display_buffer, FSTR("Best Score %s ms"), copy_buffer);
 	title_prompt(display_buffer, 1, false, ROUND_DELAY);
 
-    unsigned long time;
+    unsigned long time = millis();
     unsigned long timeout_time = time + option_idle_time;
 
     while((time = millis()) < timeout_time){
@@ -76,8 +76,7 @@ bool time_game(){
 
                 int del = random(MIN_DELAY, MAX_DELAY+1);
 
-                time = millis();
-                unsigned long delay_timeout = time + del;
+                unsigned long delay_timeout = millis() + del;
 
                 bool fault = false;
                 while((time = millis()) < delay_timeout)
@@ -160,26 +159,42 @@ bool time_game(){
         title_prompt(display_buffer, 1, false, ROUND_DELAY);
 
         // save the best result per mode
+        bool new_best_per_mode = false;
+        const char *label;
         switch(mode){
             case MODE_FLASH:
-                if(mean < best_time1)
+                if(mean < best_time1){
                     best_time1 = mean;
+                    new_best_per_mode = true;
+                    label = "LEDS";
+                }
                 break;
             case MODE_SOUND:
-                if(mean < best_time2)
+                if(mean < best_time2){
                     best_time2 = mean;
+                    new_best_per_mode = true;
+                    label = "BEEP";
+                }
                 break;
             case MODE_VIBRATION:
-                if(mean < best_time3)
+                if(mean < best_time3){
                     best_time3 = mean;
+                    new_best_per_mode = true;
+                    label = "BUZZ";
+                }
                 break;
+        }
+        if(new_best_per_mode){
+            micros_to_ms(copy_buffer, mean);
+            sprintf(display_buffer, FSTR("*NEW BEST %s %s ms"), label, copy_buffer);
+            title_prompt(display_buffer, 1, true, ROUND_DELAY);
         }
 
         if(mean < best_time){
             best_time = mean;
 
             micros_to_ms(copy_buffer, mean);
-            sprintf(display_buffer, FSTR("*NEW BEST %s ms"), copy_buffer);
+            sprintf(display_buffer, FSTR("*NEW OVERALL BEST %s ms"), copy_buffer);
 
             title_prompt(display_buffer, 1, true, ROUND_DELAY);
 
@@ -189,17 +204,11 @@ bool time_game(){
             display_purse();
 
             save_data();
-
-            // # optimize strings
-
-            // sprintf(display_buffer, FSTR("*NEW BEST %s ms"), copy_buffer);
         } else {
             micros_to_ms(copy_buffer, best_time);
-            sprintf(display_buffer, FSTR("Best Score %s ms"), copy_buffer);
+            sprintf(display_buffer, FSTR("Overall Best %s ms"), copy_buffer);
             title_prompt(display_buffer, 1, false, ROUND_DELAY);
         }
-
-        // button_led_prompt(display_buffer);
     }
 
 	return false;
