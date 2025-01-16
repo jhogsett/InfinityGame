@@ -41,12 +41,12 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 	strcpy(bank_display, format_long(get_bank()));
 	strcpy(gang_display, format_long(get_gang()));
 
-	if(best_time == DEFAULT_TIME){
-		load_f_string(F("0.0000"), time_display);
+	// if(best_time == DEFAULT_TIME){
+	// 	load_f_string(F("0.0000"), time_display);
 
-	} else {
+	// } else {
 		micros_to_ms(time_display, best_time);
-	}
+	// }
 
 	billboard_data[BILLBOARD_CASH] = cash_display;
 	billboard_data[BILLBOARD_TIME] = time_display;

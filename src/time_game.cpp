@@ -18,7 +18,25 @@ bool time_game(){
 
     int mode = MODE_FLASH;
 	const char *labels[] = {"LEDS", "BEEP", "BUZZ"};
-	mode = toggle_prompt(FSTR("MODE    %s"), labels, mode, 3, 3);
+	mode = toggle_prompt(FSTR("Stim    %s"), labels, mode, 3, 3);
+    if(mode == -1)
+        return false;
+
+    unsigned long show_time = 0;
+    switch(mode){
+        case MODE_FLASH:
+            show_time = best_time1;
+            break;
+        case MODE_SOUND:
+            show_time = best_time2;
+            break;
+        case MODE_VIBRATION:
+            show_time = best_time3;
+            break;
+    }
+    micros_to_ms(copy_buffer, show_time);
+	sprintf(display_buffer, FSTR("Best Score %s ms"), copy_buffer);
+	title_prompt(display_buffer, 1, false, ROUND_DELAY);
 
 	int response;
 	const bool buttons[] = {false, true, false, true};
@@ -138,8 +156,24 @@ bool time_game(){
 
 	if(mean < best_time){
 		best_time = mean;
+
+        switch(mode){
+            case MODE_FLASH:
+                if(mean < best_time1)
+                    best_time1 = mean;
+                break;
+            case MODE_SOUND:
+                if(mean < best_time2)
+                    best_time2 = mean;
+                break;
+            case MODE_VIBRATION:
+                if(mean < best_time2)
+                    best_time3 = mean;
+                break;
+        }
+
 		micros_to_ms(copy_buffer, mean);
-		sprintf(display_buffer, FSTR("* NEW BEST %s ms"), copy_buffer);
+		sprintf(display_buffer, FSTR("*NEW BEST %s ms"), copy_buffer);
 
 		title_prompt(display_buffer, 1, true, ROUND_DELAY);
 
@@ -152,10 +186,10 @@ bool time_game(){
 
 		// # optimize strings
 
-		sprintf(display_buffer, FSTR("* NEW BEST %s ms"), copy_buffer);
+		sprintf(display_buffer, FSTR("*NEW BEST %s ms"), copy_buffer);
 	} else {
 		micros_to_ms(copy_buffer, best_time);
-		sprintf(display_buffer, FSTR("* Best Time %s ms"), copy_buffer);
+		sprintf(display_buffer, FSTR("Best Score %s ms"), copy_buffer);
 	}
 
 	button_led_prompt(display_buffer);
