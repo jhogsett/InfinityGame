@@ -1,17 +1,10 @@
 
-
-option to show extra billboard details (house,bank,gang)
-
-start out showing only the word's letters and blanks/underscores then keep adding more letters
-
 long press from tools set somestimes goes directly to game menu
 
 ability to scroll off a display (and scroll on, like inserting 12 spaces before or after)
 also scroll in the other direction (for short strings)
 
-have a reels prompt that plays the game automatically
-
-made libs
+mad libs
 
 time game choose a color and the average is stored with it, allowing for three profiles
 

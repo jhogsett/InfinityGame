@@ -184,8 +184,9 @@ bool title_prompt(const char * title, byte times, bool show_panel_leds, int show
 		}
 	}
 
-    if(show_panel_leds)
+    if(show_panel_leds){
         panel_leds.deactivate_leds();
+    }
 
 	return false;
 }
