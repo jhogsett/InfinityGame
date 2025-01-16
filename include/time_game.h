@@ -11,6 +11,10 @@
 // in MONEY_BASIS units
 #define TIME_WIN (1000L / MONEY_BASIS)
 
+#define MODE_FLASH 0
+#define MODE_SOUND 1
+#define MODE_VIBRATION 2
+
 extern bool time_game();
 
 #endif

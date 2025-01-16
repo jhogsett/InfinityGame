@@ -13,11 +13,6 @@
 #include "time_game.h"
 #include "debug.h"
 
-#define MODE_FLASH 0
-#define MODE_SOUND 1
-#define MODE_VIBRATION 2
-
-
 bool time_game(){
 	title_prompt(FSTR("The TimeGame"), TITLE_SHOW_TIMES, true);
 
@@ -41,24 +36,18 @@ bool time_game(){
         while(fault_protect){
             button_leds.activate_all(true);
 
-            // char *wait_msg;
             switch(mode){
                 case MODE_FLASH:
-                    // wait_msg = FSTR("Wait 4 FLASH");
-                    display.scroll_string(FSTR("Wait 4 FLASH"), DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
+                    FSTR("Wait 4 FLASH");
                     break;
                 case MODE_SOUND:
-                    // wait_msg = FSTR("Wait 4 BEEP");
-                    display.scroll_string(FSTR("Wait 4 BEEP"), DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
+                    FSTR("Wait 4 BEEP");
                     break;
                 case MODE_VIBRATION:
-                    // wait_msg = FSTR("Wait 4 VIBES");
-                    display.scroll_string(FSTR("Wait 4 BUZZ"), DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
+                    FSTR("Wait 4 VIBES");
                     break;
-                // default:
-                //     wait_msg = "asdf";
             }
-            // display.scroll_string(wait_msg, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
+            display.scroll_string(fstring_buffer, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
             display.clear();
             button_leds.activate_all(false);
 
@@ -76,8 +65,6 @@ bool time_game(){
             if(fault)
                 continue;
             fault_protect = false;
-
-            // panel_leds.begin_flash(false, 0);
 
             // per-mode set up before starting timer
             switch(mode){
@@ -104,14 +91,6 @@ bool time_game(){
                     vibrate();
                     break;
             }
-
-//             while(digitalRead(ANY_BUTTON) == HIGH){
-// #ifdef ENABLE_DEBUG_FEATURES
-//                 // set_debug_marker(1);
-// #endif
-//                 // button is glitched on by flashing LEDs?
-//                 panel_leds.step_flash(millis());
-//             }
 
             while(digitalRead(ANY_BUTTON) == LOW){
                 // per-mode actions to continue stimulus
@@ -162,9 +141,6 @@ bool time_game(){
 		micros_to_ms(copy_buffer, mean);
 		sprintf(display_buffer, FSTR("* NEW BEST %s ms"), copy_buffer);
 
-		// TODO save this display to show again
-		// strcpy(copy_buffer, display_buffer);
-
 		title_prompt(display_buffer, 1, true, ROUND_DELAY);
 
 		display_win(TIME_WIN);
@@ -175,10 +151,7 @@ bool time_game(){
 		save_data();
 
 		// # optimize strings
-		// sprintf(display_buffer, FSTR("NEW BEST * %s ms"), copy_buffer);
 
-		// show the saved string
-		// strcpy(display_buffer, copy_buffer);
 		sprintf(display_buffer, FSTR("* NEW BEST %s ms"), copy_buffer);
 	} else {
 		micros_to_ms(copy_buffer, best_time);
