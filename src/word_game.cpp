@@ -85,7 +85,7 @@ int last_word_choice = -1;
 
 // returns the number of random shifts done
 int choose_word(bool rude){
-	const char **words;
+	char **words;
 	if(rude)
 		words = rude_words;
 	else
