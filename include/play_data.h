@@ -2,6 +2,7 @@
 #define __PLAY_DATA_H
 
 #include <Arduino.h>
+#include "idle_mode.h"
 
 // when adding new persisted play data, search for ##DATA
 
@@ -30,6 +31,9 @@
 
 // the longest possible count of milliseconds
 #define DEFAULT_TIME ((unsigned long)-1)
+
+// default idle mode
+#define DEFAULT_IDLE_MODE IDLE_MODE_CLOCK
 
 // default milliseconds until device goes into idle mode
 #define DEFAULT_IDLE_TIME (5L * 60L * 1000L)
@@ -60,8 +64,8 @@ extern unsigned long best_time;
 // Whether to display 12 or 24 hour time
 extern bool option_clock_24h;
 
-// Whether to show the clock or sleep mode on idle
-extern bool option_clock_on_idle;
+// mode when mode none, sleep, clock
+extern byte option_idle_mode;
 
 // Current bank
 extern unsigned long bank;
@@ -94,7 +98,7 @@ struct SavedData{
 	unsigned long purse;
 	unsigned long best_time;
 	bool option_clock_24h;
-	bool option_clock_on_idle;
+	byte option_idle_mode;
 	unsigned long bank;
 	unsigned long best_time1;
 	unsigned long best_time2;

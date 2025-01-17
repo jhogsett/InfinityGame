@@ -1,5 +1,3 @@
-clar leds after crime wave
-
 long press from tools set somestimes goes directly to game menu
 
 ability to scroll off a display (and scroll on, like inserting 12 spaces before or after)
@@ -29,6 +27,3 @@ add lm34
 option to show temp instead of seconds for clock
 option for c or f
 
-options for timeout time
-[ ] prompt timeouts
-[x]] idle timeouts

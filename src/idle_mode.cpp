@@ -1,4 +1,5 @@
 #include "clock.h"
+#include "idle_mode.h"
 #include "leds.h"
 #include "play_data.h"
 #include "prompts.h"
@@ -6,9 +7,17 @@
 
 bool idle_mode(){
 	all_leds.deactivate_leds(true);
-	if(option_clock_on_idle)
-		clock_prompt(0, 0, 12, false);
-	else
-		sleep_mode();
+
+	switch(option_idle_mode){
+		case IDLE_MODE_NONE:
+			break;
+		case IDLE_MODE_SLEEP:
+			sleep_mode();
+			break;
+		case IDLE_MODE_CLOCK:
+			clock_prompt(0, 0, 12, false);
+			break;
+	}
+
 	return false;
 }

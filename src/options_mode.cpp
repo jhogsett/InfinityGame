@@ -14,43 +14,49 @@ bool options_mode(){
 	return branch_prompt(FSTR("TOOLS   SET"), tools_menu, NULL, options_menu, NULL, buttons);
 }
 
-bool options_menu(){ // # optimize strings
-	const char *labels[] = {"Off", "On", "12H", "24H", "SLP", "CLK", "5 M", "1 M"};
-	int result = toggle_prompt(FSTR("SOUND   %s"), labels, option_sound ? 1 : 0, 3, 2) ? true : false;
+#define LABELS_OFF_ON 0
+#define LABELS_CLOCK 2
+#define LABELS_IDLE 4
+#define LABELS_IDLE_TO 7
 
+bool options_menu(){ // # optimize strings
+	const char *labels[] = {"Off", "On", "12H", "24H", "None", "SLP", "CLK", "5 M", "1 M"};
+
+	int result = toggle_prompt(FSTR("SOUND   %s"), labels + LABELS_OFF_ON, option_sound ? 1 : 0, 3, 2);
 	if(result == -1)
 		return false;
-	option_sound = result;
+
+	option_sound = result == 1 ? true : false;
 	if(option_sound)
 		beep();
 	save_data();
 
-	result = toggle_prompt(FSTR("VIBRATE %s"), labels, option_vibrate ? 1 : 0, 3, 2) ? true : false;
-
+	result = toggle_prompt(FSTR("VIBRATE %s"), labels + LABELS_OFF_ON, option_vibrate ? 1 : 0, 3, 2);
 	if(result == -1)
 		return false;
-	option_vibrate = result;
+
+	option_vibrate = result == 1 ? true : false;
 	if(option_vibrate)
 		vibrate();
 	save_data();
 
-	result = toggle_prompt(FSTR("CLOCK   %s"), labels+2, option_clock_24h ? 1 : 0, 3, 2) ? true : false;
-
+	result = toggle_prompt(FSTR("CLOCK   %s"), labels + LABELS_CLOCK, option_clock_24h ? 1 : 0, 3, 2);
 	if(result == -1)
 		return false;
-	option_clock_24h = result;
+
+	option_clock_24h = result == 1 ? true : false;
 	save_data();
 
-	result = toggle_prompt(FSTR("IDLE    %s"), labels+4, option_clock_on_idle ? 1 : 0, 3, 2) ? true : false;
-
+	result = toggle_prompt(FSTR("IDLE    %s"), labels + LABELS_IDLE, option_idle_mode, 3, 3);
 	if(result == -1)
 		return false;
-	option_clock_on_idle = result;
+
+	option_idle_mode = result;
 	save_data();
 
 	int idle_timeout_minutes = option_idle_time / MINUTE_MILLISECONDS;
 
-	result = toggle_prompt(FSTR("IDLE T.O. %s"), labels+6, idle_timeout_minutes == 1 ? 1 : 0, 3, 2) ? 1 : 5;
+	result = toggle_prompt(FSTR("IDLE T.O. %s"), labels + LABELS_IDLE_TO, idle_timeout_minutes == 1 ? 1 : 0, 3, 2) ? 1 : 5;
 
 	if(result == -1)
 		return false;

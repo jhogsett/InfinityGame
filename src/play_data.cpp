@@ -10,7 +10,7 @@ bool option_vibrate = false;
 long purse = DEFAULT_PURSE;
 unsigned long best_time = (unsigned long)-1;
 bool option_clock_24h = false;
-bool option_clock_on_idle = false;
+byte option_idle_mode = DEFAULT_IDLE_MODE;
 unsigned long bank = DEFAULT_BANK;
 unsigned long best_time1 = (unsigned long)-1;
 unsigned long best_time2 = (unsigned long)-1;
@@ -37,7 +37,7 @@ void load_save_data(){
 	purse = saved_data.purse;
 	best_time = saved_data.best_time;
 	option_clock_24h = saved_data.option_clock_24h;
-	option_clock_on_idle = saved_data.option_clock_on_idle;
+	option_idle_mode = saved_data.option_idle_mode;
 	bank = saved_data.bank;
 	best_time1 = saved_data.best_time1;
 	best_time2 = saved_data.best_time2;
@@ -58,7 +58,7 @@ void save_data(){
 	saved_data.purse = purse;
 	saved_data.best_time = best_time;
 	saved_data.option_clock_24h = option_clock_24h;
-	saved_data.option_clock_on_idle = option_clock_on_idle;
+	saved_data.option_idle_mode = option_idle_mode;
 	saved_data.bank = bank;
 	saved_data.best_time1 = best_time1;
 	saved_data.best_time2 = best_time2;
@@ -86,7 +86,7 @@ bool reset_options(){
 	purse = DEFAULT_PURSE;
 	best_time = DEFAULT_TIME;
 	option_clock_24h = false;
-	option_clock_on_idle = true;
+	option_idle_mode = DEFAULT_IDLE_MODE;
 	bank = DEFAULT_BANK;
 	best_time1 = DEFAULT_TIME;
 	best_time2 = DEFAULT_TIME;
