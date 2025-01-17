@@ -95,7 +95,8 @@ bool slots_game(){
 
 	char **words = rude ? rude_words : nice_words;
 	char text[REEL_BUFFER_LEN];
-	sprintf(text, "    %s  %s  %s  %s  %s  %s  %s  %s  %s  %s",
+	sprintf(text,
+            FSTR("    %s  %s  %s  %s  %s  %s  %s  %s  %s  %s"),
 			words[0],
 			words[1],
 			words[2],

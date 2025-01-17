@@ -10,32 +10,32 @@
 // TODO refactor
 bool display_balances(){
     long balance;
-    const char * label;
+    char label[6];
     for(int i = 0; i < 6; i++){
         switch(i){
             case 0:
                 balance = get_purse();
-                label = "CASH";
+                load_f_string(F("CASH"), label);
                 break;
             case 1:
                 balance = get_vig();
-                label = "VIG";
+                load_f_string(F("LOAN"), label);
                 break;
             case 2:
                 balance = get_house();
-                label = "HOUSE";
+                load_f_string(F("HOUSE"), label);
                 break;
             case 3:
                 balance = get_gang();
-                label = "GANG";
+                load_f_string(F("GANG"), label);
                 break;
             case 4:
                 balance = get_bank();
-                label = "BANK";
+                load_f_string(F("BANK"), label);
                 break;
             case 5:
                 balance = get_sum();
-                label = "SUM";
+                load_f_string(F("SUM"), label);
                 break;
         }
         sprintf(display_buffer, FSTR("%s $%s"), label, format_long(balance));

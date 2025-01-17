@@ -160,27 +160,27 @@ bool time_game(){
 
         // save the best result per mode
         bool new_best_per_mode = false;
-        const char *label;
+        char label[5];
         switch(mode){
             case MODE_FLASH:
                 if(mean < best_time1){
                     best_time1 = mean;
                     new_best_per_mode = true;
-                    label = "LEDS";
+                    load_f_string(F("LEDS"), label);
                 }
                 break;
             case MODE_SOUND:
                 if(mean < best_time2){
                     best_time2 = mean;
                     new_best_per_mode = true;
-                    label = "BEEP";
+                    load_f_string(F("BEEP"), label);
                 }
                 break;
             case MODE_VIBRATION:
                 if(mean < best_time3){
                     best_time3 = mean;
                     new_best_per_mode = true;
-                    label = "BUZZ";
+                    load_f_string(F("BUZZ"), label);
                 }
                 break;
         }
