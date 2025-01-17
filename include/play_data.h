@@ -40,6 +40,8 @@
 
 #define DEFAULT_VIG 0L
 
+#define DEFAULT_VIB_STR false
+
 // ##DATA add new defaults on play data reset above here
 
 
@@ -52,8 +54,11 @@ extern byte save_data_version;
 // Whether to play sounds
 extern bool option_sound;
 
-// Whether to use vibration feedback (future use)
+// Whether to use vibration feedback
 extern bool option_vibrate;
+
+// vibration strength true=hi false=lo
+extern bool option_vib_str;
 
 // Player's Cash
 extern long purse;
@@ -107,6 +112,7 @@ struct SavedData{
 	long gang;
 	unsigned long option_idle_time;
     long vig;
+    bool option_vib_str;
 
 	// ##DATA Add new persisted data types above here
 };
