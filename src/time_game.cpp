@@ -110,7 +110,7 @@ bool time_game(){
                         beep();
                         break;
                     case MODE_VIBRATION:
-                        vibrate();
+                        vibrate_raw(TIMEGAME_PULSES, TIMEGAME_MOTOR_ON, TIMEGAME_MOTOR_OFF);
                         break;
                 }
 

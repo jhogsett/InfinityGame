@@ -21,7 +21,7 @@ bool options_mode(){
 #define LABELS_HI_LO 9
 
 bool options_menu(){ // # optimize strings
-	const char *labels[] = {"Off", "On", "12H", "24H", "None", "SLP", "CLK", "5 M", "1 M", "HI", "LO"};
+	const char *labels[] = {"Off", "On", "12H", "24H", "None", "SLP", "CLK", "5 M", "1 M", "LO", "HI"};
 
 	int result = toggle_prompt(FSTR("SOUND   %s"), labels + LABELS_OFF_ON, option_sound ? 1 : 0, 3, 2);
 	if(result == -1)
@@ -41,8 +41,6 @@ bool options_menu(){ // # optimize strings
 		vibrate();
 	save_data();
 
-
-
 	result = toggle_prompt(FSTR("Vib. Str. %s"), labels + LABELS_HI_LO, option_vib_str ? 1 : 0, 3, 2);
 	if(result == -1)
 		return false;
@@ -51,9 +49,6 @@ bool options_menu(){ // # optimize strings
 	if(option_vibrate)
 		vibrate();
 	save_data();
-
-
-
 
 	result = toggle_prompt(FSTR("CLOCK   %s"), labels + LABELS_CLOCK, option_clock_24h ? 1 : 0, 3, 2);
 	if(result == -1)
