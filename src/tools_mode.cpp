@@ -34,13 +34,6 @@ bool tools_menu(){
 		return sleep_mode();
 	}
 
-	switch(button_led_prompt(FSTR("RESET    GO "))){
-	case -1:
-		return false;
-	case 3:
-		return reset_options();
-	}
-
 #ifdef ENABLE_TEST_FEATURES
 	switch(button_led_prompt(FSTR("TEST     GO "))){
 	case -1:
@@ -65,6 +58,13 @@ bool tools_menu(){
 		return false;
 	case 3:
 		return display_balances();
+	}
+
+	switch(button_led_prompt(FSTR("RESET    GO "))){
+	case -1:
+		return false;
+	case 3:
+		return reset_options();
 	}
 
 	return false;
