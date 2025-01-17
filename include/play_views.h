@@ -17,6 +17,7 @@
 // number of times to show player's jackpot win (or effective time of display if no scroll needed)
 #define JACKPOT_SHOW_TIMES 2
 
+extern bool display_scores();
 extern bool display_balances();
 extern void display_purse();
 // extern void display_bank();

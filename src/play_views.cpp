@@ -7,7 +7,34 @@
 #include "prompts.h"
 #include "utils.h"
 
-// TODO refactor
+bool display_scores(){
+    unsigned long score;
+    char label[5];
+	char time_display[15];
+    for(int i = 0; i < 3; i++){
+        switch(i){
+            case 0:
+                score = best_time1;
+                load_f_string(F("LEDS"), label);
+                break;
+            case 1:
+                score = best_time2;
+                load_f_string(F("BEEP"), label);
+                break;
+            case 2:
+                score = best_time3;
+                load_f_string(F("BUZZ"), label);
+                break;
+        }
+		micros_to_ms(time_display, score);
+        sprintf(display_buffer, FSTR("%s SCORE %s ms"), label, time_display);
+        title_prompt(display_buffer, BALANCES_SHOW_TIMES, false, BALANCES_SHOW_DELAY);
+    }
+    return false;
+}
+
+
+
 bool display_balances(){
     long balance;
     char label[6];

@@ -60,6 +60,14 @@ bool tools_menu(){
 		return display_balances();
 	}
 
+	switch(button_led_prompt(FSTR("SCORES   GO "))){
+	case -1:
+	case 0:
+		return false;
+	case 3:
+		return display_scores();
+	}
+
 	switch(button_led_prompt(FSTR("RESET    GO "))){
 	case -1:
 		return false;
