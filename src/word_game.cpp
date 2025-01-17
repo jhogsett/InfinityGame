@@ -268,7 +268,7 @@ bool word_game(){
 			case -1:
 				// timed out or long press
 				// refund their bet
-				add_to_purse(WORD_GAME_PLAY_BET);
+				add_to_purse(house_payout(WORD_GAME_PLAY_BET));
 				save_data();
 				return false;
 			case 0:
