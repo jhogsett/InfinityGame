@@ -15,7 +15,7 @@
 
 byte choice1, choice2, choice3;
 
-bool run_slot_reel(HT16K33Disp * disp, unsigned long time, char * text, char **words, byte &choice){
+bool run_slot_reel(HT16K33Disp * disp, unsigned long time, char * text, const char **words, byte &choice){
 	bool running = disp->loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME);
 	if(!running){
 		randomizer.randomize();
@@ -25,7 +25,7 @@ bool run_slot_reel(HT16K33Disp * disp, unsigned long time, char * text, char **w
 	return running;
 }
 
-void slots_round(char * text, char **words){
+void slots_round(char * text, const char **words){
 	disp1.begin_scroll_loop(1);
 	disp2.begin_scroll_loop(2);
 	disp3.begin_scroll_loop(3);
@@ -93,7 +93,7 @@ bool slots_game(){
 			break;
 	}
 
-	char **words = rude ? rude_words : nice_words;
+	const char **words = rude ? rude_words : nice_words;
 	char text[REEL_BUFFER_LEN];
 	sprintf(text,
             FSTR("    %s  %s  %s  %s  %s  %s  %s  %s  %s  %s"),
