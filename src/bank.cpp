@@ -99,6 +99,7 @@ long use_purse(long money){
 	unsigned long time;
 	while((time = millis()) < crime_wave_timeout)
 		button_leds.step(time);
+	button_leds.deactivate_leds();
 	crime_wave = false;
 
 	if(total_loan){
