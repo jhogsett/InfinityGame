@@ -23,7 +23,7 @@ void button_pressed_i(){
 }
 
 // use in conjunction with the ISR
-bool button_pressed(){
+bool button_pressed(bool show_leds){
 	// do nothing if no button has been presssed according to the ISR
     if(!button_states[ANY_COLOR_ID])
 		return false;
@@ -58,6 +58,11 @@ bool button_pressed(){
 	// save the validated button states
 	for(int i = 0; i < NUM_BUTTONS; i++)
 		validated_button_states[i] = saved_button_states[i];
+
+	// show the pressed button LED now before the quiet period
+	// otherwise the absense of the panel LED is noticeable
+	if(show_leds)
+		all_leds.activate_leds(button_states, true);
 
     delay(QUIET_PERIOD);
 
@@ -97,7 +102,7 @@ int wait_on_long_press(){
 
 // returns 0 on long press, -1 if no button pressed, otherwise validated button ID
 int handle_long_press(bool show_leds){
-	if (button_pressed()) {
+	if (button_pressed(show_leds)) {
 		if(show_leds)
 			all_leds.activate_leds(button_states, true);
 		int long_press_state;
