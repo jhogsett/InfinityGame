@@ -15,9 +15,9 @@
 #define MODE_SOUND 1
 #define MODE_VIBRATION 2
 
-#define TIMEGAME_MOTOR_ON 8
-#define TIMEGAME_MOTOR_OFF 8
-#define TIMEGAME_PULSES 4
+#define TIMEGAME_MOTOR_ON 12
+#define TIMEGAME_MOTOR_OFF 12
+#define TIMEGAME_PULSES 6
 
 extern bool time_game();
 
