@@ -11,7 +11,7 @@ typedef bool (*boolFuncPtr)(void);
 // number of times to show home billboard "InfinityGame" (effectively time of display because no scroll needed)
 #define HOME_TIMES 5
 // blacking time between billboards
-#define BLANKING_TIME 300
+#define BLANKING_TIME 500
 
 // Prompt related
 // number of times to show a title, such as a game title (or effective time of display if no scroll needed)
