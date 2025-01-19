@@ -5,7 +5,7 @@
 #define NUM_WORDS 10
 #define WORD_WIDTH 4
 
-extern char *rude_words[];
-extern char *nice_words[];
+extern const char *rude_words[];
+extern const char *nice_words[];
 
 #endif

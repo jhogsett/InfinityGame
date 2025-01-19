@@ -17,7 +17,9 @@
 #define BANK_STEAL_MIN (100000L / MONEY_BASIS)
 #define HOUSE_STEAL_MIN (100000L / MONEY_BASIS)
 #define PURSE_STEAL_MIN (25000L / MONEY_BASIS)
-#define GANG_LOAN_CUT 2
+
+// for self-doc but code only works if this is set to 2
+#define VIG_DIVISOR 2L
 
 #define ALERT_SHOW_TIME 1000
 #define MINIMUM_CRIME_WAVE_TIME 2000
@@ -25,10 +27,12 @@
 extern bool crime_wave;
 extern unsigned long crime_wave_started;
 
+extern long get_sum();
 extern long get_bank();
 extern long get_house();
 extern long get_purse();
 extern long get_gang();
+extern long get_vig();
 
 // returns amount deposited
 extern long bank_deposit(long money);

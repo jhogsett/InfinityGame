@@ -14,11 +14,11 @@
 byte timer_hour, timer_minute, timer_second;
 
 void render_timer_string(byte seconds, byte minutes, byte hours, bool running) {
-	const char *indicator;
+	char indicator[5];
 	if (running)
-		indicator = "STOP";
+        load_f_string(F("STOP"), indicator);
 	else
-		indicator = "RUN ";
+        load_f_string(F("RUN"), indicator);
 
 	if (timer_hour < 1)
 		sprintf(display_buffer, FSTR("%s %02d %02d  "), indicator, timer_minute, timer_second);

@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "buffers.h"
+#include "play_data.h"
 #include "utils.h"
 
 char * load_f_string(const __FlashStringHelper* f_string, char *override_buffer){
@@ -8,10 +9,14 @@ char * load_f_string(const __FlashStringHelper* f_string, char *override_buffer)
 }
 
 void micros_to_ms(char * buffer, unsigned long micros){
-	unsigned int ms_dec, ms_frac;
-	ms_dec = micros / 1000;
-	ms_frac = micros % 1000;
-	sprintf(buffer, FSTR("%u.%04u"), ms_dec, ms_frac);
+	if(micros == DEFAULT_TIME){
+		load_f_string(F("0.0000"), buffer);
+	} else {
+        unsigned int ms_dec, ms_frac;
+        ms_dec = micros / 1000;
+        ms_frac = micros % 1000;
+        sprintf(buffer, FSTR("%u.%04u"), ms_dec, ms_frac);
+    }
 }
 
 long time_to_seconds(byte second, byte minute, byte hour) {

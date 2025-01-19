@@ -25,8 +25,8 @@
 
 extern byte choice1, choice2, choice3;
 
-extern bool run_slot_reel(HT16K33Disp * disp, unsigned long time, char * text, char **words, byte &choice);
-extern void slots_round(char * text, char **words);
+extern bool run_slot_reel(HT16K33Disp * disp, unsigned long time, char * text, const char **words, byte &choice);
+extern void slots_round(char * text, const char **words);
 extern bool triple_word_chosen();
 extern bool double_word_chosen();
 extern bool special_word_chosen();

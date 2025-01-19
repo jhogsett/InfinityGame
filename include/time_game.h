@@ -11,6 +11,14 @@
 // in MONEY_BASIS units
 #define TIME_WIN (1000L / MONEY_BASIS)
 
+#define MODE_FLASH 0
+#define MODE_SOUND 1
+#define MODE_VIBRATION 2
+
+#define TIMEGAME_MOTOR_ON 12
+#define TIMEGAME_MOTOR_OFF 12
+#define TIMEGAME_PULSES 6
+
 extern bool time_game();
 
 #endif

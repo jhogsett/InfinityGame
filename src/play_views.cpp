@@ -7,14 +7,76 @@
 #include "prompts.h"
 #include "utils.h"
 
-void display_purse(){
-	sprintf(display_buffer, FSTR("CASH $%s"), format_long(get_purse()));
-	title_prompt(display_buffer, CASH_SHOW_TIMES, false, CASH_SHOW_DELAY);
+bool display_scores(){
+    unsigned long score;
+    char label[5];
+	char time_display[15];
+    for(int i = 0; i < 3; i++){
+        switch(i){
+            case 0:
+                score = best_time1;
+                load_f_string(F("LEDS"), label);
+                break;
+            case 1:
+                score = best_time2;
+                load_f_string(F("BEEP"), label);
+                break;
+            case 2:
+                score = best_time3;
+                load_f_string(F("BUZZ"), label);
+                break;
+        }
+		micros_to_ms(time_display, score);
+        sprintf(display_buffer, FSTR("%s SCORE %s ms"), label, time_display);
+        title_prompt(display_buffer, BALANCES_SHOW_TIMES, false, BALANCES_SHOW_DELAY);
+    }
+    return false;
 }
 
-void display_win(unsigned long win){
+bool display_balances(){
+    long balance;
+    char label[6];
+    for(int i = 0; i < 6; i++){
+        switch(i){
+            case 0:
+                balance = get_purse();
+                load_f_string(F("CASH"), label);
+                break;
+            case 1:
+                balance = get_vig();
+                load_f_string(F("LOAN"), label);
+                break;
+            case 2:
+                balance = get_house();
+                load_f_string(F("HOUSE"), label);
+                break;
+            case 3:
+                balance = get_gang();
+                load_f_string(F("GANG"), label);
+                break;
+            case 4:
+                balance = get_bank();
+                load_f_string(F("BANK"), label);
+                break;
+            case 5:
+                balance = get_sum();
+                load_f_string(F("SUM"), label);
+                break;
+        }
+        sprintf(display_buffer, FSTR("%s $%s"), label, format_long(balance));
+        title_prompt(display_buffer, BALANCES_SHOW_TIMES, false, BALANCES_SHOW_DELAY);
+    }
+    return false;
+}
+
+void display_purse(int delay){
+	sprintf(display_buffer, FSTR("CASH $%s"), format_long(get_purse()));
+	title_prompt(display_buffer, CASH_SHOW_TIMES, false, delay || CASH_SHOW_DELAY);
+}
+
+void display_win(unsigned long win, int delay){
 	sprintf(display_buffer, FSTR("*WIN $%s"), format_long(win));
-	title_prompt(display_buffer, WIN_SHOW_TIMES, true, ROUND_DELAY);
+	title_prompt(display_buffer, WIN_SHOW_TIMES, true, delay || WIN_SHOW_DELAY);
 }
 
 void display_jackpot(unsigned long win){

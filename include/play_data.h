@@ -2,6 +2,7 @@
 #define __PLAY_DATA_H
 
 #include <Arduino.h>
+#include "idle_mode.h"
 
 // when adding new persisted play data, search for ##DATA
 
@@ -22,19 +23,26 @@
 // All bets are paid to the house
 // All payouts are from the house
 // The house draws money from the bank when needed
-#define DEFAULT_HOUSE (0L / MONEY_BASIS)
+#define DEFAULT_HOUSE (1000000L / MONEY_BASIS)
 
 // The gang robs money from the bank
 // Player cash comes from the gang
-#define DEFAULT_GANG (10000L / MONEY_BASIS)
+#define DEFAULT_GANG (100000L / MONEY_BASIS)
 
 // the longest possible count of milliseconds
 #define DEFAULT_TIME ((unsigned long)-1)
 
+// default idle mode
+#define DEFAULT_IDLE_MODE IDLE_MODE_CLOCK
+
 // default milliseconds until device goes into idle mode
 #define DEFAULT_IDLE_TIME (5L * 60L * 1000L)
 
-// ##DATA add new defaults on play data reset here
+#define DEFAULT_VIG 0L
+
+#define DEFAULT_VIB_STR false
+
+// ##DATA add new defaults on play data reset above here
 
 
 // Display time for interstitial displays during games
@@ -46,8 +54,11 @@ extern byte save_data_version;
 // Whether to play sounds
 extern bool option_sound;
 
-// Whether to use vibration feedback (future use)
+// Whether to use vibration feedback
 extern bool option_vibrate;
+
+// vibration strength true=hi false=lo
+extern bool option_vib_str;
 
 // Player's Cash
 extern long purse;
@@ -58,8 +69,8 @@ extern unsigned long best_time;
 // Whether to display 12 or 24 hour time
 extern bool option_clock_24h;
 
-// Whether to show the clock or sleep mode on idle
-extern bool option_clock_on_idle;
+// mode when mode none, sleep, clock
+extern byte option_idle_mode;
 
 // Current bank
 extern unsigned long bank;
@@ -78,6 +89,9 @@ extern long gang;
 // Idle Time in milliseconds
 extern unsigned long option_idle_time;
 
+// Current vig
+extern long vig;
+
 // ##DATA Add 'extern's for new persisted play data veriables here
 
 
@@ -89,7 +103,7 @@ struct SavedData{
 	unsigned long purse;
 	unsigned long best_time;
 	bool option_clock_24h;
-	bool option_clock_on_idle;
+	byte option_idle_mode;
 	unsigned long bank;
 	unsigned long best_time1;
 	unsigned long best_time2;
@@ -97,8 +111,10 @@ struct SavedData{
 	long house;
 	long gang;
 	unsigned long option_idle_time;
+    long vig;
+    bool option_vib_str;
 
-	// ##DATA Add new persisted data types here
+	// ##DATA Add new persisted data types above here
 };
 
 extern void load_save_data();

@@ -1,66 +1,29 @@
-do something on early press in tg
-
-gang loan on starup if no cash
-
-show panel led on long press acceptance like buzz until unpressed
-
-word game:
--- nX bonus for runs of wins
-
-"+ .05"
-
-show moves in word game to explain wins
-option to show extra billboard details (house,bank,gang)
-
-word game:
--- nX bonus for runs of wins
-
-
-start out showing only the word's letters and blanks/underscores then keep adding more letters
-
-
-save data after each set option in case of early exit
-
-
 long press from tools set somestimes goes directly to game menu
-
 
 ability to scroll off a display (and scroll on, like inserting 12 spaces before or after)
 also scroll in the other direction (for short strings)
 
-
-have a reels prompt that plays the game automatically
-
-
-money units could be $5 instead of $1 to expand range of signed long by 5X
-- whenever used for display, divide by 5
-
-
-
-made libs
+mad libs
 
 time game choose a color and the average is stored with it, allowing for three profiles
 
-// have segments disappear randomly or go into place randomly
+have segments disappear randomly or go into place randomly
 
-// keep timer running in the background
-	// save and restore a timer basis when it's started
+keep timer running in the background
+	save and restore a timer basis when it's started
 
-// if title show times < 3 doesn't show it
+if title show times < 3 doesn't show it
 
-// last frame of scroll animation seems to skip ahead 1
+last frame of scroll animation seems to skip ahead 1
 
-// tests - button closure time while pressed, glitchyness etc., timing of millis
+tests - button closure time while pressed, glitchyness etc., timing of millis
 
-// setting for clock speed
-// it's losing about 2 seconds a day, might be able to tweak the daily clock basis
+setting for clock speed
+it's losing about 2 seconds a day, might be able to tweak the daily clock basis
 
-// the clock should look different in idle mode so you know it's ok not to use a long press (or in idle mode long press to exit)
+the clock should look different in idle mode so you know it's ok not to use a long press (or in idle mode long press to exit)
 
-// add lm34
-// option to show temp instead of seconds for clock
-// option for c or f
+add lm34
+option to show temp instead of seconds for clock
+option for c or f
 
-options for timeout time
-- prompt timeouts
-- idle timeouts

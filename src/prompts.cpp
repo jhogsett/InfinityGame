@@ -13,7 +13,7 @@
 #include "utils.h"
 
 BillboardsHandler billboards_handler(display_buffer, NUM_BILLBOARDS, (const char **)templates, BLANKING_TIME, HOME_TIMES, false, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
-char *billboard_data[NUM_BILLBOARDS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+char *billboard_data[NUM_BILLBOARDS] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
 void run_billboard(char **data) {
 	unsigned long time = millis();
@@ -31,33 +31,37 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 	panel_leds.begin(time, BILLBOARD_PANEL_LEDS_STYLE, BILLBOARD_PANEL_LEDS_SHOW_TIME, BILLBOARD_PANEL_LEDS_BLANK_TIME);
 
 	char cash_display[20];
-	char house_display[20];
-	char bank_display[20];
-	char gang_display[20];
+	char vig_display[20];
+	// char house_display[20];
+	// char bank_display[20];
+	// char gang_display[20];
 	char time_display[15];
 
 	strcpy(cash_display, format_long(get_purse()));
-	strcpy(house_display, format_long(get_house()));
-	strcpy(bank_display, format_long(get_bank()));
-	strcpy(gang_display, format_long(get_gang()));
+	strcpy(vig_display, format_long(get_vig()));
+	// strcpy(house_display, format_long(get_house()));
+	// strcpy(bank_display, format_long(get_bank()));
+	// strcpy(gang_display, format_long(get_gang()));
 
-	if(best_time == DEFAULT_TIME){
-		load_f_string(F("0.0000"), time_display);
+	// if(best_time == DEFAULT_TIME){
+	// 	load_f_string(F("0.0000"), time_display);
 
-	} else {
+	// } else {
 		micros_to_ms(time_display, best_time);
-	}
+	// }
 
 	billboard_data[BILLBOARD_CASH] = cash_display;
 	billboard_data[BILLBOARD_TIME] = time_display;
-	billboard_data[BILLBOARD_HOUSE] = house_display;
-	billboard_data[BILLBOARD_BANK] = bank_display;
-	billboard_data[BILLBOARD_GANG] = gang_display;
+	billboard_data[BILLBOARD_VIG] = vig_display;
+	// billboard_data[BILLBOARD_HOUSE] = house_display;
+	// billboard_data[BILLBOARD_BANK] = bank_display;
+	// billboard_data[BILLBOARD_GANG] = gang_display;
 
 	// run the billboard while waiting for user to unpress button
 	while (button_still_pressed()){
 		run_billboard(billboard_data);
 	}
+    reset_buttons_state();
 
 	while ((time = millis()) < idle_timeout) {
 		run_billboard(billboard_data);
@@ -105,6 +109,7 @@ int button_led_prompt(const char * prompt, const bool *states) {
 	while (button_still_pressed()){
 		display.loop_scroll_string(millis(), prompt, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
 	}
+    reset_buttons_state();
 
 	while ((time = millis()) < timeout_time) {
 		display.loop_scroll_string(time, prompt, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
@@ -142,6 +147,7 @@ bool title_prompt(const char * title, byte times, bool show_panel_leds, int show
 		if (show_panel_leds)
 			panel_leds.step(time);
 	}
+    reset_buttons_state();
 
 	// breaking out of the loop is handled by the display call
 	while ((time = millis()) < idle_timeout) {
@@ -173,7 +179,7 @@ bool title_prompt(const char * title, byte times, bool show_panel_leds, int show
 
 			int button_id;
 			if((button_id = handle_long_press()) != -1){
-				if (show_panel_leds)
+				if(show_panel_leds)
 					panel_leds.deactivate_leds();
 
 				if(button_id == 0)
@@ -183,6 +189,10 @@ bool title_prompt(const char * title, byte times, bool show_panel_leds, int show
 			}
 		}
 	}
+
+    if(show_panel_leds){
+        panel_leds.deactivate_leds();
+    }
 
 	return false;
 }
