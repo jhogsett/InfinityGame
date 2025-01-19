@@ -19,7 +19,7 @@ bool time_game(){
 
     int mode = MODE_FLASH;
 	const char *labels[] = {"LEDS", "BEEP", "BUZZ"};
-	mode = toggle_prompt(FSTR("Stimul.  %s"), labels, mode, 3, 3);
+	mode = toggle_prompt(FSTR("Choose  %s"), labels, mode, 3, 3);
     if(mode == -1)
         return false;
 
@@ -204,11 +204,12 @@ bool time_game(){
             display_purse();
 
             save_data();
-        } else {
-            micros_to_ms(copy_buffer, best_time);
-            sprintf(display_buffer, FSTR("Overall Best %s ms"), copy_buffer);
-            title_prompt(display_buffer, 1, false, ROUND_DELAY);
         }
+		// else {
+        //     micros_to_ms(copy_buffer, best_time);
+        //     sprintf(display_buffer, FSTR("Overall Best %s ms"), copy_buffer);
+        //     title_prompt(display_buffer, 1, false, ROUND_DELAY);
+        // }
     }
 
 	return false;
