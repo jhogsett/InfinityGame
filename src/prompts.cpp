@@ -61,6 +61,7 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 	while (button_still_pressed()){
 		run_billboard(billboard_data);
 	}
+    reset_buttons_state();
 
 	while ((time = millis()) < idle_timeout) {
 		run_billboard(billboard_data);
@@ -108,6 +109,7 @@ int button_led_prompt(const char * prompt, const bool *states) {
 	while (button_still_pressed()){
 		display.loop_scroll_string(millis(), prompt, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
 	}
+    reset_buttons_state();
 
 	while ((time = millis()) < timeout_time) {
 		display.loop_scroll_string(time, prompt, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
@@ -145,6 +147,7 @@ bool title_prompt(const char * title, byte times, bool show_panel_leds, int show
 		if (show_panel_leds)
 			panel_leds.step(time);
 	}
+    reset_buttons_state();
 
 	// breaking out of the loop is handled by the display call
 	while ((time = millis()) < idle_timeout) {

@@ -126,6 +126,8 @@ int handle_long_press(bool show_leds){
 }
 
 void reset_buttons_state(){
-	for(int i = 0; i < NUM_BUTTONS; i++)
+	for(int i = 0; i < NUM_BUTTONS; i++){
 		button_states[i] = false;
+        validated_button_states[i] = false;
+    }
 }

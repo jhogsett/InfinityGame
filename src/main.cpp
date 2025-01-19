@@ -72,6 +72,5 @@ bool main_menu(){
 
 void loop()
 {
-	while(button_pressed());
 	billboard_prompt(idle_mode, main_menu, options_mode);
 }
