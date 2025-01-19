@@ -33,8 +33,6 @@ bool display_scores(){
     return false;
 }
 
-
-
 bool display_balances(){
     long balance;
     char label[6];
@@ -71,14 +69,14 @@ bool display_balances(){
     return false;
 }
 
-void display_purse(){
+void display_purse(int delay){
 	sprintf(display_buffer, FSTR("CASH $%s"), format_long(get_purse()));
-	title_prompt(display_buffer, CASH_SHOW_TIMES, false, CASH_SHOW_DELAY);
+	title_prompt(display_buffer, CASH_SHOW_TIMES, false, delay || CASH_SHOW_DELAY);
 }
 
-void display_win(unsigned long win){
+void display_win(unsigned long win, int delay){
 	sprintf(display_buffer, FSTR("*WIN $%s"), format_long(win));
-	title_prompt(display_buffer, WIN_SHOW_TIMES, true, ROUND_DELAY);
+	title_prompt(display_buffer, WIN_SHOW_TIMES, true, delay || WIN_SHOW_DELAY);
 }
 
 void display_jackpot(unsigned long win){

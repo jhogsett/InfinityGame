@@ -138,12 +138,13 @@ int choose_word(bool rude){
 // returns -2 if player exceeds maximum moves
 int word_game_round(bool rude){
 	int instruction_times = new_game ? CONTROLS_SHOW_TIMES : 1;
+    int instruction_delay = new_game ? ROUND_DELAY : INSTRUCTIONS_SHOW_DELAY;
 	int instruction_show_leds = new_game;
 	sprintf(display_buffer, FSTR("ROL FLIP ROR"));
 	if(title_prompt(display_buffer,
 					instruction_times,
 					instruction_show_leds,
-					ROUND_DELAY,
+					instruction_delay,
 					TITLE_PANEL_LEDS_STYLE2,
 					TITLE_PANEL_LEDS_SHOW_TIME2,
 					TITLE_PANEL_LEDS_BLANK_TIME2))
@@ -292,17 +293,17 @@ bool word_game(){
                 }
 
 				if(win > 0){
-					display_win(win);
+					display_win(win, WG_WIN_SHOW_DELAY);
 					streak++;
 				}
 
 				add_to_purse(house_payout(win));
                 save_data();
-                display_purse();
+                display_purse(WG_WIN_SHOW_DELAY);
 
 				if(streak > MIN_STREAK_ACTIVATION){
                     unsigned long bonus = 1L << (long)((streak - STREAK_OFFSET) - 1);
-					sprintf(display_buffer, FSTR("%3ldX BONUS"), format_long(bonus));
+					sprintf(display_buffer, FSTR("%3sX BONUS"), format_long(bonus, 1));
 					title_prompt(display_buffer, BONUS_SHOW_TIMES, true, BONUS_SHOW_DELAY);
 				}
 
