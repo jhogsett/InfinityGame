@@ -287,7 +287,7 @@ bool word_game(){
 				// apply the current streak bonus before showing next activation
 				if(streak > MIN_STREAK_ACTIVATION){
 					// win *= (streak - STREAK_OFFSET);
-                    unsigned long bonus = 1 << ((streak - STREAK_OFFSET) - 1);
+                    unsigned long bonus = 1L << (long)((streak - STREAK_OFFSET) - 1);
                     win *= bonus;
                 }
 
@@ -301,7 +301,7 @@ bool word_game(){
                 display_purse();
 
 				if(streak > MIN_STREAK_ACTIVATION){
-                    unsigned long bonus = 1 << ((streak - STREAK_OFFSET) - 1);
+                    unsigned long bonus = 1L << (long)((streak - STREAK_OFFSET) - 1);
 					sprintf(display_buffer, FSTR("%3ldX BONUS"), bonus);
 					title_prompt(display_buffer, BONUS_SHOW_TIMES, true, BONUS_SHOW_DELAY);
 				}
