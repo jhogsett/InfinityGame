@@ -302,7 +302,7 @@ bool word_game(){
 
 				if(streak > MIN_STREAK_ACTIVATION){
                     unsigned long bonus = 1L << (long)((streak - STREAK_OFFSET) - 1);
-					sprintf(display_buffer, FSTR("%3ldX BONUS"), bonus);
+					sprintf(display_buffer, FSTR("%3ldX BONUS"), format_long(bonus));
 					title_prompt(display_buffer, BONUS_SHOW_TIMES, true, BONUS_SHOW_DELAY);
 				}
 
@@ -311,7 +311,7 @@ bool word_game(){
 
 		if(streak == -1){
 			streak = 0;
-			title_prompt(load_f_string(F(" BONUS OVER"), display_buffer), BONUS_SHOW_TIMES, false, BONUS_SHOW_DELAY);
+			title_prompt(load_f_string(F(" BONUS GONE"), display_buffer), BONUS_SHOW_TIMES, false, BONUS_SHOW_DELAY);
 		}
 	}
 	return false;
