@@ -166,7 +166,7 @@ int word_game_round(bool rude){
 	while((time = millis()) < idle_timeout){
 		format_scamble_word_display(display_buffer);
 		const bool states[] = {false, true, true, true};
-		switch(button_led_prompt(display_buffer, states)){
+		switch(button_led_prompt(display_buffer, states, true)){
 			case -1:
 				return -1;
 			case 0:
@@ -224,7 +224,9 @@ bool word_game(){
 	const bool buttons[] = {false, true, false, true};
 	switch(button_led_prompt(FSTR("NICE or RUDE"), buttons)){
 	case -1:
+        // timeout
 	case 0:
+        // long press
 		return false;
 	case 1:
 		rude = false;

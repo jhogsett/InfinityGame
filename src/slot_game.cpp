@@ -119,9 +119,10 @@ bool slots_game(){
 
 		sprintf(display_buffer, FSTR("BET %s Back"), standard_bet_str(current_bet));
 		const bool states[] = {false, true, false, false};
-		int response = button_led_prompt(display_buffer, states);
+		int response = button_led_prompt(display_buffer, states, true);
 		switch(response){
 			case -1:
+                // timeout
 				return false;
 			case 0:
 				// long press
