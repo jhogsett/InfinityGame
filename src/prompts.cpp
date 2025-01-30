@@ -94,14 +94,15 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 
 // prompt with text and cycle waiting for a button response
 // returns -1=timed out, 0=long press, button ID otherwise
-int button_led_prompt(const char * prompt, const bool *states) {
+int button_led_prompt(const char * prompt, const bool *states, bool use_idle_timeout) {
 	if (states)
 		button_leds.activate_leds(states);
 	else
 		all_leds.deactivate_leds(true);
 
 	unsigned long time;
-	unsigned long timeout_time = millis() + PROMPT_TIMEOUT;
+    unsigned long timeout = use_idle_timeout ? option_idle_time : PROMPT_TIMEOUT;
+	unsigned long timeout_time = millis() + timeout;
 
 	display.begin_scroll_loop();
 
@@ -130,6 +131,9 @@ int button_led_prompt(const char * prompt, const bool *states) {
 // show_panel_leds = true to have them cycle
 // show_delay = ensure delay between multiple titles
 // returns true if long-pressed
+// uses the idle timeout instead of the prompt timeout because:
+// - not expected to timeout since it should quit after it finishes displaying
+// - in any event it should not display forever
 bool title_prompt(const char * title, byte times, bool show_panel_leds, int show_delay, int leds_style, int leds_show_time, int leds_blank_time) {
 	unsigned long time = millis();
 	unsigned long idle_timeout = time + option_idle_time;
@@ -229,12 +233,13 @@ int panel_led_prompt(){
 
 // TODO button_led_prompt() blocks, so the loop here might not be needed (would be if there were LEDS or the display to run here)
 // returns the bool returned by the event handler function or false
-bool branch_prompt(const char * prompt, boolFuncPtr on_option_1, boolFuncPtr on_option_2, boolFuncPtr on_option_3, boolFuncPtr on_long_press, const bool *states) {
-	unsigned long prompt_timeout = millis() + PROMPT_TIMEOUT;
+bool branch_prompt(const char * prompt, boolFuncPtr on_option_1, boolFuncPtr on_option_2, boolFuncPtr on_option_3, boolFuncPtr on_long_press, const bool *states, bool use_idle_timeout) {
+    unsigned long timeout = use_idle_timeout ? option_idle_time : PROMPT_TIMEOUT;
+	unsigned long prompt_timeout = millis() + timeout;
 	unsigned long time;
 
 	while ((time = millis()) < prompt_timeout) {
-		int choice = button_led_prompt(prompt, states);
+		int choice = button_led_prompt(prompt, states, use_idle_timeout);
 		switch (choice) {
 			case -1:
 				break;
@@ -266,9 +271,10 @@ bool branch_prompt(const char * prompt, boolFuncPtr on_option_1, boolFuncPtr on_
 // returns -1 on timeout or long press, otherwise current choice
 // current_choice and return value are zero-based
 // toggle_position is one-based to be consistent with button states
-int toggle_prompt(const char * prompt, const char **labels, byte current_choice, byte toggle_position, byte num_choices) {
+int toggle_prompt(const char * prompt, const char **labels, byte current_choice, byte toggle_position, byte num_choices, bool use_idle_timeout) {
 	unsigned long time;
-	unsigned long prompt_timeout = millis() + PROMPT_TIMEOUT;
+    unsigned long timeout = use_idle_timeout ? option_idle_time : PROMPT_TIMEOUT;
+	unsigned long prompt_timeout = millis() + timeout;
 
 	while ((time = millis()) < prompt_timeout) {
 		sprintf(display_buffer, prompt, labels[current_choice]);
@@ -276,7 +282,7 @@ int toggle_prompt(const char * prompt, const char **labels, byte current_choice,
 		bool states[] = { false, false, false, false };
 		states[toggle_position] = true;
 
-		int choice = button_led_prompt(display_buffer, states);
+		int choice = button_led_prompt(display_buffer, states, use_idle_timeout);
 		if (choice == 0 || choice == -1)
 			return -1;
 
