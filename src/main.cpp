@@ -17,6 +17,8 @@
 #include "utils.h"
 #include "word_game.h"
 
+#include "morse.h"
+
 void setup_display(){
 	Wire.begin();
 	display.init(display_brightnesses);
@@ -58,11 +60,14 @@ void setup(){
 	attachInterrupt(digitalPinToInterrupt(ANY_BUTTON), button_pressed_i, RISING);
 	button_states[ANY_COLOR_ID] = false;
 
+    send_morse("Infinity Game", 25);
+
 	if(option_sound)
 		beep();
 
 	if(option_vibrate)
 		vibrate();
+
 }
 
 bool main_menu(){
