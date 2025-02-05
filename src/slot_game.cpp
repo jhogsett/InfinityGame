@@ -67,7 +67,8 @@ bool jackpot_words_chosen(byte word1, byte word2, byte word3){
 }
 
 bool slots_game(){
-	title_prompt(FSTR("Silly Slots"), TITLE_SHOW_TIMES, true);
+	if(title_prompt(FSTR("Silly Slots"), TITLE_SHOW_TIMES, true))
+        return false;
 
 	randomizer.randomize();
 	byte jackpot_choice1 = random(NUM_WORDS);

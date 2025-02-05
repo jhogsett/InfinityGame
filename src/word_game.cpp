@@ -218,7 +218,8 @@ bool word_game(){
 	// reset this flag to show extra instruction on the first play
 	new_game = true;
 
-	title_prompt(FSTR("The WordGame"), TITLE_SHOW_TIMES, true);
+	if(title_prompt(FSTR("The WordGame"), TITLE_SHOW_TIMES, true))
+        return false;
 
 	bool rude;
 	const bool buttons[] = {false, true, false, true};
