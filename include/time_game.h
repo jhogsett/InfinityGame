@@ -5,7 +5,7 @@
 #define MIN_DELAY 2500
 #define MAX_DELAY 5000
 // Number of time game rounds
-#define ROUNDS 3
+#define TIMEGAME_ROUNDS 3
 
 // Dollars won by beating the curernt time
 // in MONEY_BASIS units

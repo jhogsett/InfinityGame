@@ -39,6 +39,9 @@ bool time_game(){
 	sprintf(display_buffer, FSTR("Best Score %s ms"), copy_buffer);
 	title_prompt(display_buffer, 1, false, ROUND_DELAY);
 
+	sprintf(display_buffer, FSTR("%3d Rounds"), TIMEGAME_ROUNDS);
+	title_prompt(display_buffer, 1, false, ROUND_DELAY);
+
     unsigned long time = millis();
     unsigned long timeout_time = time + option_idle_time;
 
@@ -53,7 +56,7 @@ bool time_game(){
         delay(ROUND_DELAY);
 
         unsigned long mean = 0;
-        for(byte i = 0; i < ROUNDS; i++){
+        for(byte i = 0; i < TIMEGAME_ROUNDS; i++){
             delay(ROUND_DELAY);
             bool fault_protect = true;
             while(fault_protect){
@@ -153,7 +156,7 @@ bool time_game(){
 
         while(button_pressed());
 
-        mean /= ROUNDS;
+        mean /= TIMEGAME_ROUNDS;
         micros_to_ms(copy_buffer, mean);
         sprintf(display_buffer, FSTR("SCORE %s ms"), copy_buffer);
         title_prompt(display_buffer, 1, false, ROUND_DELAY);
