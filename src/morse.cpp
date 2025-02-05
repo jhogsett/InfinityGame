@@ -29,6 +29,7 @@ const unsigned char morsedata[] PROGMEM = {
     0b10011000, // X
     0b11011000, // Y
     0b00111000, // Z
+    0b11111100, // 0
     0b11110100, // 1
     0b11100100, // 2
     0b11000100, // 3
@@ -37,8 +38,7 @@ const unsigned char morsedata[] PROGMEM = {
     0b00001100, // 6
     0b10011100, // 7
     0b00111100, // 8
-    0b01111100, // 9
-    0b11111100 // 0
+    0b01111100  // 9
     };
 
 
@@ -99,7 +99,7 @@ void send_morse(char c, int time){
             offset = 0;
         }
         if(offset >= 0){
-            _send_morse(c - offset, time);
+            _send_morse(c + offset, time);
         }
     }
 }

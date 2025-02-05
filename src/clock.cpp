@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "buffers.h"
 #include "buttons.h"
+#include "chime.h"
 #include "displays.h"
 #include "leds.h"
 #include "play_data.h"
@@ -69,6 +70,8 @@ bool clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
 	unsigned long time = millis();
 	unsigned long idle_timeout = time + option_idle_time;
 
+    char last_chime_hour = -1;
+
 	// clock mode only times out if clock is the idle mode
 	while (true) {
 		if(settable)
@@ -79,6 +82,11 @@ bool clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
 
 		render_clock_string(clock_second, clock_minute, clock_hour);
 		display.show_string(display_buffer);
+
+        if(clock_second == 0 && clock_minute == 0 && clock_hour != last_chime_hour){
+            chime(clock_hour);
+            last_chime_hour = clock_hour;
+        }
 
 		int button_id;
 		if((button_id = handle_long_press()) != -1){
