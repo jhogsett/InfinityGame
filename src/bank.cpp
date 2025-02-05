@@ -38,17 +38,31 @@ long get_vig(){
 	return vig;
 }
 
+#ifdef SHOW_BANK_FLASHES
+void flash_led(int pin){
+    digitalWrite(pin, HIGH);
+    delay(TRANSACTION_FLASH_TIME);
+    digitalWrite(pin, LOW);
+}
+#endif
+
 // Bank operations
 
 // returns the amount deposited
 long bank_deposit(long money){
 	bank += money;
+#ifdef SHOW_BANK_FLASHES
+    flash_led(GREEN_PANEL_LED);
+#endif
 	return money;
 }
 
 // returns the amount withdrawn
 long bank_widthdrawl(long money){
 	bank -= money;
+#ifdef SHOW_BANK_FLASHES
+    flash_led(GREEN_PANEL_LED);
+#endif
 	return money;
 }
 
@@ -63,12 +77,18 @@ long bank_robbery(long min_money, long max_money){
 // returns the amount paid
 long pay_house(long money){
 	house += money;
+#ifdef SHOW_BANK_FLASHES
+    flash_led(AMBER_PANEL_LED);
+#endif
 	return money;
 }
 
 // returns the amount paid out
 long house_payout(long money){
 	house -= money;
+#ifdef SHOW_BANK_FLASHES
+    flash_led(AMBER_PANEL_LED);
+#endif
 
 	while(house < HOUSE_MINIMUM)
 		house += bank_widthdrawl(HOUSE_BANK_WITHDRAWL);
@@ -87,6 +107,9 @@ long burglarize_house(long min_money, long max_money){
 // returns the amount used
 long use_purse(long money){
 	purse -= money;
+#ifdef SHOW_BANK_FLASHES
+    flash_led(RED_PANEL_LED);
+#endif
 
 	long total_loan = 0;
 	while(purse + total_loan < PLAYER_MINIMUM)
@@ -134,6 +157,10 @@ long add_to_purse(long money){
         gang += cut;
     }
 	purse += money;
+#ifdef SHOW_BANK_FLASHES
+    flash_led(RED_PANEL_LED);
+#endif
+
 	return money;
 }
 
