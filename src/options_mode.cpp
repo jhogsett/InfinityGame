@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "buffers.h"
 #include "motor.h"
 #include "play_data.h"
 #include "prompts.h"
@@ -113,6 +114,9 @@ bool options_menu(){ // # optimize strings
             option_wpm = 5;
             break;
     }
+    sprintf(copy_buffer, FSTR("%d WPM"), option_wpm);
+    send_morse(copy_buffer);
+
 	save_data();
 
     // ##DATA add settings for new options above here
