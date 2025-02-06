@@ -21,6 +21,7 @@ unsigned long option_idle_time = DEFAULT_IDLE_TIME;
 long vig = DEFAULT_VIG;
 bool option_vib_str;
 byte option_clock_chime;
+byte option_wpm;
 
 // ##DATA Add new persisted play data veriables here
 
@@ -49,6 +50,7 @@ void load_save_data(){
     vig = saved_data.vig;
     option_vib_str = saved_data.option_vib_str;
     option_clock_chime = saved_data.option_clock_chime;
+    option_wpm = saved_data.option_wpm;
 
 	// ##DATA Load new persisted play data variables into memory here
 }
@@ -72,6 +74,7 @@ void save_data(){
     saved_data.vig = vig;
     saved_data.option_vib_str = option_vib_str;
     saved_data.option_clock_chime = option_clock_chime;
+    saved_data.option_wpm = option_wpm;
 
 	// ##DATA Store new persisted play data veriables in the persistent structure here
 
@@ -102,6 +105,7 @@ bool reset_options(){
     vig = DEFAULT_VIG;
     option_vib_str = DEFAULT_VIB_STR;
     option_clock_chime = DEFAULT_CLOCK_CHIME;
+    option_wpm = DEFAULT_WPM;
 
 	// ##DATA Reset new persisted play data veriables to default variables here
 

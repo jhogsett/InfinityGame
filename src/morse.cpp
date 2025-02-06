@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "play_data.h"
 #include "speaker.h"
 #include "morse.h"
 
@@ -43,12 +44,12 @@ const unsigned char morsedata[] PROGMEM = {
 
 
 void _send_dot(int time){
-    beep(BEEP_FREQUENCY, time * DOT_FACTOR);
+    beep(DEFAULT_MORSE_FREQ, time * DOT_FACTOR);
     delay(time * ELEMENT_SPACE_FACTOR);
 }
 
 void _send_dash(int time){
-    beep(BEEP_FREQUENCY, time * DASH_FACTOR);
+    beep(DEFAULT_MORSE_FREQ, time * DASH_FACTOR);
     delay(time * ELEMENT_SPACE_FACTOR);
 }
 
@@ -105,6 +106,8 @@ void send_morse(char c, int time){
 }
 
 void send_morse(const char *s, int wpm){
+    if(wpm == 0)
+        wpm = option_wpm;
     int time = MORSE_TIME_FROM_WPM(wpm);
     int l = strlen(s);
     for(int i = 0; i < l; i++){

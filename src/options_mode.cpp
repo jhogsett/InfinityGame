@@ -79,6 +79,42 @@ bool options_menu(){ // # optimize strings
 	option_clock_chime = result;
 	save_data();
 
+	const char *labels_wpm[] = {"13", "20", "35", "5"};
+    int option;
+    switch(option_wpm){
+        case 13:
+            option = 0;
+            break;
+        case 20:
+            option = 1;
+            break;
+        case 35:
+            option = 2;
+            break;
+        case 5:
+            option = 3;
+            break;
+    }
+	result = toggle_prompt(FSTR("WPM     %s"), labels_wpm, option, 3, 4);
+	if(result == -1)
+		return false;
+
+    switch(result){
+        case 0:
+            option_wpm = 13;
+            break;
+        case 1:
+            option_wpm = 20;
+            break;
+        case 2:
+            option_wpm = 35;
+            break;
+        case 3:
+            option_wpm = 5;
+            break;
+    }
+	save_data();
+
     // ##DATA add settings for new options above here
 
 	return false;

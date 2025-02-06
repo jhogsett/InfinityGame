@@ -3,8 +3,8 @@
 
 // empirically discovered loudest and most pleasant resonant frequency of the particular speaker used in the v2 PLA 3D printed cabinet
 // #define INV_FREQUENCY 339
-// F#6
-#define BEEP_FREQUENCY 1478
+// F6
+#define BEEP_FREQUENCY 1397
 
 // how many pulses to create a beep
 // #define BEEP_PULSES 90
