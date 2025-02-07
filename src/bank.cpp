@@ -60,6 +60,10 @@ long bank_deposit(long money){
 // returns the amount withdrawn
 long bank_widthdrawl(long money){
 	bank -= money;
+
+    if(bank < BANK_MINIMUM){
+        reset_bank();
+    }
 #ifdef SHOW_BANK_FLASHES
     flash_led(GREEN_PANEL_LED);
 #endif
@@ -71,6 +75,33 @@ long bank_robbery(long min_money, long max_money){
 	long take = random(min_money, max_money+1);
 	return bank_widthdrawl(take);
 }
+
+bool reset_bank(){
+    sprintf(display_buffer, FSTR("BANK INSOLVANT. RESETTING"));
+    title_prompt(display_buffer, 2);
+
+    for(int i = 10; i >= 0; i--){
+        sprintf(display_buffer, FSTR("%7d"), i);
+        beep();
+        title_prompt(display_buffer, 1, false, 500);
+        display.clear();
+        delay(500);
+    }
+
+	purse = DEFAULT_PURSE;
+	bank = DEFAULT_BANK;
+	house = DEFAULT_HOUSE;
+	gang = DEFAULT_GANG;
+    vig = DEFAULT_VIG;
+
+    // ##DATA Reset new persisted play data veriables to default variables here
+
+	save_data();
+
+	reset_device();
+	return false;
+}
+
 
 // House operations
 
@@ -110,6 +141,11 @@ long use_purse(long money){
 #ifdef SHOW_BANK_FLASHES
     flash_led(RED_PANEL_LED);
 #endif
+
+    if(purse < PLAYER_MINIMUM){
+        sprintf(display_buffer, FSTR("Seeking Cash"));
+        title_prompt(display_buffer, 1, false, ALERT_SHOW_TIME);
+    }
 
 	long total_loan = 0;
 	while(purse + total_loan < PLAYER_MINIMUM)

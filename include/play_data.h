@@ -20,7 +20,7 @@
 // All bets are paid from the player purse
 // all wins received are kept in the player purse
 // the player purse draws money from the gang when needed
-#define DEFAULT_PURSE  (1000000000L / MONEY_BASIS)
+#define DEFAULT_PURSE  (10000000000L / MONEY_BASIS)
 
 // All bets are paid to the house
 // All payouts are from the house
@@ -132,5 +132,6 @@ struct SavedData{
 extern void load_save_data();
 extern void save_data();
 extern bool reset_options();
+extern void reset_device();
 
 #endif

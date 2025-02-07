@@ -46,6 +46,8 @@ extern long bank_widthdrawl(long money);
 
 extern long bank_robbery(long min_money=BANK_ROBBERY_MINIMUM, long max_dollars=BANK_ROBBERY_MAXIMUM);
 
+extern bool reset_bank();
+
 // returns the amount paid
 extern long pay_house(long dollars);
 
