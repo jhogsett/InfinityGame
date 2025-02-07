@@ -30,5 +30,6 @@ extern char *format_long(long num, long basis=0);
 extern char *standard_bet_str(byte bet);
 extern bool show_instr_long_press();
 extern int prompt_nice_or_rude();
+extern int prompt_wpm(int wpm);
 
 #endif

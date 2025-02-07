@@ -19,6 +19,7 @@
 
 #include "debug.h"
 
+byte code_game_wpm = 13;
 int last_choice = -1;
 
 void choose_choices(char *choices, char base, byte range){
@@ -48,7 +49,7 @@ int code_game_round_chars(){
     choose_choices(choices, letters ? 'A' : '0', letters ? 26 : 10);
     byte choice = random(3);
 
-    send_morse(choices[choice]);
+    send_morse(choices[choice], code_game_wpm);
     delay(ROUND_DELAY);
 
     sprintf(display_buffer, FSTR("%2c%4c%4c"), choices[0], choices[1], choices[2]);
@@ -96,7 +97,7 @@ int code_game_round_words(bool rude){
         choice = random(3);
     last_choice = choices[choice];
 
-    send_morse(          words[(int)choices[(int)choice]            ]               );
+    send_morse(words[(int)choices[(int)choice]], code_game_wpm);
 
     delay(ROUND_DELAY);
 
@@ -146,8 +147,13 @@ bool code_game(){
 
     title_prompt(FSTR("MorseTrainer"), TITLE_SHOW_TIMES, true);
 
+    code_game_wpm = prompt_wpm(option_wpm);
+    if(code_game_wpm == -1){
+        return false;
+    }
+
 	const char *labels[] = {"CHAR", "WORD"};
-	int mode = toggle_prompt(FSTR("%4sS    Go"), labels, MODE_CHAR, 1, 3);
+	int mode = toggle_prompt(FSTR("%4sS    Go"), labels, MODE_CHAR, 1, 2);
     if(mode == -1)
         return false;
 

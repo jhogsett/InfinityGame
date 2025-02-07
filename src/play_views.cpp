@@ -154,3 +154,44 @@ int prompt_nice_or_rude(){
     }
     return rude ? 1 : 0;
 }
+
+// returns -1 on timeout or long press
+int prompt_wpm(int wpm){
+    const char *labels_wpm[] = {"13", "20", "35", "5"};
+    int option;
+    switch(wpm){
+        case 13:
+            option = 0;
+            break;
+        case 20:
+            option = 1;
+            break;
+        case 35:
+            option = 2;
+            break;
+        case 5:
+            option = 3;
+            break;
+    }
+
+    int result = toggle_prompt(FSTR("WPM     %s"), labels_wpm, option, 3, 4);
+    if(result == -1)
+        return -1;
+
+    switch(result){
+        case 0:
+            wpm = 13;
+            break;
+        case 1:
+            wpm = 20;
+            break;
+        case 2:
+            wpm = 35;
+            break;
+        case 3:
+            wpm = 5;
+            break;
+    }
+
+    return wpm;
+}
