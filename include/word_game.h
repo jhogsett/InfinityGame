@@ -28,11 +28,10 @@
 #define SHUFFLE_TIMES_MAX 9
 
 // in MONEY_BASIS units
-#define WORD_WIN_UNIT (100L / MONEY_BASIS)
+#define WORD_GAME_WIN_UNIT (100L / MONEY_BASIS)
 #define WORD_GAME_PLAY_BET (100L / MONEY_BASIS)
 
 #define WIN_IN_1_BONUS 10
-
 
 // activate streak bonus after two beats in a row
 #define MIN_STREAK_ACTIVATION 2

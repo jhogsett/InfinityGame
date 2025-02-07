@@ -20,7 +20,7 @@
 // All bets are paid from the player purse
 // all wins received are kept in the player purse
 // the player purse draws money from the gang when needed
-#define DEFAULT_PURSE  (1000L / MONEY_BASIS)
+#define DEFAULT_PURSE  (1000000000L / MONEY_BASIS)
 
 // All bets are paid to the house
 // All payouts are from the house

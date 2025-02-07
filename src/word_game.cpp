@@ -285,7 +285,7 @@ bool word_game(){
 				sprintf(display_buffer, FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word);
 				title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, SUCCESS_SHOW_DELAY);
 
-				win = (round_result) * (WORD_WIN_UNIT);
+				win = (round_result) * (WORD_GAME_WIN_UNIT);
 
 				// apply the current streak bonus before showing next activation
 				if(streak > MIN_STREAK_ACTIVATION){

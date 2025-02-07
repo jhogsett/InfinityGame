@@ -94,6 +94,7 @@ void billboard_prompt(boolFuncPtr on_time_out, boolFuncPtr on_press, boolFuncPtr
 
 // prompt with text and cycle waiting for a button response
 // returns -1=timed out, 0=long press, button ID otherwise
+// if use_idle_timeout is true, the idle timeout instead of the prompt timeout is used
 int button_led_prompt(const char * prompt, const bool *states, bool use_idle_timeout) {
 	if (states)
 		button_leds.activate_leds(states);

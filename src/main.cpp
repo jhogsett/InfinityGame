@@ -6,6 +6,7 @@
 #include "idle_mode.h"
 #include "led_handler.h"
 #include "leds.h"
+#include "morse.h"
 #include "motor.h"
 #include "options_mode.h"
 #include "play_data.h"
@@ -16,8 +17,6 @@
 #include "time_game.h"
 #include "utils.h"
 #include "word_game.h"
-
-#include "morse.h"
 
 void setup_display(){
 	Wire.begin();
@@ -60,7 +59,7 @@ void setup(){
 	attachInterrupt(digitalPinToInterrupt(ANY_BUTTON), button_pressed_i, RISING);
 	button_states[ANY_COLOR_ID] = false;
 
-    // send_morse("Infinity Game 69 42");
+    // send_morse("Infinity Game");
 
 	if(option_sound)
 		beep();
