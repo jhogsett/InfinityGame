@@ -186,7 +186,10 @@ bool code_game(){
                 return false;
             case 0:
                 win = 0;
-                streak = 0;
+                if(streak > MIN_STREAK_ACTIVATION)
+                    streak = -1;
+                else
+                    streak = 0;
                 break;
             case 1:
                 win = CODE_GAME_WIN_UNIT;
