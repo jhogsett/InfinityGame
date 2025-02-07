@@ -125,3 +125,32 @@ char *standard_bet_str(byte bet){
 	} else
 		return format_long(bet_amounts[bet]);
 }
+
+// returns true if long-pressed
+bool show_instr_long_press(){
+    sprintf(display_buffer, FSTR("LONG PRESS EXITS"));
+    return title_prompt(display_buffer, 1, false, ROUND_DELAY);
+}
+
+// returns 0 for nice, 1 for rude, -1 for timeout or long press
+int prompt_nice_or_rude(){
+    bool rude;
+    const bool buttons[] = {false, true, false, true};
+    switch(button_led_prompt(FSTR("NICE or RUDE"), buttons)){
+    case -1:
+        // timeout
+    case 0:
+        // long press
+        return -1;
+    case 1:
+        rude = false;
+        break;
+    case 2:
+        rude = random(2) == 0 ? true : false;
+        break;
+    case 3:
+        rude = true;
+        break;
+    }
+    return rude ? 1 : 0;
+}

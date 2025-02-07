@@ -220,33 +220,42 @@ bool word_game(){
 
 	title_prompt(FSTR("The WordGame"), TITLE_SHOW_TIMES, true);
 
-	bool rude;
-	const bool buttons[] = {false, true, false, true};
-	switch(button_led_prompt(FSTR("NICE or RUDE"), buttons)){
-	case -1:
-        // timeout
-	case 0:
-        // long press
-		return false;
-	case 1:
-		rude = false;
-		break;
-	case 2:
-		rude = random(2) == 0 ? true : false;
-		break;
-	case 3:
-		rude = true;
-		break;
-	}
+    bool rude = false;
+	switch(prompt_nice_or_rude()){
+        case -1:
+            return false;
+        case 1:
+            rude = true;
+    }
+
+    // const bool buttons[] = {false, true, false, true};
+	// switch(button_led_prompt(FSTR("NICE or RUDE"), buttons)){
+	// case -1:
+    //     // timeout
+	// case 0:
+    //     // long press
+	// 	return false;
+	// case 1:
+	// 	rude = false;
+	// 	break;
+	// case 2:
+	// 	rude = random(2) == 0 ? true : false;
+	// 	break;
+	// case 3:
+	// 	rude = true;
+	// 	break;
+	// }
 
 	sprintf(display_buffer, FSTR("BUTTONS ROTATE/FLIP"));
 	if(title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY))
 		return false;
 
-	sprintf(display_buffer, FSTR("LONG PRESS EXITS"));
-	if(title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY))
-		return false;
-
+	// sprintf(display_buffer, FSTR("LONG PRESS EXITS"));
+	// if(title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY))
+	// 	return false;
+    if(show_instr_long_press()){
+        return false;
+    }
 	int streak = 0; // -1 means canceled
 
 	unsigned long idle_timeout = millis() + option_idle_time;

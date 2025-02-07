@@ -40,7 +40,7 @@ int code_game_round(){
 
     randomizer.randomize();
     char choices[3];
-    bool letters = random(2) == 1 ? true : false;
+    bool letters = random(CHANCE_OF_NUMBERS) != 0 ? true : false;
     choose_chars(choices, letters ? 'A' : '0', letters ? 26 : 10);
     byte choice = random(3);
     send_morse(choices[choice]);
@@ -59,7 +59,6 @@ int code_game_round(){
     int result;
     if(pressed == choice){
         sprintf(display_buffer, FSTR("%2c%4c%4c"), choices[choice], choices[choice], choices[choice]);
-        title_prompt(display_buffer, 1, false, ROUND_DELAY);
         result = 1;
     } else {
         for(int i = 0; i < 3; i++){
@@ -116,6 +115,12 @@ bool code_game(){
     const bool buttons[] = {false, true, false, true};
     response = button_led_prompt(FSTR("READY   Back"), buttons);
     if(response == 0 || response == -1 || response == RED_ID)
+    return false;
+
+    // sprintf(display_buffer, FSTR("LONG PRESS EXITS"));
+	// if(title_prompt(display_buffer, 1, false, ROUND_DELAY))
+	// 	return false;
+    if(show_instr_long_press())
         return false;
 
     while((time = millis()) < timeout_time){

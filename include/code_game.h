@@ -12,14 +12,6 @@
 #define CODE_GAME_WIN_UNIT (100L / MONEY_BASIS)
 #define CODE_GAME_PLAY_BET (100L / MONEY_BASIS)
 
-#define MODE_FLASH 0
-#define MODE_SOUND 1
-#define MODE_VIBRATION 2
-
-#define TIMEGAME_MOTOR_ON 12
-#define TIMEGAME_MOTOR_OFF 12
-#define TIMEGAME_PULSES 6
-
 // activate streak bonus after two beats in a row
 #define MIN_STREAK_ACTIVATION 2
 
@@ -30,6 +22,8 @@
 
 #define BONUS_SHOW_TIMES 1
 #define BONUS_SHOW_DELAY 1500
+
+#define CHANCE_OF_NUMBERS 10
 
 extern bool code_game();
 
