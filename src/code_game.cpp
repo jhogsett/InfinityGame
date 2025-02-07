@@ -14,11 +14,14 @@
 #include "speaker.h"
 #include "utils.h"
 #include "timeouts.h"
+#include "word_lists.h"
 #include "code_game.h"
 
 #include "debug.h"
 
-void choose_chars(char *choices, char base, byte range){
+int last_choice = -1;
+
+void choose_choices(char *choices, char base, byte range){
     choices[0] = base + random(range);
 
     choices[1] = base + random(range);
@@ -30,21 +33,22 @@ void choose_chars(char *choices, char base, byte range){
         choices[2] = base + random(range);
 }
 
+
 // return 1 for win and 0 for loss
 // returns -1 in the event of a long press or time out
-int code_game_round(){
-    load_f_string(F(" Get Ready"), display_buffer);
-    title_prompt(display_buffer);
-    display.clear();
-    delay(ROUND_DELAY);
+int code_game_round_chars(){
+    // load_f_string(F(" Get Ready"), display_buffer);
+    // title_prompt(display_buffer);
+    // display.clear();
+    // delay(ROUND_DELAY);
 
-    randomizer.randomize();
+    // randomizer.randomize();
     char choices[3];
     bool letters = random(CHANCE_OF_NUMBERS) != 0 ? true : false;
-    choose_chars(choices, letters ? 'A' : '0', letters ? 26 : 10);
+    choose_choices(choices, letters ? 'A' : '0', letters ? 26 : 10);
     byte choice = random(3);
-    send_morse(choices[choice]);
 
+    send_morse(choices[choice]);
     delay(ROUND_DELAY);
 
     sprintf(display_buffer, FSTR("%2c%4c%4c"), choices[0], choices[1], choices[2]);
@@ -52,7 +56,6 @@ int code_game_round(){
     int pressed = button_led_prompt(display_buffer, states, false);
     if(pressed == 0 || pressed == -1)
         return -1;
-
     // button IDs are 1-based
     pressed -= 1;
 
@@ -80,30 +83,83 @@ int code_game_round(){
     return result;
 }
 
+// return 1 for win and 0 for loss
+// returns -1 in the event of a long press or time out
+int code_game_round_words(bool rude){
+    char choices[3];
+    choose_choices(choices, 0, 10);
+
+    const char **words = rude ? rude_words : nice_words;
+
+    byte choice = random(3);
+    while(choices[choice] == last_choice)
+        choice = random(3);
+    last_choice = choices[choice];
+
+    send_morse(          words[(int)choices[(int)choice]            ]               );
+
+    delay(ROUND_DELAY);
+
+    sprintf(display_buffer, FSTR("%s%s%s"), words[(int)choices[0]], words[(int)choices[1]], words[(int)choices[2]]);
+    bool states[4] = {false, true, true, true};
+    int pressed = button_led_prompt(display_buffer, states, false);
+    if(pressed == 0 || pressed == -1)
+        return -1;
+
+    // button IDs are 1-based
+    pressed -= 1;
+
+    int result;
+    if(pressed == choice){
+        sprintf(display_buffer, FSTR("%s%s%s"), words[(int)choices[choice]], words[(int)choices[choice]], words[(int)choices[choice]]);
+        result = 1;
+    } else {
+        sprintf(display_buffer, FSTR("    %s"), words[(int)choices[choice]]);
+
+        result = 0;
+    }
+    title_prompt(display_buffer, 1, false, ROUND_DELAY);
+
+    return result;
+}
+
+int code_game_round(bool words, bool rude){
+    load_f_string(F(" Get Ready"), display_buffer);
+    title_prompt(display_buffer);
+    display.clear();
+    delay(ROUND_DELAY);
+
+    randomizer.randomize();
+
+    if(words){
+        return code_game_round_words(rude);
+    } else {
+        return code_game_round_chars();
+    }
+}
+
+#define MODE_CHAR 0
+#define MODE_WORD 1
+
 bool code_game(){
-	title_prompt(FSTR("MorseTrainer"), TITLE_SHOW_TIMES, true);
+    last_choice = -1;
 
-    // int mode = MODE_FLASH;
-	// const char *labels[] = {"LEDS", "BEEP", "BUZZ"};
-	// mode = toggle_prompt(FSTR("Choose  %s"), labels, mode, 3, 3);
-    // if(mode == -1)
-    //     return false;
+    title_prompt(FSTR("MorseTrainer"), TITLE_SHOW_TIMES, true);
 
-    // unsigned long show_time = 0;
-    // switch(mode){
-    //     case MODE_FLASH:
-    //         show_time = best_time1;
-    //         break;
-    //     case MODE_SOUND:
-    //         show_time = best_time2;
-    //         break;
-    //     case MODE_VIBRATION:
-    //         show_time = best_time3;
-    //         break;
-    // }
-    // micros_to_ms(copy_buffer, show_time);
-	// sprintf(display_buffer, FSTR("Best Score %s ms"), copy_buffer);
-	// title_prompt(display_buffer, 1, false, ROUND_DELAY);
+	const char *labels[] = {"CHAR", "WORD"};
+	int mode = toggle_prompt(FSTR("%4sS    Go"), labels, MODE_CHAR, 1, 3);
+    if(mode == -1)
+        return false;
+
+    bool rude = false;
+    if(mode == MODE_WORD){
+        switch(prompt_nice_or_rude()){
+            case -1:
+                return false;
+            case 1:
+                rude = true;
+        }
+    }
 
     long win = 0;
     int streak = 0; // -1 means canceled
@@ -117,9 +173,6 @@ bool code_game(){
     if(response == 0 || response == -1 || response == RED_ID)
     return false;
 
-    // sprintf(display_buffer, FSTR("LONG PRESS EXITS"));
-	// if(title_prompt(display_buffer, 1, false, ROUND_DELAY))
-	// 	return false;
     if(show_instr_long_press())
         return false;
 
@@ -128,7 +181,7 @@ bool code_game(){
         pay_house(use_purse(CODE_GAME_PLAY_BET));
         delay(ROUND_DELAY);
 
-        switch(code_game_round()){
+        switch(code_game_round(mode ? true : false, rude)){
             case -1:
                 return false;
             case 0:
