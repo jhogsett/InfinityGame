@@ -22,7 +22,7 @@
 byte code_game_wpm = 13;
 int last_choice = -1;
 
-void choose_choices(char *choices, char base, byte range){
+int choose_choices(char *choices, char base, byte range){
     choices[0] = base + random(range);
 
     choices[1] = base + random(range);
@@ -32,22 +32,21 @@ void choose_choices(char *choices, char base, byte range){
     choices[2] = base + random(range);
     while(choices[2] == choices[0] or choices[2] == choices[1])
         choices[2] = base + random(range);
+
+    byte choice = random(3);
+    while(choices[choice] == last_choice)
+        choice = random(3);
+    last_choice = choices[choice];
+    return choice;
 }
 
 
 // return 1 for win and 0 for loss
 // returns -1 in the event of a long press or time out
 int code_game_round_chars(){
-    // load_f_string(F(" Get Ready"), display_buffer);
-    // title_prompt(display_buffer);
-    // display.clear();
-    // delay(ROUND_DELAY);
-
-    // randomizer.randomize();
     char choices[3];
     bool letters = random(CHANCE_OF_NUMBERS) != 0 ? true : false;
-    choose_choices(choices, letters ? 'A' : '0', letters ? 26 : 10);
-    byte choice = random(3);
+    byte choice = choose_choices(choices, letters ? 'A' : '0', letters ? 26 : 10);
 
     send_morse(choices[choice], code_game_wpm);
     delay(ROUND_DELAY);
@@ -88,14 +87,9 @@ int code_game_round_chars(){
 // returns -1 in the event of a long press or time out
 int code_game_round_words(bool rude){
     char choices[3];
-    choose_choices(choices, 0, 10);
+    byte choice = choose_choices(choices, 0, 10);
 
     const char **words = rude ? rude_words : nice_words;
-
-    byte choice = random(3);
-    while(choices[choice] == last_choice)
-        choice = random(3);
-    last_choice = choices[choice];
 
     send_morse(words[(int)choices[(int)choice]], code_game_wpm);
 
@@ -201,6 +195,7 @@ bool code_game(){
                 win = CODE_GAME_WIN_UNIT;
                 break;
         }
+        timeout_time = time + option_idle_time;
 
         if(win > 0){
             // apply the current streak bonus before showing next activation
