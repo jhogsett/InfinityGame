@@ -21,7 +21,8 @@
 // for self-doc but code only works if this is set to 2
 #define VIG_DIVISOR 2L
 
-#define ALERT_SHOW_TIME 1000
+#define FINDING_SHOW_TIME 300
+#define LOAN_SHOW_TIME 1000
 #define MINIMUM_CRIME_WAVE_TIME 2000
 
 #ifdef SHOW_BANK_FLASHES

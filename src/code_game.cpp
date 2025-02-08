@@ -2,19 +2,15 @@
 #include <Arduino.h>
 #include "bank.h"
 #include "buffers.h"
-#include "buttons.h"
 #include "displays.h"
 #include "leds.h"
 #include "morse.h"
-#include "motor.h"
 #include "play_data.h"
 #include "play_views.h"
 #include "prompts.h"
 #include "seeding.h"
-#include "speaker.h"
 #include "streak.h"
 #include "utils.h"
-#include "timeouts.h"
 #include "word_lists.h"
 #include "code_game.h"
 
@@ -171,12 +167,6 @@ bool code_game(){
 
     unsigned long time = millis();
     unsigned long timeout_time = time + option_idle_time;
-
-    // int response;
-    // const bool buttons[] = {false, true, false, true};
-    // response = button_led_prompt(FSTR("READY   Back"), buttons);
-    // if(response == 0 || response == -1 || response == RED_ID)
-    // return false;
 
     if(!prompt_ready())
         return false;

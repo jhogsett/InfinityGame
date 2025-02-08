@@ -16,7 +16,7 @@ bool options_mode(){
 	return branch_prompt(FSTR("TOOLS   SET"), tools_menu, NULL, options_menu, NULL, buttons);
 }
 
-bool options_menu(){ // # optimize strings
+bool options_menu(){
 	const char *labels_on_off[] = {"Off", "On"};
 	int result = toggle_prompt(FSTR("SOUND   %s"), labels_on_off, option_sound ? 1 : 0, 3, 2);
 	if(result == -1)

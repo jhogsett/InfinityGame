@@ -145,7 +145,7 @@ long use_purse(long money){
 #endif
 
     if(purse < PLAYER_MINIMUM){
-        title_prompt(FSTR("Finding Cash"), 1, false, ALERT_SHOW_TIME);
+        title_prompt(FSTR("Finding Cash"), 1, false, FINDING_SHOW_TIME);
     }
 
 	long total_loan = 0;
@@ -165,7 +165,7 @@ long use_purse(long money){
 	if(total_loan){
 		// sprintf(display_buffer, FSTR("GANG LOAN $%s"), format_long(total_loan));
 		// title_prompt(display_buffer, 1, false, ALERT_SHOW_TIME);
-        title_prompt_string(FSTR("GANG LOAN $%s"), format_long(total_loan), false, ALERT_SHOW_TIME);
+        title_prompt_string(FSTR("GANG LOAN $%s"), format_long(total_loan), false, LOAN_SHOW_TIME);
 	}
 
 	return money;

@@ -8,13 +8,13 @@
 bool option_sound = false;
 bool option_vibrate = false;
 long purse = DEFAULT_PURSE;
-unsigned long best_time = (unsigned long)-1;
+unsigned long best_time = DEFAULT_TIME;
 bool option_clock_24h = false;
 byte option_idle_mode = DEFAULT_IDLE_MODE;
 unsigned long bank = DEFAULT_BANK;
-unsigned long best_time1 = (unsigned long)-1;
-unsigned long best_time2 = (unsigned long)-1;
-unsigned long best_time3 = (unsigned long)-1;
+unsigned long best_time1 = DEFAULT_TIME;
+unsigned long best_time2 = DEFAULT_TIME;
+unsigned long best_time3 = DEFAULT_TIME;
 long house = DEFAULT_HOUSE;
 long gang = DEFAULT_GANG;
 unsigned long option_idle_time = DEFAULT_IDLE_TIME;

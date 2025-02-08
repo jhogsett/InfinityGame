@@ -20,8 +20,3 @@ void vibrate_raw(int pulses, int on_time, int off_time){
 		delay(off_time);
 	}
 }
-
-void vibrate_gap(){
-	delay(VIBRATE_GAP_TIME);
-}
-
