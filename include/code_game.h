@@ -1,14 +1,14 @@
 #ifndef __CODE_GAME_H__
 #define __CODE_GAME_H__
 
+#define MODE_CHAR 0
+#define MODE_WORD 1
+
 // in MONEY_BASIS units
 #define CODE_GAME_WIN_UNIT (100L / MONEY_BASIS)
 #define CODE_GAME_PLAY_BET (0L / MONEY_BASIS)
 
 #define MIN_STREAK_ACTIVATION 2
-
-// subtract this from the streak win count to arrive at the bonus amount
-#define STREAK_OFFSET 1
 
 #define CG_WIN_SHOW_DELAY 900
 

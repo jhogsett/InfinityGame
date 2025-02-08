@@ -141,9 +141,6 @@ int code_game_round(bool words, bool rude){
     }
 }
 
-#define MODE_CHAR 0
-#define MODE_WORD 1
-
 bool code_game(){
     last_choice = -1;
 

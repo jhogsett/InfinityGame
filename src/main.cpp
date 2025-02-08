@@ -6,7 +6,6 @@
 #include "idle_mode.h"
 #include "led_handler.h"
 #include "leds.h"
-#include "morse.h"
 #include "motor.h"
 #include "options_mode.h"
 #include "play_data.h"
