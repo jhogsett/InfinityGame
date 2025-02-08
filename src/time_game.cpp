@@ -36,8 +36,6 @@ bool time_game(){
             break;
     }
     micros_to_ms(copy_buffer, show_time);
-	// sprintf(display_buffer, FSTR("Best Score %s ms"), copy_buffer);
-	// title_prompt(display_buffer, 1, false, ROUND_DELAY);
     title_prompt_string(FSTR("Best Score %s ms"), copy_buffer, false, ROUND_DELAY);
 
     unsigned long time = millis();
@@ -156,8 +154,6 @@ bool time_game(){
 
         mean /= ROUNDS;
         micros_to_ms(copy_buffer, mean);
-        // sprintf(display_buffer, FSTR("SCORE %s ms"), copy_buffer);
-        // title_prompt(display_buffer, 1, false, ROUND_DELAY);
         title_prompt_string(FSTR("SCORE %s ms"), copy_buffer, false, ROUND_DELAY);
 
         // save the best result per mode
@@ -188,8 +184,6 @@ bool time_game(){
         }
         if(new_best_per_mode){
             micros_to_ms(copy_buffer, mean);
-            // sprintf(display_buffer, FSTR("*NEW BEST %s %s ms"), label, copy_buffer);
-            // title_prompt(display_buffer, 1, true, ROUND_DELAY);
             title_prompt_string2(FSTR("*NEW BEST %s %s ms"), label, copy_buffer, true, ROUND_DELAY);
         }
 
@@ -198,8 +192,6 @@ bool time_game(){
 
             micros_to_ms(copy_buffer, mean);
 
-            // sprintf(display_buffer, , copy_buffer);
-            // title_prompt(display_buffer, 1, true, ROUND_DELAY);
             title_prompt_string(FSTR("*NEW OVERALL BEST %s ms"), copy_buffer, true, ROUND_DELAY);
 
             display_win(TIME_WIN);

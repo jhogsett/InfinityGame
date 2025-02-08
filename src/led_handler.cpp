@@ -99,11 +99,6 @@ void LEDHandler::step(unsigned long time){
 				if(_active >= _num_states)
 					_active = 0;
 			}
-			// else {
-			// 	_active++;
-			// 	if(_active >= _num_states)
-			// 		_active = 0;
-			// }
 		}
 		if(_enabled == NULL || _enabled[_active])
 			activate_led(_active, _style & STYLE_MIRROR);

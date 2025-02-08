@@ -4,9 +4,10 @@
 #include "displays.h"
 #include "leds.h"
 #include "prompts.h"
-#include "seeding.h"
 #include "play_data.h"
 #include "play_views.h"
+#include "seeding.h"
+#include "streak.h"
 #include "timeouts.h"
 #include "utils.h"
 #include "word_lists.h"
@@ -109,7 +110,6 @@ int choose_word(bool rude){
 	{
 		int letter = random(LETTERS_LEN);
 		add_chars[i] = letters[letter];
-		// add_chars[i] = (char)random((int)'A', (int)'Z' + 1);
 	}
 	add_chars[ADD_CHARS_BUFFER_SIZE-1] = '\0';
 
@@ -121,15 +121,9 @@ int choose_word(bool rude){
 	format_scamble_word(show_word);
 
 	while(strcmp(show_word, chosen_word) == 0){
-		// scramble_moves += shuffle_word(scramble_word, SCRAMBLE_SIZE, SHUFFLE_TIMES_MIN, SHUFFLE_TIMES_MAX);
 		scramble_moves = shuffle_word(scramble_word, SCRAMBLE_SIZE, SHUFFLE_TIMES_MIN, SHUFFLE_TIMES_MAX);
 		format_scamble_word(show_word);
 	}
-
-	// // rotate the real word into the middle
-	// for(int i = 0; i < ADD_CHARS / 2; i++){
-	// 	rotate_right(scramble_word, SCRAMBLE_SIZE);
-	// 	scramble_moves++;
 
 	return scramble_moves;
 }
@@ -152,10 +146,6 @@ int word_game_round(bool rude){
 
 	int scramble_moves = choose_word(rude);
 	int player_moves = 0;
-
-	// sprintf(display_buffer, FSTR("BEAT %d MOVES"), scramble_moves);
-	// if(title_prompt(display_buffer, BEAT_SHOW_TIMES, false, BEAT_SHOW_DELAY))
-	// 	return -1;
 
     if(title_prompt_int(FSTR("BEAT %d MOVES"), scramble_moves, false, BEAT_SHOW_DELAY))
 		return -1;
@@ -200,12 +190,8 @@ int word_game_round(bool rude){
 
 		if(strcmp(show_word, chosen_word) == 0){
 			// word found
-			// sprintf(display_buffer, FSTR("    %s    "), chosen_word);
-			// title_prompt(display_buffer, SUCCESS_SHOW_TIMES, false, CORRECT_WORD_SHOW_TIME);
             title_prompt_string(FSTR("    %s    "), chosen_word, false, CORRECT_WORD_SHOW_TIME);
 
-			// sprintf(display_buffer, FSTR("  MOVES %d"), player_moves);
-			// title_prompt(display_buffer, MOVES_SHOW_TIMES, false, MOVES_SHOW_DELAY);
             title_prompt_int(FSTR("  MOVES %d"), player_moves, false, MOVES_SHOW_DELAY);
 
 			// compute winning factor
@@ -238,7 +224,7 @@ bool word_game(){
     if(show_instr_long_press()){
         return false;
     }
-	int streak = 0; // -1 means canceled
+    reset_streak();
 
 	unsigned long idle_timeout = millis() + option_idle_time;
 	unsigned long time;
@@ -252,10 +238,7 @@ bool word_game(){
 		switch(round_result){
 			case -2:
 				// exceeded max moves
-				if(streak > MIN_STREAK_ACTIVATION)
-                    streak = -1;
-                else
-                    streak = 0;
+                cancel_streak();
 				title_prompt(FSTR("OUT OF MOVES"), EXCEEDED_SHOW_TIMES, false, EXCEEDED_SHOW_DELAY);
 				break;
 			case -1:
@@ -266,10 +249,7 @@ bool word_game(){
 				return false;
 			case 0:
 				// player didn't beat the moves
-				if(streak > MIN_STREAK_ACTIVATION)
-                    streak = -1;
-                else
-                    streak = 0;
+                cancel_streak();
 				break;
 			default:
 				sprintf(display_buffer, FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word);
@@ -278,36 +258,22 @@ bool word_game(){
 				win = (round_result) * (WORD_GAME_WIN_UNIT);
 
 				// apply the current streak bonus before showing next activation
-				if(streak > MIN_STREAK_ACTIVATION){
-					// win *= (streak - STREAK_OFFSET);
-                    unsigned long bonus = 1L << (long)((streak - STREAK_OFFSET) - 1);
-                    win *= bonus;
-                }
+                win *= streak_bonus();
 
 				if(win > 0){
 					display_win(win, WG_WIN_SHOW_DELAY);
-					streak++;
+                    add_streak();
 				}
 
 				add_to_purse(house_payout(win));
                 save_data();
                 display_purse(WG_WIN_SHOW_DELAY);
-
-				if(streak > MIN_STREAK_ACTIVATION){
-                    unsigned long bonus = 1L << (long)((streak - STREAK_OFFSET) - 1);
-
-					// sprintf(display_buffer, FSTR("%3sX BONUS"), format_long(bonus, 1));
-					// title_prompt(display_buffer, BONUS_SHOW_TIMES, true, BONUS_SHOW_DELAY);
-                    title_prompt_string(FSTR("%3sX BONUS"), format_long(bonus, 1), true, BONUS_SHOW_DELAY);
-                }
+                display_bonus();
 
 				break;
 		}
 
-		if(streak == -1){
-			streak = 0;
-			title_prompt(FSTR(" BONUS GONE"), BONUS_SHOW_TIMES, false, BONUS_SHOW_DELAY);
-		}
+        display_bonus_gone();
 	}
 	return false;
 }

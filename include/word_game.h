@@ -31,10 +31,7 @@
 #define WORD_GAME_WIN_UNIT (100L / MONEY_BASIS)
 #define WORD_GAME_PLAY_BET (100L / MONEY_BASIS)
 
-#define WIN_IN_1_BONUS 10
-
-// activate streak bonus after two beats in a row
-#define MIN_STREAK_ACTIVATION 2
+// #define WIN_IN_1_BONUS 10
 
 // subtract this from the streak win count to arrive at the bonus amount
 #define STREAK_OFFSET 1

@@ -5,7 +5,6 @@
 #define CODE_GAME_WIN_UNIT (100L / MONEY_BASIS)
 #define CODE_GAME_PLAY_BET (0L / MONEY_BASIS)
 
-// activate streak bonus after two beats in a row
 #define MIN_STREAK_ACTIVATION 2
 
 // subtract this from the streak win count to arrive at the bonus amount

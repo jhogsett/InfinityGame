@@ -12,6 +12,7 @@
 #include "prompts.h"
 #include "seeding.h"
 #include "speaker.h"
+#include "streak.h"
 #include "utils.h"
 #include "timeouts.h"
 #include "word_lists.h"
@@ -58,7 +59,6 @@ int code_game_round_chars(){
     send_morse(choices[choice], code_game_wpm);
     delay(ROUND_DELAY);
 
-    // sprintf(display_buffer, FSTR("%2c%4c%4c"), choices[0], choices[1], choices[2]);
     format_char_display(choices[0], choices[1], choices[2]);
     bool states[4] = {false, true, true, true};
     int pressed = button_led_prompt(display_buffer, states, false);
@@ -69,7 +69,6 @@ int code_game_round_chars(){
 
     int result;
     if(pressed == choice){
-        // sprintf(display_buffer, FSTR("%2c%4c%4c"), choices[choice], choices[choice], choices[choice]);
         format_char_display(choices[choice], choices[choice], choices[choice]);
 
         result = 1;
@@ -82,7 +81,6 @@ int code_game_round_chars(){
                 states[i + 1] = false;
             }
         }
-        // sprintf(display_buffer, FSTR("%2c%4c%4c"), choices[0], choices[1], choices[2]);
         format_char_display(choices[0], choices[1], choices[2]);
 
         all_leds.activate_leds(states, true);
@@ -106,7 +104,6 @@ int code_game_round_words(bool rude){
 
     delay(ROUND_DELAY);
 
-    // sprintf(display_buffer, FSTR("%s%s%s"), words[(int)choices[0]], words[(int)choices[1]], words[(int)choices[2]]);
     format_word_display(words[(int)choices[0]], words[(int)choices[1]], words[(int)choices[2]]);
     bool states[4] = {false, true, true, true};
     int pressed = button_led_prompt(display_buffer, states, false);
@@ -118,7 +115,6 @@ int code_game_round_words(bool rude){
 
     int result;
     if(pressed == choice){
-        // sprintf(display_buffer, FSTR("%s%s%s"), words[(int)choices[choice]], words[(int)choices[choice]], words[(int)choices[choice]]);
         format_word_display(words[(int)choices[choice]], words[(int)choices[choice]], words[(int)choices[choice]]);
         result = 1;
     } else {
@@ -159,7 +155,7 @@ bool code_game(){
     }
 
 	const char *labels[] = {"CHAR", "WORD"};
-	int mode = toggle_prompt(FSTR("Pick    %s"), labels, MODE_CHAR, 3, 2);
+	int mode = toggle_prompt(FSTR("Choose  %s"), labels, MODE_CHAR, 3, 2);
     if(mode == -1)
         return false;
 
@@ -174,7 +170,7 @@ bool code_game(){
     }
 
     long win = 0;
-    int streak = 0; // -1 means canceled
+    reset_streak();
 
     unsigned long time = millis();
     unsigned long timeout_time = time + option_idle_time;
@@ -198,10 +194,7 @@ bool code_game(){
                 return false;
             case 0:
                 win = 0;
-                if(streak > MIN_STREAK_ACTIVATION)
-                    streak = -1;
-                else
-                    streak = 0;
+                cancel_streak();
                 break;
             case 1:
                 win = CODE_GAME_WIN_UNIT;
@@ -210,34 +203,18 @@ bool code_game(){
         timeout_time = time + option_idle_time;
 
         if(win > 0){
-            // apply the current streak bonus before showing next activation
-            if(streak > MIN_STREAK_ACTIVATION){
-                unsigned long bonus = 1L << (long)((streak - STREAK_OFFSET) - 1);
-                win *= bonus;
-            }
+            win *= streak_bonus();
 
-            // if(win > 0){
-                display_win(win, CG_WIN_SHOW_DELAY);
-                streak++;
-            // }
+            display_win(win, CG_WIN_SHOW_DELAY);
+            add_streak();
 
             add_to_purse(house_payout(win));
             save_data();
             display_purse(CG_WIN_SHOW_DELAY);
-
-            if(streak > MIN_STREAK_ACTIVATION){
-                unsigned long bonus = 1L << (long)((streak - STREAK_OFFSET) - 1);
-                // sprintf(display_buffer, FSTR("%3sX BONUS"), format_long(bonus, 1));
-                // title_prompt(display_buffer, BONUS_SHOW_TIMES, true, BONUS_SHOW_DELAY);
-                title_prompt_string(FSTR("%3sX BONUS"), format_long(bonus, 1), true, BONUS_SHOW_DELAY);
-            }
+            display_bonus();
         }
 
-        if(streak == -1){
-            streak = 0;
-            title_prompt(FSTR(" BONUS GONE"), BONUS_SHOW_TIMES, false, BONUS_SHOW_DELAY);
-        }
-
+        display_bonus_gone();
     }
 
 	return false;

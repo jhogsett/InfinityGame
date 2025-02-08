@@ -25,9 +25,3 @@ void vibrate_gap(){
 	delay(VIBRATE_GAP_TIME);
 }
 
-// void vibes(int times, int pulses){
-// 	for(int i = 0; i < times; i++){
-// 		vibrate(pulses);
-// 		vibrate_gap();
-// 	}
-// }

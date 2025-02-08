@@ -27,8 +27,6 @@ bool display_scores(){
                 break;
         }
 		micros_to_ms(time_display, score);
-        // sprintf(display_buffer, FSTR("%s SCORE %s ms"), label, time_display);
-        // title_prompt(display_buffer, BALANCES_SHOW_TIMES, false, BALANCES_SHOW_DELAY);
         title_prompt_string2(FSTR("%s SCORE %s ms"), label, time_display, false, BALANCES_SHOW_DELAY);
     }
     return false;
@@ -64,31 +62,20 @@ bool display_balances(){
                 load_f_string(F("SUM"), label);
                 break;
         }
-        // sprintf(display_buffer, FSTR("%s $%s"), label, format_long(balance));
-        // title_prompt(display_buffer, BALANCES_SHOW_TIMES, false, BALANCES_SHOW_DELAY);
         title_prompt_string2(FSTR("%s $%s"), label, format_long(balance), false, BALANCES_SHOW_DELAY);
     }
     return false;
 }
 
 void display_purse(int delay){
-	// sprintf(display_buffer, FSTR("CASH $%s"), format_long(get_purse()));
-	// title_prompt(display_buffer, CASH_SHOW_TIMES, false, delay || CASH_SHOW_DELAY);
-
     title_prompt_string(FSTR("CASH $%s"), format_long(get_purse()), false, delay || CASH_SHOW_DELAY);
 }
 
 void display_win(unsigned long win, int delay){
-	// sprintf(display_buffer, FSTR("*WIN $%s"), format_long(win));
-	// title_prompt(display_buffer, WIN_SHOW_TIMES, true, delay || WIN_SHOW_DELAY);
-
     title_prompt_string(FSTR("*WIN $%s"), format_long(win), true, delay || WIN_SHOW_DELAY);
 }
 
 void display_jackpot(unsigned long win){
-	// sprintf(display_buffer, FSTR("** JACKPOT $%s"), format_long(win));
-	// title_prompt(display_buffer, JACKPOT_SHOW_TIMES, true, ROUND_DELAY);
-
     title_prompt_string(FSTR("** JACKPOT $%s"), format_long(win), true, ROUND_DELAY);
 }
 

@@ -27,21 +27,21 @@ bool tools_menu(){
 		return timer_mode();
 	}
 
-	switch(button_led_prompt(FSTR("SLEEP    GO "))){
-	case -1:
-	case 0:
-		return false;
-	case 3:
-		return sleep_mode();
-	}
-
 	switch(button_led_prompt(FSTR("MORSE    GO "))){
         case -1:
         case 0:
-            return false;
+        return false;
         case 3:
-            return code_game();
-        }
+        return code_game();
+    }
+
+    switch(button_led_prompt(FSTR("SLEEP    GO "))){
+    case -1:
+    case 0:
+        return false;
+    case 3:
+        return sleep_mode();
+    }
 
     #ifdef ENABLE_TEST_FEATURES
 	switch(button_led_prompt(FSTR("TEST     GO "))){

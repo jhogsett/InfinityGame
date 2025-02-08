@@ -84,23 +84,6 @@ bool slots_game(){
             rude = true;
     }
 
-	// bool rude;
-	// const bool buttons[] = {false, true, false, true};
-	// switch(button_led_prompt(FSTR("NICE or RUDE"), buttons)){
-	// 	case -1:
-	// 	case 0:
-	// 		return false;
-	// 	case 1:
-	// 		rude = false;
-	// 		break;
-	// 	case 2:
-	// 		rude = random(2) == 0 ? true : false;
-	// 		break;
-	// 	case 3:
-	// 		rude = true;
-	// 		break;
-	// }
-
 	const char **words = rude ? rude_words : nice_words;
 	char text[REEL_BUFFER_LEN];
 	sprintf(text,
