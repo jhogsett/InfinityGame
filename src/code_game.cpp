@@ -172,11 +172,14 @@ bool code_game(){
     unsigned long time = millis();
     unsigned long timeout_time = time + option_idle_time;
 
-    int response;
-    const bool buttons[] = {false, true, false, true};
-    response = button_led_prompt(FSTR("READY   Back"), buttons);
-    if(response == 0 || response == -1 || response == RED_ID)
-    return false;
+    // int response;
+    // const bool buttons[] = {false, true, false, true};
+    // response = button_led_prompt(FSTR("READY   Back"), buttons);
+    // if(response == 0 || response == -1 || response == RED_ID)
+    // return false;
+
+    if(!prompt_ready())
+        return false;
 
     if(show_instr_long_press())
         return false;

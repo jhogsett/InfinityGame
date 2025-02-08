@@ -2,6 +2,7 @@
 #include "bank.h"
 #include "betting.h"
 #include "buffers.h"
+#include "buttons.h"
 #include "play_data.h"
 #include "play_views.h"
 #include "prompts.h"
@@ -157,4 +158,13 @@ int prompt_wpm(int wpm){
     }
 
     return wpm;
+}
+
+// returns true if READY chosen, false if Back chosen or on long press or timeout
+bool prompt_ready(){
+    const bool buttons[] = {false, true, false, true};
+    int response = button_led_prompt(FSTR("READY   Back"), buttons);
+    if(response == 0 || response == -1 || response == RED_ID)
+        return false;
+    return true;
 }
