@@ -27,8 +27,9 @@ bool display_scores(){
                 break;
         }
 		micros_to_ms(time_display, score);
-        sprintf(display_buffer, FSTR("%s SCORE %s ms"), label, time_display);
-        title_prompt(display_buffer, BALANCES_SHOW_TIMES, false, BALANCES_SHOW_DELAY);
+        // sprintf(display_buffer, FSTR("%s SCORE %s ms"), label, time_display);
+        // title_prompt(display_buffer, BALANCES_SHOW_TIMES, false, BALANCES_SHOW_DELAY);
+        title_prompt_string2(FSTR("%s SCORE %s ms"), label, time_display, false, BALANCES_SHOW_DELAY);
     }
     return false;
 }
@@ -63,56 +64,32 @@ bool display_balances(){
                 load_f_string(F("SUM"), label);
                 break;
         }
-        sprintf(display_buffer, FSTR("%s $%s"), label, format_long(balance));
-        title_prompt(display_buffer, BALANCES_SHOW_TIMES, false, BALANCES_SHOW_DELAY);
+        // sprintf(display_buffer, FSTR("%s $%s"), label, format_long(balance));
+        // title_prompt(display_buffer, BALANCES_SHOW_TIMES, false, BALANCES_SHOW_DELAY);
+        title_prompt_string2(FSTR("%s $%s"), label, format_long(balance), false, BALANCES_SHOW_DELAY);
     }
     return false;
 }
 
 void display_purse(int delay){
-	sprintf(display_buffer, FSTR("CASH $%s"), format_long(get_purse()));
-	title_prompt(display_buffer, CASH_SHOW_TIMES, false, delay || CASH_SHOW_DELAY);
+	// sprintf(display_buffer, FSTR("CASH $%s"), format_long(get_purse()));
+	// title_prompt(display_buffer, CASH_SHOW_TIMES, false, delay || CASH_SHOW_DELAY);
+
+    title_prompt_string(FSTR("CASH $%s"), format_long(get_purse()), false, delay || CASH_SHOW_DELAY);
 }
 
 void display_win(unsigned long win, int delay){
-	sprintf(display_buffer, FSTR("*WIN $%s"), format_long(win));
-	title_prompt(display_buffer, WIN_SHOW_TIMES, true, delay || WIN_SHOW_DELAY);
+	// sprintf(display_buffer, FSTR("*WIN $%s"), format_long(win));
+	// title_prompt(display_buffer, WIN_SHOW_TIMES, true, delay || WIN_SHOW_DELAY);
+
+    title_prompt_string(FSTR("*WIN $%s"), format_long(win), true, delay || WIN_SHOW_DELAY);
 }
 
 void display_jackpot(unsigned long win){
-	sprintf(display_buffer, FSTR("** JACKPOT $%s"), format_long(win));
-	title_prompt(display_buffer, JACKPOT_SHOW_TIMES, true, ROUND_DELAY);
-}
+	// sprintf(display_buffer, FSTR("** JACKPOT $%s"), format_long(win));
+	// title_prompt(display_buffer, JACKPOT_SHOW_TIMES, true, ROUND_DELAY);
 
-char *format_long(long num, long basis){
-	int negate = (num < 0L) ? -1 : 1;
-	if(negate < 0)
-		num *= -1L;
-
-	if(basis == 0)
-		basis = MONEY_BASIS;
-
-	// this captures and removes the lower three digits in the expanded basis of the number
-	// plus removes the basis factor and 1000 for the remaining splits
-	long basis_factor = 1000L / basis;
-	int units = num % (basis_factor);
-	num = (num - units) / (basis_factor);
-	units *= basis;
-
-	int thous = ((num % 1000L) - 0) / 1L;
-	int mills = ((num % 1000000L) - thous) / 1000L;
-	int bills = ((num % 1000000000L) - mills) / 1000000L;
-
-	if(bills > 0)
-		sprintf(copy_buffer, FSTR("%d,%03d,%03d,%03d"), bills*negate, mills, thous, units);
-	else if(mills > 0)
-		sprintf(copy_buffer, FSTR("%d,%03d,%03d"), mills*negate, thous, units);
-	else if(thous > 0)
-		sprintf(copy_buffer, FSTR("%d,%03d"), thous*negate, units);
-	else
-		sprintf(copy_buffer, FSTR("%d"), units*negate);
-
-	return copy_buffer;
+    title_prompt_string(FSTR("** JACKPOT $%s"), format_long(win), true, ROUND_DELAY);
 }
 
 char *standard_bet_str(byte bet){
@@ -128,8 +105,7 @@ char *standard_bet_str(byte bet){
 
 // returns true if long-pressed
 bool show_instr_long_press(){
-    sprintf(display_buffer, FSTR("LONG PRESS EXITS"));
-    return title_prompt(display_buffer, 1, false, ROUND_DELAY);
+    return title_prompt(FSTR("LONG PRESS EXITS"), 1, false, ROUND_DELAY);
 }
 
 // returns 0 for nice, 1 for rude, -1 for timeout or long press

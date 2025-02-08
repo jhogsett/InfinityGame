@@ -140,8 +140,7 @@ int word_game_round(bool rude){
 	int instruction_times = new_game ? CONTROLS_SHOW_TIMES : 1;
     int instruction_delay = new_game ? ROUND_DELAY : INSTRUCTIONS_SHOW_DELAY;
 	int instruction_show_leds = new_game;
-	sprintf(display_buffer, FSTR("ROL FLIP ROR"));
-	if(title_prompt(display_buffer,
+	if(title_prompt(FSTR("ROL FLIP ROR"),
 					instruction_times,
 					instruction_show_leds,
 					instruction_delay,
@@ -154,8 +153,11 @@ int word_game_round(bool rude){
 	int scramble_moves = choose_word(rude);
 	int player_moves = 0;
 
-	sprintf(display_buffer, FSTR("BEAT %d MOVES"), scramble_moves);
-	if(title_prompt(display_buffer, BEAT_SHOW_TIMES, false, BEAT_SHOW_DELAY))
+	// sprintf(display_buffer, FSTR("BEAT %d MOVES"), scramble_moves);
+	// if(title_prompt(display_buffer, BEAT_SHOW_TIMES, false, BEAT_SHOW_DELAY))
+	// 	return -1;
+
+    if(title_prompt_int(FSTR("BEAT %d MOVES"), scramble_moves, false, BEAT_SHOW_DELAY))
 		return -1;
 
 	pay_house(use_purse(WORD_GAME_PLAY_BET));
@@ -198,11 +200,13 @@ int word_game_round(bool rude){
 
 		if(strcmp(show_word, chosen_word) == 0){
 			// word found
-			sprintf(display_buffer, FSTR("    %s    "), chosen_word);
-			title_prompt(display_buffer, SUCCESS_SHOW_TIMES, false, CORRECT_WORD_SHOW_TIME);
+			// sprintf(display_buffer, FSTR("    %s    "), chosen_word);
+			// title_prompt(display_buffer, SUCCESS_SHOW_TIMES, false, CORRECT_WORD_SHOW_TIME);
+            title_prompt_string(FSTR("    %s    "), chosen_word, false, CORRECT_WORD_SHOW_TIME);
 
-			sprintf(display_buffer, FSTR("  MOVES %d"), player_moves);
-			title_prompt(display_buffer, MOVES_SHOW_TIMES, false, MOVES_SHOW_DELAY);
+			// sprintf(display_buffer, FSTR("  MOVES %d"), player_moves);
+			// title_prompt(display_buffer, MOVES_SHOW_TIMES, false, MOVES_SHOW_DELAY);
+            title_prompt_int(FSTR("  MOVES %d"), player_moves, false, MOVES_SHOW_DELAY);
 
 			// compute winning factor
 			int factor = scramble_moves - player_moves;
@@ -228,31 +232,9 @@ bool word_game(){
             rude = true;
     }
 
-    // const bool buttons[] = {false, true, false, true};
-	// switch(button_led_prompt(FSTR("NICE or RUDE"), buttons)){
-	// case -1:
-    //     // timeout
-	// case 0:
-    //     // long press
-	// 	return false;
-	// case 1:
-	// 	rude = false;
-	// 	break;
-	// case 2:
-	// 	rude = random(2) == 0 ? true : false;
-	// 	break;
-	// case 3:
-	// 	rude = true;
-	// 	break;
-	// }
-
-	sprintf(display_buffer, FSTR("BUTTONS ROTATE/FLIP"));
-	if(title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY))
+	if(title_prompt(FSTR("BUTTONS ROTATE/FLIP"), INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY))
 		return false;
 
-	// sprintf(display_buffer, FSTR("LONG PRESS EXITS"));
-	// if(title_prompt(display_buffer, INSTRUCTIONS_SHOW_TIMES, false, ROUND_DELAY))
-	// 	return false;
     if(show_instr_long_press()){
         return false;
     }
@@ -274,8 +256,7 @@ bool word_game(){
                     streak = -1;
                 else
                     streak = 0;
-				sprintf(display_buffer, FSTR("OUT OF MOVES"));
-				title_prompt(display_buffer, EXCEEDED_SHOW_TIMES, false, EXCEEDED_SHOW_DELAY);
+				title_prompt(FSTR("OUT OF MOVES"), EXCEEDED_SHOW_TIMES, false, EXCEEDED_SHOW_DELAY);
 				break;
 			case -1:
 				// timed out or long press
@@ -314,16 +295,18 @@ bool word_game(){
 
 				if(streak > MIN_STREAK_ACTIVATION){
                     unsigned long bonus = 1L << (long)((streak - STREAK_OFFSET) - 1);
-					sprintf(display_buffer, FSTR("%3sX BONUS"), format_long(bonus, 1));
-					title_prompt(display_buffer, BONUS_SHOW_TIMES, true, BONUS_SHOW_DELAY);
-				}
+
+					// sprintf(display_buffer, FSTR("%3sX BONUS"), format_long(bonus, 1));
+					// title_prompt(display_buffer, BONUS_SHOW_TIMES, true, BONUS_SHOW_DELAY);
+                    title_prompt_string(FSTR("%3sX BONUS"), format_long(bonus, 1), true, BONUS_SHOW_DELAY);
+                }
 
 				break;
 		}
 
 		if(streak == -1){
 			streak = 0;
-			title_prompt(load_f_string(F(" BONUS GONE"), display_buffer), BONUS_SHOW_TIMES, false, BONUS_SHOW_DELAY);
+			title_prompt(FSTR(" BONUS GONE"), BONUS_SHOW_TIMES, false, BONUS_SHOW_DELAY);
 		}
 	}
 	return false;

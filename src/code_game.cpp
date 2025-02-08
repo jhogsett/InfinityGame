@@ -40,6 +40,13 @@ int choose_choices(char *choices, char base, byte range){
     return choice;
 }
 
+void format_char_display(char c1, char c2, char c3){
+    sprintf(display_buffer, FSTR("%2c%4c%4c"), c1, c2, c3);
+}
+
+void format_word_display(const char *w1, const char *w2, const char *w3){
+    sprintf(display_buffer, FSTR("%s%s%s"), w1, w2, w3);
+}
 
 // return 1 for win and 0 for loss
 // returns -1 in the event of a long press or time out
@@ -51,7 +58,8 @@ int code_game_round_chars(){
     send_morse(choices[choice], code_game_wpm);
     delay(ROUND_DELAY);
 
-    sprintf(display_buffer, FSTR("%2c%4c%4c"), choices[0], choices[1], choices[2]);
+    // sprintf(display_buffer, FSTR("%2c%4c%4c"), choices[0], choices[1], choices[2]);
+    format_char_display(choices[0], choices[1], choices[2]);
     bool states[4] = {false, true, true, true};
     int pressed = button_led_prompt(display_buffer, states, false);
     if(pressed == 0 || pressed == -1)
@@ -61,7 +69,9 @@ int code_game_round_chars(){
 
     int result;
     if(pressed == choice){
-        sprintf(display_buffer, FSTR("%2c%4c%4c"), choices[choice], choices[choice], choices[choice]);
+        // sprintf(display_buffer, FSTR("%2c%4c%4c"), choices[choice], choices[choice], choices[choice]);
+        format_char_display(choices[choice], choices[choice], choices[choice]);
+
         result = 1;
     } else {
         for(int i = 0; i < 3; i++){
@@ -72,7 +82,8 @@ int code_game_round_chars(){
                 states[i + 1] = false;
             }
         }
-        sprintf(display_buffer, FSTR("%2c%4c%4c"), choices[0], choices[1], choices[2]);
+        // sprintf(display_buffer, FSTR("%2c%4c%4c"), choices[0], choices[1], choices[2]);
+        format_char_display(choices[0], choices[1], choices[2]);
 
         all_leds.activate_leds(states, true);
         result = 0;
@@ -95,7 +106,8 @@ int code_game_round_words(bool rude){
 
     delay(ROUND_DELAY);
 
-    sprintf(display_buffer, FSTR("%s%s%s"), words[(int)choices[0]], words[(int)choices[1]], words[(int)choices[2]]);
+    // sprintf(display_buffer, FSTR("%s%s%s"), words[(int)choices[0]], words[(int)choices[1]], words[(int)choices[2]]);
+    format_word_display(words[(int)choices[0]], words[(int)choices[1]], words[(int)choices[2]]);
     bool states[4] = {false, true, true, true};
     int pressed = button_led_prompt(display_buffer, states, false);
     if(pressed == 0 || pressed == -1)
@@ -106,7 +118,8 @@ int code_game_round_words(bool rude){
 
     int result;
     if(pressed == choice){
-        sprintf(display_buffer, FSTR("%s%s%s"), words[(int)choices[choice]], words[(int)choices[choice]], words[(int)choices[choice]]);
+        // sprintf(display_buffer, FSTR("%s%s%s"), words[(int)choices[choice]], words[(int)choices[choice]], words[(int)choices[choice]]);
+        format_word_display(words[(int)choices[choice]], words[(int)choices[choice]], words[(int)choices[choice]]);
         result = 1;
     } else {
         sprintf(display_buffer, FSTR("    %s"), words[(int)choices[choice]]);
@@ -119,8 +132,7 @@ int code_game_round_words(bool rude){
 }
 
 int code_game_round(bool words, bool rude){
-    load_f_string(F(" Get Ready"), display_buffer);
-    title_prompt(display_buffer);
+    title_prompt(FSTR(" Get Ready"));
     display.clear();
     delay(ROUND_DELAY);
 
@@ -147,7 +159,7 @@ bool code_game(){
     }
 
 	const char *labels[] = {"CHAR", "WORD"};
-	int mode = toggle_prompt(FSTR("%4sS    Go"), labels, MODE_CHAR, 1, 2);
+	int mode = toggle_prompt(FSTR("Pick    %s"), labels, MODE_CHAR, 3, 2);
     if(mode == -1)
         return false;
 
@@ -215,14 +227,15 @@ bool code_game(){
 
             if(streak > MIN_STREAK_ACTIVATION){
                 unsigned long bonus = 1L << (long)((streak - STREAK_OFFSET) - 1);
-                sprintf(display_buffer, FSTR("%3sX BONUS"), format_long(bonus, 1));
-                title_prompt(display_buffer, BONUS_SHOW_TIMES, true, BONUS_SHOW_DELAY);
+                // sprintf(display_buffer, FSTR("%3sX BONUS"), format_long(bonus, 1));
+                // title_prompt(display_buffer, BONUS_SHOW_TIMES, true, BONUS_SHOW_DELAY);
+                title_prompt_string(FSTR("%3sX BONUS"), format_long(bonus, 1), true, BONUS_SHOW_DELAY);
             }
         }
 
         if(streak == -1){
             streak = 0;
-            title_prompt(load_f_string(F(" BONUS GONE"), display_buffer), BONUS_SHOW_TIMES, false, BONUS_SHOW_DELAY);
+            title_prompt(FSTR(" BONUS GONE"), BONUS_SHOW_TIMES, false, BONUS_SHOW_DELAY);
         }
 
     }

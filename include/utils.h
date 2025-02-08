@@ -2,6 +2,7 @@
 #define __UTILS_H__
 
 #include <Arduino.h>
+#include "bank.h"
 
 // shortcut for using strings stored in program memory
 #define FSTR(s) (load_f_string(F(s)))
@@ -10,5 +11,9 @@ extern char * load_f_string(const __FlashStringHelper* f_string, char *override_
 extern void micros_to_ms(char * buffer, unsigned long micros);
 extern long time_to_seconds(byte second, byte minute, byte hour);
 extern void seconds_to_time(long seconds, byte &second, byte &minute, byte &hour);
+extern char *format_long(long num, long basis=0);
+extern bool title_prompt_int(const char * pattern, int data, bool show_leds = false, int show_time = 0);
+extern bool title_prompt_string(const char * pattern, char * data, bool show_leds = false, int show_time = 0);
+extern bool title_prompt_string2(const char * pattern, char * data1, char * data2, bool show_leds, int show_time);
 
 #endif

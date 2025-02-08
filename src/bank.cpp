@@ -143,7 +143,7 @@ long use_purse(long money){
 #endif
 
     if(purse < PLAYER_MINIMUM){
-        sprintf(display_buffer, FSTR("Seeking Cash"));
+        sprintf(display_buffer, FSTR("Finding Cash"));
         title_prompt(display_buffer, 1, false, ALERT_SHOW_TIME);
     }
 
