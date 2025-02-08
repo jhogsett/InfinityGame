@@ -252,8 +252,9 @@ bool word_game(){
                 cancel_streak();
 				break;
 			default:
-				sprintf(display_buffer, FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word);
-				title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, SUCCESS_SHOW_DELAY);
+				// sprintf(display_buffer, FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word);
+				// title_prompt(display_buffer, SUCCESS_SHOW_TIMES, true, SUCCESS_SHOW_DELAY);
+                title_prompt_string3(FSTR("%s%s%s"), chosen_word, chosen_word, chosen_word, true, SUCCESS_SHOW_DELAY);
 
 				win = (round_result) * (WORD_GAME_WIN_UNIT);
 

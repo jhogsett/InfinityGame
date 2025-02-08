@@ -157,8 +157,9 @@ bool slots_game(){
 		while(button_pressed())
 			;
 
-		sprintf(display_buffer, FSTR("%s%s%s"), words[choice1], words[choice2], words[choice3]);
-		title_prompt(display_buffer);
+		// sprintf(display_buffer, FSTR("%s%s%s"), words[choice1], words[choice2], words[choice3]);
+		// title_prompt(display_buffer);
+        title_prompt_string3(FSTR("%s%s%s"), words[choice1], words[choice2], words[choice3]);
 
 		long win_factor = 0;
 		if(jackpot_words_chosen(jackpot_choice1, jackpot_choice2, jackpot_choice3)){

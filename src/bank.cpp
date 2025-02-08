@@ -76,16 +76,18 @@ long bank_robbery(long min_money, long max_money){
 	return bank_widthdrawl(take);
 }
 
+#define RESETTING_SHOW_TIMES 2
+#define RESETTING_COUNTDOWN_TIME 450
+
 bool reset_bank(){
-    sprintf(display_buffer, FSTR("BANK INSOLVANT. RESETTING"));
-    title_prompt(display_buffer, 2);
+    title_prompt(FSTR("BANK INSOLVANT. RESETTING"), RESETTING_SHOW_TIMES);
 
     for(int i = 10; i >= 0; i--){
         sprintf(display_buffer, FSTR("%7d"), i);
         beep();
-        title_prompt(display_buffer, 1, false, 500);
+        title_prompt(display_buffer, 1, false, RESETTING_COUNTDOWN_TIME);
         display.clear();
-        delay(500);
+        delay(RESETTING_COUNTDOWN_TIME);
     }
 
 	purse = DEFAULT_PURSE;
@@ -143,8 +145,7 @@ long use_purse(long money){
 #endif
 
     if(purse < PLAYER_MINIMUM){
-        sprintf(display_buffer, FSTR("Finding Cash"));
-        title_prompt(display_buffer, 1, false, ALERT_SHOW_TIME);
+        title_prompt(FSTR("Finding Cash"), 1, false, ALERT_SHOW_TIME);
     }
 
 	long total_loan = 0;
@@ -162,8 +163,9 @@ long use_purse(long money){
 	crime_wave = false;
 
 	if(total_loan){
-		sprintf(display_buffer, FSTR("GANG LOAN $%s"), format_long(total_loan));
-		title_prompt(display_buffer, 1, false, ALERT_SHOW_TIME);
+		// sprintf(display_buffer, FSTR("GANG LOAN $%s"), format_long(total_loan));
+		// title_prompt(display_buffer, 1, false, ALERT_SHOW_TIME);
+        title_prompt_string(FSTR("GANG LOAN $%s"), format_long(total_loan), false, ALERT_SHOW_TIME);
 	}
 
 	return money;

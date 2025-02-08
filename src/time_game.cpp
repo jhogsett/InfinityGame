@@ -145,8 +145,9 @@ bool time_game(){
                 mean += reaction_time;
 
                 micros_to_ms(copy_buffer, reaction_time);
-                sprintf(display_buffer, FSTR("%s ms"), copy_buffer);
-                display.scroll_string(display_buffer, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
+                // sprintf(display_buffer, FSTR("%s ms"), copy_buffer);
+                // display.scroll_string(display_buffer, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
+                title_prompt_string(FSTR("%s ms"), copy_buffer, false, ROUND_DELAY);
                 delay(ROUND_DELAY);
                 display.clear();
             }

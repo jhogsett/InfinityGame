@@ -13,7 +13,8 @@ extern long time_to_seconds(byte second, byte minute, byte hour);
 extern void seconds_to_time(long seconds, byte &second, byte &minute, byte &hour);
 extern char *format_long(long num, long basis=0);
 extern bool title_prompt_int(const char * pattern, int data, bool show_leds = false, int show_time = 0);
-extern bool title_prompt_string(const char * pattern, char * data, bool show_leds = false, int show_time = 0);
-extern bool title_prompt_string2(const char * pattern, char * data1, char * data2, bool show_leds, int show_time);
+extern bool title_prompt_string(const char * pattern, const char * data, bool show_leds = false, int show_time = 0);
+extern bool title_prompt_string2(const char * pattern, const char * data1, const char * data2, bool show_leds = false, int show_time = 0);
+extern bool title_prompt_string3(const char * pattern, const char * data1, const char * data2, const char * data3, bool show_leds = false, int show_time = 0);
 
 #endif

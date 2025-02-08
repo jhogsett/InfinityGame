@@ -70,13 +70,17 @@ bool title_prompt_int(const char * pattern, int data, bool show_leds, int show_t
 	return title_prompt(display_buffer, 1, show_leds, show_time == 0 ? ROUND_DELAY : show_time);
 }
 
-bool title_prompt_string(const char * pattern, char * data, bool show_leds, int show_time){
+bool title_prompt_string(const char * pattern, const char * data, bool show_leds, int show_time){
 	sprintf(display_buffer, pattern, data);
 	return title_prompt(display_buffer, 1, show_leds, show_time == 0 ? ROUND_DELAY : show_time);
 }
 
-bool title_prompt_string2(const char * pattern, char * data1, char * data2, bool show_leds, int show_time){
+bool title_prompt_string2(const char * pattern, const char * data1, const char * data2, bool show_leds, int show_time){
 	sprintf(display_buffer, pattern, data1, data2);
 	return title_prompt(display_buffer, 1, show_leds, show_time == 0 ? ROUND_DELAY : show_time);
 }
 
+bool title_prompt_string3(const char * pattern, const char * data1, const char * data2, const char * data3, bool show_leds, int show_time){
+	sprintf(display_buffer, pattern, data1, data2, data3);
+	return title_prompt(display_buffer, 1, show_leds, show_time == 0 ? ROUND_DELAY : show_time);
+}
