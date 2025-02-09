@@ -1,4 +1,3 @@
-long press from tools set somestimes goes directly to game menu
 
 ability to scroll off a display (and scroll on, like inserting 12 spaces before or after)
 also scroll in the other direction (for short strings)
