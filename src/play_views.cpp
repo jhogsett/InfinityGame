@@ -28,7 +28,7 @@ bool display_scores(){
                 break;
         }
 		micros_to_ms(time_display, score);
-        title_prompt_string2(FSTR("%s SCORE %s ms"), label, time_display, false, BALANCES_SHOW_DELAY);
+        title_prompt_string2(FSTR("%s SCORE %s"), label, time_display, false, BALANCES_SHOW_DELAY);
     }
     return false;
 }

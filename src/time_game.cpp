@@ -42,7 +42,7 @@ bool time_game(){
 
     unsigned long best_time = render_best_time_per_mode(copy_buffer, mode);
     if(best_time != DEFAULT_TIME)
-        title_prompt_string(FSTR("Best Score %s ms"), copy_buffer, false, ROUND_DELAY);
+        title_prompt_string(FSTR("Best Score %s"), copy_buffer, false, ROUND_DELAY);
 
     unsigned long time = millis();
     unsigned long timeout_time = time + option_idle_time;
@@ -59,10 +59,9 @@ bool time_game(){
 
         best_time = render_best_time_per_mode(copy_buffer, mode);
         if(best_time != DEFAULT_TIME)
-            title_prompt_string(FSTR("Beat %s ms"), copy_buffer, false, BEAT_SHOW_TIME);
+            title_prompt_string(FSTR("Beat %s"), copy_buffer, false, BEAT_SHOW_TIME);
 
         display.clear();
-        delay(ROUND_DELAY);
 
         unsigned long mean = 0;
         for(byte i = 0; i < TIME_GAME_ROUNDS; i++){
@@ -156,7 +155,7 @@ bool time_game(){
                 mean += reaction_time;
 
                 micros_to_ms(copy_buffer, reaction_time);
-                title_prompt_string(FSTR("%s ms"), copy_buffer, false, ROUND_DELAY);
+                title_prompt_string(FSTR(" %s"), copy_buffer, false, ROUND_DELAY);
                 delay(ROUND_DELAY);
                 display.clear();
             }
@@ -166,7 +165,7 @@ bool time_game(){
 
         mean /= TIME_GAME_ROUNDS;
         micros_to_ms(copy_buffer, mean);
-        title_prompt_string(FSTR("SCORE %s ms"), copy_buffer, false, ROUND_DELAY);
+        title_prompt_string(FSTR("SCORE %s"), copy_buffer, false, ROUND_DELAY);
 
         // save the best result per mode
         bool new_best_per_mode = false;
@@ -196,15 +195,14 @@ bool time_game(){
         }
         if(new_best_per_mode){
             micros_to_ms(copy_buffer, mean);
-            title_prompt_string2(FSTR("*NEW BEST %s %s ms"), label, copy_buffer, true, ROUND_DELAY);
+            title_prompt_string2(FSTR("*NEW BEST %s %s"), label, copy_buffer, true, ROUND_DELAY);
         }
 
         if(mean < best_time){
             best_time = mean;
 
             micros_to_ms(copy_buffer, mean);
-
-            title_prompt_string(FSTR("*NEW OVERALL BEST %s ms"), copy_buffer, true, ROUND_DELAY);
+            title_prompt_string(FSTR("*NEW OVERALL BEST %s"), copy_buffer, true, ROUND_DELAY);
 
             display_win(TIME_WIN);
 

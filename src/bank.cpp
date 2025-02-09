@@ -163,26 +163,11 @@ long use_purse(long money){
 	crime_wave = false;
 
 	if(total_loan){
-		// sprintf(display_buffer, FSTR("GANG LOAN $%s"), format_long(total_loan));
-		// title_prompt(display_buffer, 1, false, ALERT_SHOW_TIME);
         title_prompt_string(FSTR("GANG LOAN $%s"), format_long(total_loan), false, LOAN_SHOW_TIME);
 	}
 
 	return money;
 }
-
-// // returns the amount burglarized
-// long scam_purse(long min_dollars, long max_dollars){
-// 	// quantize to 100s
-// 	min_dollars /= 100;
-// 	max_dollars /= 100;
-// 	long take = random(min_dollars, max_dollars+1);
-// 	min_dollars *= 100;
-// 	max_dollars *= 100;
-
-// 	return house_payout(take);
-// }
-
 
 // returns the amount added
 long add_to_purse(long money){

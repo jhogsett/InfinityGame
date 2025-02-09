@@ -17,7 +17,7 @@ void micros_to_ms(char * buffer, unsigned long micros){
         unsigned int ms_dec, ms_frac;
         ms_dec = micros / 1000;
         ms_frac = micros % 1000;
-        sprintf(buffer, FSTR("%u.%04u"), ms_dec, ms_frac);
+        sprintf(buffer, FSTR("%u.%04u ms"), ms_dec, ms_frac);
     }
 }
 
