@@ -77,22 +77,13 @@ bool slots_game(){
 	randomizer.randomize();
 	byte jackpot_choice3 = random(NUM_WORDS);
 
-	bool rude;
-	const bool buttons[] = {false, true, false, true};
-	switch(button_led_prompt(FSTR("NICE or RUDE"), buttons)){
-		case -1:
-		case 0:
-			return false;
-		case 1:
-			rude = false;
-			break;
-		case 2:
-			rude = random(2) == 0 ? true : false;
-			break;
-		case 3:
-			rude = true;
-			break;
-	}
+    bool rude = false;
+	switch(prompt_nice_or_rude()){
+        case -1:
+            return false;
+        case 1:
+            rude = true;
+    }
 
 	const char **words = rude ? rude_words : nice_words;
 	char text[REEL_BUFFER_LEN];
@@ -167,8 +158,7 @@ bool slots_game(){
 		while(button_pressed())
 			;
 
-		sprintf(display_buffer, FSTR("%s%s%s"), words[choice1], words[choice2], words[choice3]);
-		title_prompt(display_buffer);
+        title_prompt_string3(FSTR("%s%s%s"), words[choice1], words[choice2], words[choice3]);
 
 		long win_factor = 0;
 		if(jackpot_words_chosen(jackpot_choice1, jackpot_choice2, jackpot_choice3)){

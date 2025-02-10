@@ -35,7 +35,7 @@
 #define DEFAULT_TIME ((unsigned long)-1)
 
 // default idle mode
-#define DEFAULT_IDLE_MODE IDLE_MODE_CLOCK
+#define DEFAULT_IDLE_MODE IDLE_MODE_SLEEP
 
 // default milliseconds until device goes into idle mode
 #define DEFAULT_IDLE_TIME (5L * 60L * 1000L)
@@ -132,5 +132,6 @@ struct SavedData{
 extern void load_save_data();
 extern void save_data();
 extern bool reset_options();
+extern void reset_device();
 
 #endif

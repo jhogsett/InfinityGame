@@ -149,7 +149,7 @@ public:
 	void segments_test();
 	void clear();
 	int string_length(const char * string);
-	void show_string(const char * string, bool pad_blanks = true, bool right_justify = false);
+	void show_string(const char * string, bool pad_blanks = true);
 	void simple_show_string(const char * string);
 
 	void scroll_string(const char * string, int show_delay = 0, int scroll_delay = 0);

@@ -42,12 +42,10 @@ bool decrement_timer(byte &second, byte &minute, byte &hour, int seconds, int mi
 	return total_seconds > 0;
 }
 
-// TODO timer mode should time out per sleep timeout after no activity
 bool timer_prompt(byte seconds, byte minutes, byte hours) {
 	unsigned long time = millis();
 	unsigned long idle_timeout = time + option_idle_time;
 
-	// unsigned long next_second = millis() + 1000;
 	unsigned long next_second = 0;
 	timer_hour = hours;
 	timer_minute = minutes;

@@ -37,7 +37,7 @@ const unsigned char morsedata[] PROGMEM = {
     0b10000100, // 4
     0b00000100, // 5
     0b00001100, // 6
-    0b10011100, // 7
+    0b00011100, // 7
     0b00111100, // 8
     0b01111100  // 9
     };
@@ -82,7 +82,7 @@ void _send_morse(int c, int time){
     }
 }
 
-void send_morse(char c, int time){
+void _send_morse_char(char c, int time){
     int offset = -1;
     if(c == ' '){
         _send_word_space(time);
@@ -105,13 +105,19 @@ void send_morse(char c, int time){
     }
 }
 
+void send_morse(char c, int wpm){
+    if(wpm == 0)
+        wpm = option_wpm;
+    _send_morse_char(c, MORSE_TIME_FROM_WPM(wpm));
+}
+
 void send_morse(const char *s, int wpm){
     if(wpm == 0)
         wpm = option_wpm;
     int time = MORSE_TIME_FROM_WPM(wpm);
     int l = strlen(s);
     for(int i = 0; i < l; i++){
-        send_morse(s[i], time);
+        _send_morse_char(s[i], time);
         _send_char_space(time);
     }
 }
