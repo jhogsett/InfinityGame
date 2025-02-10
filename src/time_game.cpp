@@ -45,9 +45,6 @@ bool time_game(){
     if(best_time != DEFAULT_TIME)
         title_prompt_string(FSTR("Best Score %s"), copy_buffer, false, ROUND_DELAY);
 
-	sprintf(display_buffer, FSTR("%3d Rounds"), TIMEGAME_ROUNDS);
-	title_prompt(display_buffer, 1, false, ROUND_DELAY);
-
     unsigned long time = millis();
     unsigned long timeout_time = time + option_idle_time;
 
