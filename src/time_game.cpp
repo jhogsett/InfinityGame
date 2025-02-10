@@ -32,7 +32,8 @@ unsigned long render_best_time_per_mode(char * buffer, int mode){
 }
 
 bool time_game(){
-	title_prompt(FSTR("The TimeGame"), TITLE_SHOW_TIMES, true);
+	if(title_prompt(FSTR("The TimeGame"), TITLE_SHOW_TIMES, true))
+        return false;
 
     int mode = MODE_FLASH;
 	const char *labels[] = {"LEDS", "BEEP", "BUZZ"};
