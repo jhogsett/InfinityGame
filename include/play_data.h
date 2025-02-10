@@ -3,13 +3,15 @@
 
 #include <Arduino.h>
 #include "idle_mode.h"
+#include "morse.h"
+#include "chime.h"
 
 // when adding new persisted play data, search for ##DATA
 
 // ##DATA Increment the save data version to force upgraded devices to auto-reset after programming
 // Current save data version
 // On start-up if this differs from the EEPROM value, the data is reset to defaults
-#define SAVE_DATA_VERSION 3
+#define SAVE_DATA_VERSION 4
 
 // All money originates in the bank, this is in money basis units
 #define DEFAULT_OUTSTANDING (DEFAULT_GANG + DEFAULT_HOUSE + DEFAULT_PURSE)
@@ -41,6 +43,10 @@
 #define DEFAULT_VIG 0L
 
 #define DEFAULT_VIB_STR false
+
+#define DEFAULT_CLOCK_CHIME CHIME_NONE
+
+#define DEFAULT_WPM DEFAULT_MORSE_WPM
 
 // ##DATA add new defaults on play data reset above here
 
@@ -92,6 +98,10 @@ extern unsigned long option_idle_time;
 // Current vig
 extern long vig;
 
+extern byte option_clock_chime;
+
+extern byte option_wpm;
+
 // ##DATA Add 'extern's for new persisted play data veriables here
 
 
@@ -113,6 +123,8 @@ struct SavedData{
 	unsigned long option_idle_time;
     long vig;
     bool option_vib_str;
+    byte option_clock_chime;
+    byte option_wpm;
 
 	// ##DATA Add new persisted data types above here
 };

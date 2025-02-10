@@ -13,12 +13,18 @@
 #define NUM_PANEL_LEDS 3
 #define FIRST_PANEL_LED 9
 #define LAST_PANEL_LED 11
+#define GREEN_PANEL_LED 9
+#define AMBER_PANEL_LED 10
+#define RED_PANEL_LED 11
 
 // Arduino Nano pins for the button LEDs
 // digital pins
 #define NUM_BUTTON_LEDS 3
 #define FIRST_BUTTON_LED 6
 #define LAST_BUTTON_LED 8
+#define GREEN_BUTTON_LED 6
+#define AMBER_BUTTON_LED 7
+#define RED_BUTTON_LED 8
 
 // Arduino Nano pins for the 'any' button and three arcade buttons
 // The 'any' button is wired by diodes to the three other buttons
