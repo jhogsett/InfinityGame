@@ -30,11 +30,8 @@ typedef bool (*boolFuncPtr)(void);
 const char template0[] PROGMEM = "InfinityGame";
 const char template1[] PROGMEM = "Press A Button to Play";
 const char template2[] PROGMEM = "Wallet CASH $%s";
-const char template3[] PROGMEM = "Best SCORE %s ms";
+const char template3[] PROGMEM = "Best SCORE %s";
 const char template4[] PROGMEM = "Payback LOAN $%s";
-// const char template4[] PROGMEM = "House SAFE $%s";
-// const char template5[] PROGMEM = "Bank VAULT $%s";
-// const char template6[] PROGMEM = "GANG STASH $%s";
 const char template5[] PROGMEM = "Play Silly Slots";
 const char template6[] PROGMEM = "Play The WordGame";
 const char template7[] PROGMEM = "Play The TimeGame";
@@ -45,9 +42,6 @@ const char *const templates[] PROGMEM = { template0, template1, template2, templ
 #define BILLBOARD_CASH 2
 #define BILLBOARD_TIME 3
 #define BILLBOARD_VIG 4
-// #define BILLBOARD_HOUSE 4
-// #define BILLBOARD_BANK 5
-// #define BILLBOARD_GANG 6
 
 extern BillboardsHandler billboards_handler;
 extern char *billboard_data[NUM_BILLBOARDS];

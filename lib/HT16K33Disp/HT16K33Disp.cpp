@@ -30,8 +30,6 @@ void HT16K33Disp::init(const byte *brightLevels){
 	}
 }
 
-
-
 void HT16K33Disp::write(byte digit, unsigned int data){
 	int display = digit / NUM_DIGITS_PER_DISPLAY;
 	digit -= (display * NUM_DIGITS_PER_DISPLAY);
@@ -60,61 +58,52 @@ int HT16K33Disp::string_length(const char * string){
 	for(int i = 0; i <= num_chars; i++){
 		if(*string == 0)
 		    break;
-		// period chars won't take up a digit position when displayed
 
+		// period chars won't take up a digit position when displayed
 		if(*(string + 1) == '.')
 		    string++;
-		string++;
+
+        string++;
 		count++;
 	}
 	return count;
 }
 
-void HT16K33Disp::show_string(const char * string, bool pad_blanks, bool right_justify){
-	byte i = 0;
-	if(right_justify)
-	{
-		char diff = _num_digits - string_length(string);
-		if(pad_blanks)
-		{
-		    if(diff > 0){
+void HT16K33Disp::show_string(const char * string, bool pad_blanks){
+	byte start = 0;
+	// if(right_justify)
+	// {
+	// 	char diff = _num_digits - string_length(string);
+	// 	if(pad_blanks)
+	// 	{
+	// 	    if(diff > 0){
+    //     		for(start = 0; start < diff; start++)
+    //     		    write(start, char_to_segments(' '));
+    //         }
+	// 	}
+	// 	else
+	// 	    start = diff;
+	// }
 
-		for(i = 0; i < diff; i++)
-
-		    write(i, char_to_segments(' '));
-		    }
-		}
-		else
-
-		    i = diff;
-	}
-
-	for(byte j = i; j < _num_digits; j++)
+	for(byte j = start; j < _num_digits; j++)
 	{
 		if(*string == 0)
 		{
-		    if(pad_blanks && !right_justify)
-
-		write(j, char_to_segments(' '));
+		    if(pad_blanks)// && !right_justify)
+        		write(j, char_to_segments(' '));
 		    else
-
-		break;
+        		break;
 		}
 		else
-
 		{
 		    if(*(string + 1) == '.')
 		    {
-
-		// take the next char and just light this positions DP LED
-
-		write(j, char_to_segments(*string, true));
-
-		string++;
+        		// take the next char and just light this positions DP LED
+        		write(j, char_to_segments(*string, true));
+        		string++;
 		    }
 		    else
-
-		write(j, char_to_segments(*string));
+        		write(j, char_to_segments(*string));
 		    string++;
 		}
 	}
@@ -166,15 +155,12 @@ bool HT16K33Disp::step_scroll_string(unsigned long time){
 		if(_short_string)
 		    show_string(_string, true);
 		else
-
 		{
 		    simple_show_string(_string + _scrollpos);
 		    if(_frame < _frames - 1){
-
-		_scrollpos++;
-		if(*(_string + _scrollpos) == '.')
-
-		    _scrollpos++;
+        		_scrollpos++;
+		        if(*(_string + _scrollpos) == '.')
+        		    _scrollpos++;
 		    }
 		}
 		int del = (_frame == 0) || (_frame == _frames - 1) ? _show_delay : _scroll_delay;
@@ -184,9 +170,7 @@ bool HT16K33Disp::step_scroll_string(unsigned long time){
 		    _frame++;
 		    return true;
 		} else
-
 		    return false;
-
 	}
 	else
     {

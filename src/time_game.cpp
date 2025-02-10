@@ -14,15 +14,7 @@
 #include "timeouts.h"
 #include "debug.h"
 
-bool time_game(){
-	title_prompt(FSTR("The TimeGame"), TITLE_SHOW_TIMES, true);
-
-    int mode = MODE_FLASH;
-	const char *labels[] = {"LEDS", "BEEP", "BUZZ"};
-	mode = toggle_prompt(FSTR("Choose  %s"), labels, mode, 3, 3);
-    if(mode == -1)
-        return false;
-
+unsigned long render_best_time_per_mode(char * buffer, int mode){
     unsigned long show_time = 0;
     switch(mode){
         case MODE_FLASH:
@@ -36,24 +28,43 @@ bool time_game(){
             break;
     }
     micros_to_ms(copy_buffer, show_time);
-	sprintf(display_buffer, FSTR("Best Score %s ms"), copy_buffer);
-	title_prompt(display_buffer, 1, false, ROUND_DELAY);
+    return show_time;
+}
+
+bool time_game(){
+	title_prompt(FSTR("The TimeGame"), TITLE_SHOW_TIMES, true);
+
+    int mode = MODE_FLASH;
+	const char *labels[] = {"LEDS", "BEEP", "BUZZ"};
+	mode = toggle_prompt(FSTR("Choose  %s"), labels, mode, 3, 3);
+    if(mode == -1)
+        return false;
+
+    unsigned long best_time = render_best_time_per_mode(copy_buffer, mode);
+    if(best_time != DEFAULT_TIME)
+        title_prompt_string(FSTR("Best Score %s"), copy_buffer, false, ROUND_DELAY);
 
     unsigned long time = millis();
     unsigned long timeout_time = time + option_idle_time;
 
+    bool instructed = false;
     while((time = millis()) < timeout_time){
-        int response;
-        const bool buttons[] = {false, true, false, true};
-        response = button_led_prompt(FSTR("READY   Back"), buttons);
-        if(response == 0 || response == -1 || response == RED_ID)
-            return false;
+        if(!prompt_ready())
+        return false;
+
+        if(!instructed){
+            title_prompt_int(FSTR("%3d Rounds"), TIME_GAME_ROUNDS, false, ROUNDS_SHOW_TIME);
+            instructed = true;
+        }
+
+        best_time = render_best_time_per_mode(copy_buffer, mode);
+        if(best_time != DEFAULT_TIME)
+            title_prompt_string(FSTR("Beat %s"), copy_buffer, false, BEAT_SHOW_TIME);
 
         display.clear();
-        delay(ROUND_DELAY);
 
         unsigned long mean = 0;
-        for(byte i = 0; i < ROUNDS; i++){
+        for(byte i = 0; i < TIME_GAME_ROUNDS; i++){
             delay(ROUND_DELAY);
             bool fault_protect = true;
             while(fault_protect){
@@ -144,8 +155,7 @@ bool time_game(){
                 mean += reaction_time;
 
                 micros_to_ms(copy_buffer, reaction_time);
-                sprintf(display_buffer, FSTR("%s ms"), copy_buffer);
-                display.scroll_string(display_buffer, DISPLAY_SHOW_TIME, DISPLAY_SCROLL_TIME);
+                title_prompt_string(FSTR(" %s"), copy_buffer, false, ROUND_DELAY);
                 delay(ROUND_DELAY);
                 display.clear();
             }
@@ -153,10 +163,9 @@ bool time_game(){
 
         while(button_pressed());
 
-        mean /= ROUNDS;
+        mean /= TIME_GAME_ROUNDS;
         micros_to_ms(copy_buffer, mean);
-        sprintf(display_buffer, FSTR("SCORE %s ms"), copy_buffer);
-        title_prompt(display_buffer, 1, false, ROUND_DELAY);
+        title_prompt_string(FSTR("SCORE %s"), copy_buffer, false, ROUND_DELAY);
 
         // save the best result per mode
         bool new_best_per_mode = false;
@@ -186,17 +195,14 @@ bool time_game(){
         }
         if(new_best_per_mode){
             micros_to_ms(copy_buffer, mean);
-            sprintf(display_buffer, FSTR("*NEW BEST %s %s ms"), label, copy_buffer);
-            title_prompt(display_buffer, 1, true, ROUND_DELAY);
+            title_prompt_string2(FSTR("*NEW BEST %s %s"), label, copy_buffer, true, ROUND_DELAY);
         }
 
         if(mean < best_time){
             best_time = mean;
 
             micros_to_ms(copy_buffer, mean);
-            sprintf(display_buffer, FSTR("*NEW OVERALL BEST %s ms"), copy_buffer);
-
-            title_prompt(display_buffer, 1, true, ROUND_DELAY);
+            title_prompt_string(FSTR("*NEW OVERALL BEST %s"), copy_buffer, true, ROUND_DELAY);
 
             display_win(TIME_WIN);
 
@@ -205,11 +211,6 @@ bool time_game(){
 
             save_data();
         }
-		// else {
-        //     micros_to_ms(copy_buffer, best_time);
-        //     sprintf(display_buffer, FSTR("Overall Best %s ms"), copy_buffer);
-        //     title_prompt(display_buffer, 1, false, ROUND_DELAY);
-        // }
     }
 
 	return false;

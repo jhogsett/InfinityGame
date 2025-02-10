@@ -60,6 +60,10 @@ long bank_deposit(long money){
 // returns the amount withdrawn
 long bank_widthdrawl(long money){
 	bank -= money;
+
+    if(bank < BANK_MINIMUM){
+        reset_bank();
+    }
 #ifdef SHOW_BANK_FLASHES
     flash_led(GREEN_PANEL_LED);
 #endif
@@ -71,6 +75,35 @@ long bank_robbery(long min_money, long max_money){
 	long take = random(min_money, max_money+1);
 	return bank_widthdrawl(take);
 }
+
+#define RESETTING_SHOW_TIMES 2
+#define RESETTING_COUNTDOWN_TIME 450
+
+bool reset_bank(){
+    title_prompt(FSTR("BANK INSOLVANT. RESETTING"), RESETTING_SHOW_TIMES);
+
+    for(int i = 10; i >= 0; i--){
+        sprintf(display_buffer, FSTR("%7d"), i);
+        beep();
+        title_prompt(display_buffer, 1, false, RESETTING_COUNTDOWN_TIME);
+        display.clear();
+        delay(RESETTING_COUNTDOWN_TIME);
+    }
+
+	purse = DEFAULT_PURSE;
+	bank = DEFAULT_BANK;
+	house = DEFAULT_HOUSE;
+	gang = DEFAULT_GANG;
+    vig = DEFAULT_VIG;
+
+    // ##DATA Reset new persisted play data veriables to default variables here
+
+	save_data();
+
+	reset_device();
+	return false;
+}
+
 
 // House operations
 
@@ -111,6 +144,10 @@ long use_purse(long money){
     flash_led(RED_PANEL_LED);
 #endif
 
+    if(purse < PLAYER_MINIMUM){
+        title_prompt(FSTR("Finding Cash"), 1, false, FINDING_SHOW_TIME);
+    }
+
 	long total_loan = 0;
 	while(purse + total_loan < PLAYER_MINIMUM)
 		total_loan += gang_loan(PLAYER_LOAN);
@@ -126,25 +163,11 @@ long use_purse(long money){
 	crime_wave = false;
 
 	if(total_loan){
-		sprintf(display_buffer, FSTR("GANG LOAN $%s"), format_long(total_loan));
-		title_prompt(display_buffer, 1, false, ALERT_SHOW_TIME);
+        title_prompt_string(FSTR("GANG LOAN $%s"), format_long(total_loan), false, LOAN_SHOW_TIME);
 	}
 
 	return money;
 }
-
-// // returns the amount burglarized
-// long scam_purse(long min_dollars, long max_dollars){
-// 	// quantize to 100s
-// 	min_dollars /= 100;
-// 	max_dollars /= 100;
-// 	long take = random(min_dollars, max_dollars+1);
-// 	min_dollars *= 100;
-// 	max_dollars *= 100;
-
-// 	return house_payout(take);
-// }
-
 
 // returns the amount added
 long add_to_purse(long money){

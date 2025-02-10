@@ -17,7 +17,8 @@ extern void _send_dash(int time = DEFAULT_MORSE_TIME);
 extern void _send_char_space(int time = DEFAULT_MORSE_TIME);
 extern void _send_word_space(int time = DEFAULT_MORSE_TIME);
 extern void _send_morse(int c, int time = DEFAULT_MORSE_TIME);
-extern void send_morse(char c, int time = DEFAULT_MORSE_TIME);
+extern void _send_morse_char(char c, int time = DEFAULT_MORSE_TIME);
+extern void send_morse(char c, int wpm = 0);
 extern void send_morse(const char *s, int wpm = 0);
 
 #endif

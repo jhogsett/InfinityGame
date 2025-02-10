@@ -1,4 +1,5 @@
 #include "clock_mode.h"
+#include "code_game.h"
 #include "play_data.h"
 #include "play_views.h"
 #include "prompts.h"
@@ -26,15 +27,23 @@ bool tools_menu(){
 		return timer_mode();
 	}
 
-	switch(button_led_prompt(FSTR("SLEEP    GO "))){
-	case -1:
-	case 0:
-		return false;
-	case 3:
-		return sleep_mode();
-	}
+	switch(button_led_prompt(FSTR("MORSE    GO "))){
+        case -1:
+        case 0:
+        return false;
+        case 3:
+        return code_game();
+    }
 
-#ifdef ENABLE_TEST_FEATURES
+    switch(button_led_prompt(FSTR("SLEEP    GO "))){
+    case -1:
+    case 0:
+        return false;
+    case 3:
+        return sleep_mode();
+    }
+
+    #ifdef ENABLE_TEST_FEATURES
 	switch(button_led_prompt(FSTR("TEST     GO "))){
 	case -1:
 		return false;
