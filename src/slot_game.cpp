@@ -14,7 +14,6 @@
 #include "word_lists.h"
 
 byte choice1, choice2, choice3;
-byte bonus_word;
 
 bool run_slot_reel(HT16K33Disp * disp, unsigned long time, char * text, const char **words, byte &choice){
 	bool running = disp->loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME);
@@ -59,8 +58,8 @@ bool double_word_chosen(){
 	return choice1 == choice2 || choice2 == choice3 || choice1 == choice3;
 }
 
-bool special_word_chosen(){
-	return choice1 == bonus_word || choice2 == bonus_word || choice3 == bonus_word;
+bool bonus_word_chosen(byte bonus_word){
+	return (choice1 == bonus_word) || (choice2 == bonus_word) || (choice3 == bonus_word);
 }
 
 bool jackpot_words_chosen(byte word1, byte word2, byte word3){
@@ -90,8 +89,8 @@ bool slots_game(){
 
 	const char **words = rude ? rude_words : nice_words;
 	char text[REEL_BUFFER_LEN];
-	sprintf(text,
-            FSTR("    %s  %s  %s  %s  %s  %s  %s  %s  %s  %s  %s  %s  %s  %s  %s"),
+	sprintf_P(text,
+            PSTR("%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "),
 			words[0],
 			words[1],
 			words[2],
@@ -109,7 +108,7 @@ bool slots_game(){
 			words[14]);
 
     title_prompt(" Bonus Word", 1, false, ROUND_DELAY);
-    sprintf(display_buffer, FSTR("%s%s%s"), words[bonus_word], words[bonus_word], words[bonus_word]);
+    sprintf_P(display_buffer, PSTR("%s%s%s"), words[bonus_word], words[bonus_word], words[bonus_word]);
     title_prompt(display_buffer, 1, true, BONUS_SHOW_TIME);
     display.clear();
     delay(ROUND_DELAY);
@@ -122,7 +121,7 @@ bool slots_game(){
 		bet_amounts[BET_ALL] = get_purse();
 		bet_amounts[BET_REPEAT] = last_bet_amount;
 
-		sprintf(display_buffer, FSTR("BET %s Back"), standard_bet_str(current_bet));
+		sprintf_P(display_buffer, PSTR("BET %s Back"), standard_bet_str(current_bet));
 		const bool states[] = {false, true, false, false};
 		int response = button_led_prompt(display_buffer, states, true);
 		switch(response){
@@ -151,7 +150,7 @@ bool slots_game(){
 				if(current_bet >= NUM_BET_AMOUNTS)
 					current_bet = 0;
 
-				sprintf(display_buffer, FSTR("    %s"), standard_bet_str(current_bet));
+				sprintf_P(display_buffer, PSTR("    %s"), standard_bet_str(current_bet));
 				disp2.scroll_string(display_buffer, 1, OPTION_FLIP_SCROLL_TIME);
 				continue;
 			case 3:
@@ -174,18 +173,19 @@ bool slots_game(){
         title_prompt_string3(FSTR("%s%s%s"), words[choice1], words[choice2], words[choice3]);
 
 		long win_factor = 0;
+        bool word_bonus = bonus_word_chosen(bonus_word);
 		if(jackpot_words_chosen(jackpot_choice1, jackpot_choice2, jackpot_choice3)){
 			win_factor = WIN_JACKPOT;
 			jackpot = true;
 		} else if(triple_word_chosen()){
 			win_factor = WIN_TRIPLE;
-			if(special_word_chosen())
+			if(word_bonus)
 				win_factor *= WIN_WORD_BONUS;
 		} else if(double_word_chosen()){
 			win_factor = WIN_DOUBLE;
-			if(special_word_chosen())
+			if(word_bonus)
 				win_factor *= WIN_WORD_BONUS;
-		} else if(choice1 < WIN_WORD_CUTOFF || choice2 < WIN_WORD_CUTOFF || choice3 < WIN_WORD_CUTOFF) {
+		} else if(word_bonus) {
 			win_factor = WIN_WORD;
 		}
 

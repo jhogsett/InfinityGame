@@ -83,7 +83,7 @@ bool reset_bank(){
     title_prompt(FSTR("BANK INSOLVANT. RESETTING"), RESETTING_SHOW_TIMES);
 
     for(int i = 10; i >= 0; i--){
-        sprintf(display_buffer, FSTR("%7d"), i);
+        sprintf_P(display_buffer, PSTR("%7d"), i);
         beep();
         title_prompt(display_buffer, 1, false, RESETTING_COUNTDOWN_TIME);
         display.clear();

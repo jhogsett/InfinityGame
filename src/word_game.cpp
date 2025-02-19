@@ -76,7 +76,7 @@ void format_scamble_word(char *buffer){
 void format_scamble_word_display(char *buffer){
 	char show_word[WORD_BUFFER_SIZE];
 	format_scamble_word(show_word);
-	sprintf(buffer, FSTR("rol %s ror"), show_word);
+	sprintf_P(buffer, PSTR("rol %s ror"), show_word);
 }
 
 #define LETTERS_LEN 12
@@ -113,7 +113,7 @@ int choose_word(bool rude){
 	}
 	add_chars[ADD_CHARS_BUFFER_SIZE-1] = '\0';
 
-	sprintf(scramble_word, FSTR("%s%s"), chosen_word, add_chars);
+	sprintf_P(scramble_word, PSTR("%s%s"), chosen_word, add_chars);
 
 	int scramble_moves = 0;
 

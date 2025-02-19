@@ -15,7 +15,7 @@
 #define BONUS_SHOW_TIMES 1
 #define BONUS_SHOW_DELAY 1500
 
-#define CHANCE_OF_NUMBERS 10
+#define CHANCE_OF_NUMBERS 5
 
 extern bool code_game();
 

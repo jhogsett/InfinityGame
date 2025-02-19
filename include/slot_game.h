@@ -2,8 +2,8 @@
 #define __SLOT_GAME_H__
 
 // For animating the slot machine wheels, the show time (20ms) before scrolling and the scrolling time (every 20ms)
-#define SLOTS_SHOW_TIME   20
-#define SLOTS_SCROLL_TIME 15
+#define SLOTS_SHOW_TIME   1
+#define SLOTS_SCROLL_TIME 20
 
 #define BONUS_SHOW_TIME 1500
 
@@ -31,7 +31,7 @@ extern bool run_slot_reel(HT16K33Disp * disp, unsigned long time, char * text, c
 extern void slots_round(char * text, const char **words);
 extern bool triple_word_chosen();
 extern bool double_word_chosen();
-extern bool special_word_chosen();
+extern bool bonus_word_chosen(byte bonus_word);
 extern bool jackpot_words_chosen(byte word1, byte word2, byte word3);
 extern bool slots_game();
 

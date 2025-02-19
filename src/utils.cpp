@@ -17,7 +17,7 @@ void micros_to_ms(char * buffer, unsigned long micros){
         unsigned int ms_dec, ms_frac;
         ms_dec = micros / 1000;
         ms_frac = micros % 1000;
-        sprintf(buffer, FSTR("%u.%04u ms"), ms_dec, ms_frac);
+        sprintf_P(buffer, PSTR("%u.%04u ms"), ms_dec, ms_frac);
     }
 }
 
@@ -54,13 +54,13 @@ char *format_long(long num, long basis){
 	int bills = ((num % 1000000000L) - mills) / 1000000L;
 
 	if(bills > 0)
-		sprintf(copy_buffer, FSTR("%d,%03d,%03d,%03d"), bills*negate, mills, thous, units);
+		sprintf_P(copy_buffer, PSTR("%d,%03d,%03d,%03d"), bills*negate, mills, thous, units);
 	else if(mills > 0)
-		sprintf(copy_buffer, FSTR("%d,%03d,%03d"), mills*negate, thous, units);
+		sprintf_P(copy_buffer, PSTR("%d,%03d,%03d"), mills*negate, thous, units);
 	else if(thous > 0)
-		sprintf(copy_buffer, FSTR("%d,%03d"), thous*negate, units);
+		sprintf_P(copy_buffer, PSTR("%d,%03d"), thous*negate, units);
 	else
-		sprintf(copy_buffer, FSTR("%d"), units*negate);
+		sprintf_P(copy_buffer, PSTR("%d"), units*negate);
 
 	return copy_buffer;
 }
