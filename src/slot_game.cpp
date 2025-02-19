@@ -14,6 +14,7 @@
 #include "word_lists.h"
 
 byte choice1, choice2, choice3;
+byte bonus_word;
 
 bool run_slot_reel(HT16K33Disp * disp, unsigned long time, char * text, const char **words, byte &choice){
 	bool running = disp->loop_scroll_string(time, text, SLOTS_SHOW_TIME, SLOTS_SCROLL_TIME);
@@ -59,7 +60,7 @@ bool double_word_chosen(){
 }
 
 bool special_word_chosen(){
-	return choice1 < WIN_WORD_CUTOFF || choice2 < WIN_WORD_CUTOFF || choice3 < WIN_WORD_CUTOFF;
+	return choice1 == bonus_word || choice2 == bonus_word || choice3 == bonus_word;
 }
 
 bool jackpot_words_chosen(byte word1, byte word2, byte word3){
@@ -70,6 +71,8 @@ bool slots_game(){
 	if(title_prompt(FSTR("Silly Slots"), TITLE_SHOW_TIMES, true))
         return false;
 
+	randomizer.randomize();
+	byte bonus_word = random(NUM_WORDS);
 	randomizer.randomize();
 	byte jackpot_choice1 = random(NUM_WORDS);
 	randomizer.randomize();
@@ -88,7 +91,7 @@ bool slots_game(){
 	const char **words = rude ? rude_words : nice_words;
 	char text[REEL_BUFFER_LEN];
 	sprintf(text,
-            FSTR("    %s  %s  %s  %s  %s  %s  %s  %s  %s  %s"),
+            FSTR("    %s  %s  %s  %s  %s  %s  %s  %s  %s  %s  %s  %s  %s  %s  %s"),
 			words[0],
 			words[1],
 			words[2],
@@ -98,8 +101,18 @@ bool slots_game(){
 			words[6],
 			words[7],
 			words[8],
-			words[9]);
+			words[9],
+			words[10],
+			words[11],
+			words[12],
+			words[13],
+			words[14]);
 
+    title_prompt(" Bonus Word", 1, false, ROUND_DELAY);
+    sprintf(display_buffer, FSTR("%s%s%s"), words[bonus_word], words[bonus_word], words[bonus_word]);
+    title_prompt(display_buffer, 1, true, BONUS_SHOW_TIME);
+    display.clear();
+    delay(ROUND_DELAY);
 
 	unsigned long idle_timeout = millis() + option_idle_time;
 	unsigned long time;

@@ -3,7 +3,9 @@
 
 // For animating the slot machine wheels, the show time (20ms) before scrolling and the scrolling time (every 20ms)
 #define SLOTS_SHOW_TIME   20
-#define SLOTS_SCROLL_TIME 20
+#define SLOTS_SCROLL_TIME 15
+
+#define BONUS_SHOW_TIME 1500
 
 // For scoring, having nothing else but the the 'winning word' gets you 1X your bet (returns your bet)
 // The 'winning word' is the first word in the Nice and Rude word lists
