@@ -2,14 +2,16 @@
 #define __SLOT_GAME_H__
 
 // For animating the slot machine wheels, the show time (20ms) before scrolling and the scrolling time (every 20ms)
-#define SLOTS_SHOW_TIME   20
+#define SLOTS_SHOW_TIME   1
 #define SLOTS_SCROLL_TIME 20
+
+#define BONUS_SHOW_TIME 1500
 
 // For scoring, having nothing else but the the 'winning word' gets you 1X your bet (returns your bet)
 // The 'winning word' is the first word in the Nice and Rude word lists
 #define WIN_WORD  1
 // Having two matching words gets you 2X your bet
-#define WIN_DOUBLE 2
+#define WIN_DOUBLE 3
 // Having three matching words gets you 5X your bet
 #define WIN_TRIPLE 5
 // Matching precisely three chosen words, chosen at the time of spinning the reels, gets you 100X your bet
@@ -29,7 +31,7 @@ extern bool run_slot_reel(HT16K33Disp * disp, unsigned long time, char * text, c
 extern void slots_round(char * text, const char **words);
 extern bool triple_word_chosen();
 extern bool double_word_chosen();
-extern bool special_word_chosen();
+extern bool bonus_word_chosen(byte bonus_word);
 extern bool jackpot_words_chosen(byte word1, byte word2, byte word3);
 extern bool slots_game();
 

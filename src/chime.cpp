@@ -24,7 +24,7 @@ void chime(int count){
             }
             break;
         case CHIME_CODE:
-            sprintf(copy_buffer, FSTR("%d"), count);
+            sprintf_P(copy_buffer, PSTR("%d"), count);
             send_morse(copy_buffer);
             break;
     }

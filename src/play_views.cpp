@@ -82,10 +82,10 @@ void display_jackpot(unsigned long win){
 
 char *standard_bet_str(byte bet){
 	if(bet == BET_ALL){
-		sprintf(copy_buffer, FSTR("ALL"));
+		sprintf_P(copy_buffer, PSTR("ALL"));
 		return copy_buffer;
 	} else if(bet == BET_REPEAT){
-		sprintf(copy_buffer, FSTR("RPT"));
+		sprintf_P(copy_buffer, PSTR("RPT"));
 		return copy_buffer;
 	} else
 		return format_long(bet_amounts[bet]);

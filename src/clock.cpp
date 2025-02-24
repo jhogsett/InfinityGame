@@ -53,7 +53,7 @@ void render_clock_string(byte seconds, byte minutes, byte hours) {
 			effective_hours = 12;
 	}
 
-	sprintf(display_buffer, FSTR("  %2d %02d %02d  "), effective_hours, minutes, seconds);
+	sprintf_P(display_buffer, PSTR("  %2d %02d %02d  "), effective_hours, minutes, seconds);
 }
 
 // returns true if the clock timed out while being set

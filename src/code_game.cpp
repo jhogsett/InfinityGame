@@ -38,11 +38,11 @@ int choose_choices(char *choices, char base, byte range){
 }
 
 void format_char_display(char c1, char c2, char c3){
-    sprintf(display_buffer, FSTR("%2c%4c%4c"), c1, c2, c3);
+    sprintf_P(display_buffer, PSTR("%2c%4c%4c"), c1, c2, c3);
 }
 
 void format_word_display(const char *w1, const char *w2, const char *w3){
-    sprintf(display_buffer, FSTR("%s%s%s"), w1, w2, w3);
+    sprintf_P(display_buffer, PSTR("%s%s%s"), w1, w2, w3);
 }
 
 // return 1 for win and 0 for loss
@@ -92,7 +92,7 @@ int code_game_round_chars(){
 // returns -1 in the event of a long press or time out
 int code_game_round_words(bool rude){
     char choices[3];
-    byte choice = choose_choices(choices, 0, 10);
+    byte choice = choose_choices(choices, 0, NUM_WORDS);
 
     const char **words = rude ? rude_words : nice_words;
 
@@ -114,7 +114,7 @@ int code_game_round_words(bool rude){
         format_word_display(words[(int)choices[choice]], words[(int)choices[choice]], words[(int)choices[choice]]);
         result = 1;
     } else {
-        sprintf(display_buffer, FSTR("    %s"), words[(int)choices[choice]]);
+        sprintf_P(display_buffer, PSTR("    %s"), words[(int)choices[choice]]);
 
         result = 0;
     }

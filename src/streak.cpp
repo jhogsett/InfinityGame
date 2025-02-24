@@ -39,7 +39,7 @@ unsigned long streak_bonus(){
 
 void display_bonus(){
     if(streak > MIN_STREAK_ACTIVATION){
-        title_prompt_string(FSTR("%3sX BONUS"), format_long(streak_bonus(), 1), true, BONUS_SHOW_DELAY);
+        title_prompt_string(FSTR("  BONUS %sX "), format_long(streak_bonus(), 1), true, BONUS_SHOW_DELAY);
     }
 }
 

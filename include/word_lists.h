@@ -2,7 +2,7 @@
 #define __WORD_LISTS_H__
 
 // Number of words in each words list
-#define NUM_WORDS 10
+#define NUM_WORDS 15
 #define WORD_WIDTH 4
 
 extern const char *rude_words[];
