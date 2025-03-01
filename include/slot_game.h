@@ -3,7 +3,7 @@
 
 // For animating the slot machine wheels, the show time (20ms) before scrolling and the scrolling time (every 20ms)
 #define SLOTS_SHOW_TIME   1
-#define SLOTS_SCROLL_TIME 20
+#define SLOTS_SCROLL_TIME 19
 
 #define BONUS_SHOW_TIME 1500
 
@@ -23,7 +23,16 @@
 // Default best on power-up
 #define DEFAULT_BET 10
 
+#ifndef USE_ALL_WORDS
+#define REEL_WORDS 10
+#define REEL_BUFFER_LEN (4 + (REEL_WORDS * 6) + 1)
+#else
 #define REEL_BUFFER_LEN (2 + (NUM_WORDS * 6) + 1)
+#endif
+
+#define AUTOPLAY_SHOW_TIME 1000
+#define AUTOPLAY_BLANK_TIME 500
+#define AUTOPLAY_LEDS_TIME 500
 
 extern byte choice1, choice2, choice3;
 

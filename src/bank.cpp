@@ -78,6 +78,7 @@ long bank_robbery(long min_money, long max_money){
 
 #define RESETTING_SHOW_TIMES 2
 #define RESETTING_COUNTDOWN_TIME 450
+#define RESET_BONUS (1000000000L / MONEY_BASIS)
 
 bool reset_bank(){
     title_prompt(FSTR("BANK INSOLVANT. RESETTING"), RESETTING_SHOW_TIMES);
@@ -90,11 +91,12 @@ bool reset_bank(){
         delay(RESETTING_COUNTDOWN_TIME);
     }
 
-	purse = DEFAULT_PURSE;
-	bank = DEFAULT_BANK;
+	purse = DEFAULT_PURSE + RESET_BONUS;
+	bank = DEFAULT_BANK - RESET_BONUS;
 	house = DEFAULT_HOUSE;
 	gang = DEFAULT_GANG;
     vig = DEFAULT_VIG;
+    auto_play_enabled = true;
 
     // ##DATA Reset new persisted play data veriables to default variables here
 
