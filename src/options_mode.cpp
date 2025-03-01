@@ -83,7 +83,7 @@ bool options_menu(){
 
     option_wpm = prompt_wpm(option_wpm);
 
-    sprintf_P(copy_buffer, PSTR("%d WPM"), option_wpm);
+    sprintf_P(copy_buffer, PSTR("WPM %d"), option_wpm);
     send_morse(copy_buffer);
 
 	save_data();

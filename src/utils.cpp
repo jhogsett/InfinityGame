@@ -84,3 +84,19 @@ bool title_prompt_string3(const char * pattern, const char * data1, const char *
 	sprintf(display_buffer, pattern, data1, data2, data3);
 	return title_prompt(display_buffer, 1, show_leds, show_time == 0 ? ROUND_DELAY : show_time);
 }
+
+void random_unique(int count, int max_value, int *result){
+    for(int i = 0; i < count; i++){
+        bool found = false;
+        while(!found){
+            result[i] = random(max_value);
+            found = true;
+            for(int j = 0; j < i; j++){
+                if(result[i] == result[j]){
+                    found = false;
+                    break;
+                }
+            }
+        }
+    }
+}

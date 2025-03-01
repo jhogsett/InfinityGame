@@ -87,8 +87,28 @@ bool slots_game(){
             rude = true;
     }
 
-	const char **words = rude ? rude_words : nice_words;
-	char text[REEL_BUFFER_LEN];
+    const char **words = rude ? rude_words : nice_words;
+
+#ifndef USE_ALL_WORDS
+    int reel_words[REEL_WORDS];
+    random_unique(REEL_WORDS, NUM_WORDS, reel_words);
+
+    char text[REEL_BUFFER_LEN];
+	sprintf_P(text,
+            PSTR("    %s  %s  %s  %s  %s  %s  %s  %s  %s  %s"),
+			words[reel_words[0]],
+			words[reel_words[1]],
+			words[reel_words[2]],
+			words[reel_words[3]],
+			words[reel_words[4]],
+			words[reel_words[5]],
+			words[reel_words[6]],
+			words[reel_words[7]],
+			words[reel_words[8]],
+			words[reel_words[9]]);
+
+#else
+    char text[REEL_BUFFER_LEN];
 	sprintf_P(text,
             PSTR("%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s "),
 			words[0],
@@ -106,6 +126,7 @@ bool slots_game(){
 			words[12],
 			words[13],
 			words[14]);
+#endif
 
     title_prompt(" Bonus Word", 1, false, ROUND_DELAY);
     sprintf_P(display_buffer, PSTR("%s%s%s"), words[bonus_word], words[bonus_word], words[bonus_word]);
@@ -117,45 +138,61 @@ bool slots_game(){
 	unsigned long time;
 	long last_bet_amount = 0L;
 
+    bool auto_play = false;
 	while((time = millis()) < idle_timeout){
 		bet_amounts[BET_ALL] = get_purse();
 		bet_amounts[BET_REPEAT] = last_bet_amount;
 
-		sprintf_P(display_buffer, PSTR("BET %s Back"), standard_bet_str(current_bet));
-		const bool states[] = {false, true, false, false};
-		int response = button_led_prompt(display_buffer, states, true);
-		switch(response){
-			case -1:
-                // timeout
-				return false;
-			case 0:
-				// long press
-				if(validated_button_states[GREEN_ID]){
-					// set the bet to repeat and go
-					current_bet = BET_REPEAT;
-					break;
-				} else if(validated_button_states[AMBER_ID]){
-					// set the bet to all and go
-					current_bet = BET_ALL;
-					break;
-				} else if(validated_button_states[RED_ID]){
-					// go back
-					return false;
-				}
-				break;
-			case 1:
-				break;
-			case 2:
-				current_bet++;
-				if(current_bet >= NUM_BET_AMOUNTS)
-					current_bet = 0;
+        if(auto_play){
+            display.clear();
+            delay(AUTOPLAY_BLANK_TIME);
+            current_bet = (bet_amounts[BET_ALL] > bet_amounts[BET_REPEAT]) ? BET_ALL : BET_REPEAT;
+            sprintf_P(display_buffer, PSTR("AUTO BET $%s"), format_long(bet_amounts[current_bet]));
+            if(title_prompt(display_buffer, 1, true, AUTOPLAY_SHOW_TIME, LEDHandler::STYLE_PLAIN)){
+                return false;
+            }
+        } else {
+            sprintf_P(display_buffer, PSTR("BET %s Back"), standard_bet_str(current_bet));
+            const bool states[] = {false, true, false, false};
+            int response = button_led_prompt(display_buffer, states, true);
+            switch(response){
+                case -1:
+                    // timeout
+                    return false;
+                case 0:
+                    // long press
+                    if(validated_button_states[GREEN_ID]){
+                        // set the bet to repeat and go
+                        current_bet = BET_REPEAT;
+                        // break;
+                    } else if(validated_button_states[AMBER_ID]){
+                        // set the bet to all and go
+                        current_bet = BET_ALL;
+                        // break;
+                    } else if(validated_button_states[RED_ID]){
+                        if(auto_play_enabled){
+                            auto_play = true;
+                            current_bet = BET_REPEAT;
+                        } else {
+                            // go back
+                            return false;
+                        }
+                    }
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    current_bet++;
+                    if(current_bet >= NUM_BET_AMOUNTS)
+                        current_bet = 0;
 
-				sprintf_P(display_buffer, PSTR("    %s"), standard_bet_str(current_bet));
-				disp2.scroll_string(display_buffer, 1, OPTION_FLIP_SCROLL_TIME);
-				continue;
-			case 3:
-				return false;
-		}
+                    sprintf_P(display_buffer, PSTR("    %s"), standard_bet_str(current_bet));
+                    disp2.scroll_string(display_buffer, 1, OPTION_FLIP_SCROLL_TIME);
+                    continue;
+                case 3:
+                    return false;
+            }
+        }
 
 		idle_timeout = millis() + option_idle_time;
 

@@ -102,6 +102,8 @@ extern byte option_clock_chime;
 
 extern byte option_wpm;
 
+extern bool auto_play_enabled;
+
 // ##DATA Add 'extern's for new persisted play data veriables here
 
 
@@ -125,6 +127,7 @@ struct SavedData{
     bool option_vib_str;
     byte option_clock_chime;
     byte option_wpm;
+    bool auto_play_enabled;
 
 	// ##DATA Add new persisted data types above here
 };

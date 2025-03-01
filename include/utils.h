@@ -16,5 +16,6 @@ extern bool title_prompt_int(const char * pattern, int data, bool show_leds = fa
 extern bool title_prompt_string(const char * pattern, const char * data, bool show_leds = false, int show_time = 0);
 extern bool title_prompt_string2(const char * pattern, const char * data1, const char * data2, bool show_leds = false, int show_time = 0);
 extern bool title_prompt_string3(const char * pattern, const char * data1, const char * data2, const char * data3, bool show_leds = false, int show_time = 0);
+extern void random_unique(int count, int max_value, int *result);
 
 #endif
