@@ -86,7 +86,7 @@ void LEDHandler::step(unsigned long time){
 	bool blanking_period = (_style & STYLE_BLANKING) && (_frame % 2);
 	if(!blanking_period){
 		if(_style & STYLE_RANDOM){
-			int r; // skkp prevention llgic here if neing e abled
+			int r; // skip prevention logic here if nothing enabled
 			while( (r = random(_num_states)) == _active )
 				;
 			_active = r;

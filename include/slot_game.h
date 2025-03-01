@@ -32,6 +32,7 @@
 
 #define AUTOPLAY_SHOW_TIME 1000
 #define AUTOPLAY_BLANK_TIME 500
+#define AUTOPLAY_LEDS_TIME 500
 
 extern byte choice1, choice2, choice3;
 

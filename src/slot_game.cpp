@@ -148,7 +148,7 @@ bool slots_game(){
             delay(AUTOPLAY_BLANK_TIME);
             current_bet = (bet_amounts[BET_ALL] > bet_amounts[BET_REPEAT]) ? BET_ALL : BET_REPEAT;
             sprintf_P(display_buffer, PSTR("AUTO BET $%s"), format_long(bet_amounts[current_bet]));
-            if(title_prompt(display_buffer, 1, true, AUTOPLAY_SHOW_TIME, LEDHandler::STYLE_PLAIN)){
+            if(title_prompt(display_buffer, 1, true, AUTOPLAY_SHOW_TIME, LEDHandler::STYLE_RANDOM, AUTOPLAY_LEDS_TIME)){
                 return false;
             }
         } else {
