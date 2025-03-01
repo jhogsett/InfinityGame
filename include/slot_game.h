@@ -3,7 +3,7 @@
 
 // For animating the slot machine wheels, the show time (20ms) before scrolling and the scrolling time (every 20ms)
 #define SLOTS_SHOW_TIME   1
-#define SLOTS_SCROLL_TIME 19
+#define SLOTS_SCROLL_TIME 20
 
 #define BONUS_SHOW_TIME 1500
 
@@ -11,17 +11,13 @@
 // The 'winning word' is the first word in the Nice and Rude word lists
 #define WIN_WORD  1
 // Having two matching words gets you 2X your bet
-#define WIN_DOUBLE 3
+#define WIN_DOUBLE 2
 // Having three matching words gets you 5X your bet
 #define WIN_TRIPLE 5
 // Matching precisely three chosen words, chosen at the time of spinning the reels, gets you 100X your bet
 #define WIN_JACKPOT 100
 // In the case of double and triple word wins, if the 'winning word' appears also, the winnings are additionally doubled
 #define WIN_WORD_BONUS 2
-// Default which words are winning words
-#define WIN_WORD_CUTOFF 1
-// Default best on power-up
-#define DEFAULT_BET 10
 
 #ifndef USE_ALL_WORDS
 #define REEL_WORDS 10
