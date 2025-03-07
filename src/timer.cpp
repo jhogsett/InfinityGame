@@ -13,17 +13,20 @@
 
 byte timer_hour, timer_minute, timer_second;
 
-void render_timer_string(byte seconds, byte minutes, byte hours, bool running) {
+void render_timer_string(byte seconds, byte minutes, byte hours, bool running, bool going_up) {
 	char indicator[5];
 	if (running)
         load_f_string(F("STOP"), indicator);
 	else
-        load_f_string(F("RUN "), indicator);
+        load_f_string(F(" RUN"), indicator);
 
-	if (timer_hour < 1)
-		sprintf_P(display_buffer, PSTR("%s %02d %02d  "), indicator, timer_minute, timer_second);
-	else {
-		sprintf_P(display_buffer, PSTR("%s %02d. %02d  "), indicator, timer_hour, timer_minute);
+	if (timer_hour < 1){
+		sprintf_P(display_buffer, PSTR("%s%4d %02d  "), indicator, timer_minute, timer_second);
+    } else {
+        if(running)
+            sprintf_P(display_buffer, PSTR("%s%4d.%02d.%02d"), indicator, timer_hour, timer_minute, timer_second);
+        else
+    		sprintf_P(display_buffer, PSTR("%s%4d. %02d  "), indicator, timer_hour, timer_minute);
 	}
 }
 
@@ -53,7 +56,7 @@ bool timer_prompt(byte seconds, byte minutes, byte hours) {
 	bool running = false;
 	bool going_up = false;
 
-	render_timer_string(timer_second, timer_minute, timer_hour, running);
+	render_timer_string(timer_second, timer_minute, timer_hour, running, going_up);
 	display.show_string(display_buffer);
 
 	while(true){
@@ -67,12 +70,12 @@ bool timer_prompt(byte seconds, byte minutes, byte hours) {
 			else if (!decrement_timer(timer_second, timer_minute, timer_hour)){
 				running = false;
 				idle_timeout = time + option_idle_time;
-				render_timer_string(timer_second, timer_minute, timer_hour, running);
+				render_timer_string(timer_second, timer_minute, timer_hour, running, going_up);
 				display.show_string(display_buffer);
 				if(option_sound)
 					alert();
 			}
-			render_timer_string(timer_second, timer_minute, timer_hour, running);
+			render_timer_string(timer_second, timer_minute, timer_hour, running, going_up);
 			display.show_string(display_buffer);
 			next_second = time + 1000;
 		}
@@ -107,7 +110,7 @@ bool timer_prompt(byte seconds, byte minutes, byte hours) {
 						break;
 				}
 
-				render_timer_string(timer_second, timer_minute, timer_hour, running);
+				render_timer_string(timer_second, timer_minute, timer_hour, running, going_up);
 				display.show_string(display_buffer);
 			}
 		}
