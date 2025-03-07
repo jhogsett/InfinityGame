@@ -11,7 +11,7 @@
 // The 'winning word' is the first word in the Nice and Rude word lists
 #define WIN_WORD  1
 // Having two matching words gets you 2X your bet
-#define WIN_DOUBLE 2
+#define WIN_DOUBLE 3
 // Having three matching words gets you 5X your bet
 #define WIN_TRIPLE 5
 // Matching precisely three chosen words, chosen at the time of spinning the reels, gets you 100X your bet

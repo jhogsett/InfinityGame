@@ -51,11 +51,11 @@ void slots_round(char * text, const char **words){
 }
 
 bool triple_word_chosen(){
-	return choice1 == choice2 && choice2 == choice3;
+	return (choice1 == choice2) && (choice2 == choice3);
 }
 
 bool double_word_chosen(){
-	return choice1 == choice2 || choice2 == choice3 || choice1 == choice3;
+	return (choice1 == choice2) || (choice2 == choice3) || (choice1 == choice3);
 }
 
 bool bonus_word_chosen(byte bonus_word){
@@ -63,7 +63,7 @@ bool bonus_word_chosen(byte bonus_word){
 }
 
 bool jackpot_words_chosen(byte word1, byte word2, byte word3){
-	return choice1 == word1 && choice2 == word2 && choice3 == word3;
+	return (choice1 == word1) && (choice2 == word2) && (choice3 == word3);
 }
 
 bool slots_game(){
@@ -137,7 +137,7 @@ bool slots_game(){
 	unsigned long idle_timeout = millis() + option_idle_time;
 	unsigned long time;
 	long last_bet_amount = 0L;
-
+    long win = 0L;
     bool auto_play = false;
 	while((time = millis()) < idle_timeout){
 		bet_amounts[BET_ALL] = get_purse();
@@ -146,7 +146,53 @@ bool slots_game(){
         if(auto_play){
             display.clear();
             delay(AUTOPLAY_BLANK_TIME);
-            current_bet = (bet_amounts[BET_ALL] > bet_amounts[BET_REPEAT]) ? BET_ALL : BET_REPEAT;
+
+// dont halve
+
+
+            // repeat the last bet if the player purse is zero or the last play was a loss
+            // if(bet_amounts[BET_REPEAT] > 0 && (bet_amounts[BET_ALL] <= 0 || win <= 0L))
+            //     current_bet = BET_REPEAT;
+            // else
+            //     current_bet = BET_ALL;
+
+            if(bet_amounts[BET_REPEAT] > 0L){
+                // there is a last bet
+                if(bet_amounts[BET_ALL] <= 0){
+                    // there is no remaining purse
+                    // must repeat the last bet
+                    current_bet = BET_REPEAT;
+                } else if(win > 0L){
+                    // there is a remaining purse and there was a win last time
+                    if(win <= bet_amounts[BET_REPEAT]){
+                        // the win was a bet return
+                        // repeat the last bet rather than betting the
+                        // purse which may be halved due to loan payback
+
+                        // this is very aggressive, climbing to a broken bank quickly
+                        // current_bet = BET_REPEAT;
+
+                        // this is conservative, bet the purse to avoid more loan payback
+                        current_bet = BET_ALL;
+
+                    } else {
+                        // otherwise make a larger bet with the whole purse
+                        current_bet = BET_ALL;
+                    }
+                } else {
+                    // there is a remaining purse and there was a loss last time
+                    // repeat the last bet if larger than the purse
+                    if(bet_amounts[BET_REPEAT] > bet_amounts[BET_ALL])
+                        current_bet = BET_REPEAT;
+                    else
+                        current_bet = BET_ALL;
+                }
+            } else {
+                // there is no last bet
+                // must bet the purse
+                current_bet = BET_ALL;
+            }
+
             sprintf_P(display_buffer, PSTR("AUTO BET $%s"), format_long(bet_amounts[current_bet]));
             if(title_prompt(display_buffer, 1, true, AUTOPLAY_SHOW_TIME, LEDHandler::STYLE_RANDOM, AUTOPLAY_LEDS_TIME)){
                 return false;
@@ -226,7 +272,7 @@ bool slots_game(){
 			win_factor = WIN_WORD;
 		}
 
-		long win = bet_amounts[current_bet] * win_factor;
+		win = bet_amounts[current_bet] * win_factor;
 
 		if(jackpot)
 			display_jackpot(win);
