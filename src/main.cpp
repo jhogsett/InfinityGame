@@ -55,6 +55,11 @@ void setup(){
 
 	load_save_data();
 
+    // if all three buttons are pressed, enable auto play
+    if((digitalRead(GREEN_BUTTON) == HIGH) && (digitalRead(AMBER_BUTTON) == HIGH) && (digitalRead(RED_BUTTON) == HIGH)){
+        auto_play_enabled = true;
+    }
+
 	attachInterrupt(digitalPinToInterrupt(ANY_BUTTON), button_pressed_i, RISING);
 	button_states[ANY_COLOR_ID] = false;
 
