@@ -111,7 +111,14 @@ bool reset_bank(){
 
 // returns the amount paid
 long pay_house(long money){
-	house += money;
+    long deposit = money / 2L;
+
+    // deposit half earnings to the bank
+    bank_deposit(deposit);
+
+    // keep the rest in the vault
+	house += (money - deposit);
+
 #ifdef SHOW_BANK_FLASHES
     flash_led(AMBER_PANEL_LED);
 #endif
