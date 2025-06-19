@@ -18,7 +18,7 @@
 ## Phase 1: String and Flash Memory Optimization (PRIORITY 1)
 
 ### 1.1 PROGMEM String Optimization
-**Status**: Not Started  
+**Status**: In Progress  
 **Risk**: Low  
 **Expected Flash Savings**: 2-5KB  
 
@@ -28,10 +28,14 @@
 - Repeated string constants not consolidated
 
 **Actions**:
-- [ ] Audit all string literals for PROGMEM usage
-- [ ] Create centralized string constants file
-- [ ] Convert sprintf_P calls to use PROGMEM consistently
+- [x] ~~Audit all string literals for PROGMEM usage~~ 
+- [x] ~~Create centralized string constants file~~ **COMPLETED**
+- [x] ~~Convert repeated strings in play_views.cpp~~ **COMPLETED**
+- [ ] Convert sprintf_P calls in options_mode.cpp to use constants
+- [ ] Update remaining files to use string constants
 - [ ] Test build size after each batch of changes
+
+**NOTES**: Avoided problematic cross-file PROGMEM arrays. Using safer string constants approach.
 
 ### 1.2 Remove Debug/Test Code
 **Status**: Not Started  

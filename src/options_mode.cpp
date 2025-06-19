@@ -5,6 +5,7 @@
 #include "play_views.h"
 #include "prompts.h"
 #include "speaker.h"
+#include "string_constants.h"
 #include "tools_mode.h"
 #include "utils.h"
 #include "options_mode.h"
@@ -83,7 +84,7 @@ bool options_menu(){
 
     option_wpm = prompt_wpm(option_wpm);
 
-    sprintf_P(copy_buffer, PSTR("WPM %d"), option_wpm);
+    sprintf_P(copy_buffer, FMT_WPM, option_wpm);
     send_morse(copy_buffer);
 
 	save_data();
