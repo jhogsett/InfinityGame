@@ -6,6 +6,7 @@
 #include "play_data.h"
 #include "play_views.h"
 #include "prompts.h"
+#include "string_constants.h"
 #include "utils.h"
 
 bool display_scores(){
@@ -36,31 +37,30 @@ bool display_scores(){
 bool display_balances(){
     long balance;
     char label[6];
-    for(int i = 0; i < 6; i++){
-        switch(i){
+    for(int i = 0; i < 6; i++){        switch(i){
             case 0:
                 balance = get_purse();
-                load_f_string(F("CASH"), label);
+                strcpy_P(label, STR_CASH);
                 break;
             case 1:
                 balance = get_vig();
-                load_f_string(F("LOAN"), label);
+                strcpy_P(label, STR_LOAN);
                 break;
             case 2:
                 balance = get_house();
-                load_f_string(F("HOUSE"), label);
+                strcpy_P(label, STR_HOUSE);
                 break;
             case 3:
                 balance = get_gang();
-                load_f_string(F("GANG"), label);
+                strcpy_P(label, STR_GANG);
                 break;
             case 4:
                 balance = get_bank();
-                load_f_string(F("BANK"), label);
+                strcpy_P(label, STR_BANK);
                 break;
             case 5:
                 balance = get_sum();
-                load_f_string(F("SUM"), label);
+                strcpy_P(label, STR_SUM);
                 break;
         }
         title_prompt_string2(FSTR("%s $%s"), label, format_long(balance), false, BALANCES_SHOW_DELAY);
@@ -82,10 +82,10 @@ void display_jackpot(unsigned long win){
 
 char *standard_bet_str(byte bet){
 	if(bet == BET_ALL){
-		sprintf_P(copy_buffer, PSTR("ALL"));
+		strcpy_P(copy_buffer, STR_ALL);
 		return copy_buffer;
 	} else if(bet == BET_REPEAT){
-		sprintf_P(copy_buffer, PSTR("RPT"));
+		strcpy_P(copy_buffer, STR_RPT);
 		return copy_buffer;
 	} else
 		return format_long(bet_amounts[bet]);
