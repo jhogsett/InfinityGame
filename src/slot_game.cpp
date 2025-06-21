@@ -149,13 +149,6 @@ bool slots_game(){
 
 // dont halve
 
-
-            // repeat the last bet if the player purse is zero or the last play was a loss
-            // if(bet_amounts[BET_REPEAT] > 0 && (bet_amounts[BET_ALL] <= 0 || win <= 0L))
-            //     current_bet = BET_REPEAT;
-            // else
-            //     current_bet = BET_ALL;
-
             if(bet_amounts[BET_REPEAT] > 0L){
                 // there is a last bet
                 if(bet_amounts[BET_ALL] <= 0){
@@ -164,13 +157,9 @@ bool slots_game(){
                     current_bet = BET_REPEAT;
                 } else if(win > 0L){
                     // there is a remaining purse and there was a win last time
-                    if(win <= bet_amounts[BET_REPEAT]){
-                        // the win was a bet return
+                    if(win <= bet_amounts[BET_REPEAT]){                        // the win was a bet return
                         // repeat the last bet rather than betting the
                         // purse which may be halved due to loan payback
-
-                        // this is very aggressive, climbing to a broken bank quickly
-                        // current_bet = BET_REPEAT;
 
                         // this is conservative, bet the purse to avoid more loan payback
                         current_bet = BET_ALL;

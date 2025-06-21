@@ -46,12 +46,10 @@ bool button_pressed(bool show_leds){
 		    drop_count++;
 	}
 
-#ifdef ENABLE_DEBUG_FEATURES
-	if(debug_marker == 0)
+#ifdef ENABLE_DEBUG_FEATURES	if(debug_marker == 0)
 		set_debug_marker(drop_count);
 #endif
 	if(drop_count > MAX_DROPS){
-		// set_debug_marker(1);
 		return false;
 	}
 

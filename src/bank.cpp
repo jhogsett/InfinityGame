@@ -226,10 +226,8 @@ long gang_loan(long money){
 
 long steal_money(){
 	long take = 0L;
-
 	bool steal_from_bank = false;
 	bool steal_from_house = false;
-	// bool steal_from_purse = false;
 
 	if(bank >= BANK_STEAL_MIN)
 		steal_from_bank = true;
@@ -237,22 +235,14 @@ long steal_money(){
 	if(house >= HOUSE_STEAL_MIN)
 		steal_from_house = true;
 
-	// if(purse  >= PURSE_STEAL_MIN)
-	// 	steal_from_purse = true;
-
 	switch(random(2)){
 		case 0:
 			if(steal_from_bank)
 				take = bank_robbery();
-			break;
-		case 1:
+			break;		case 1:
 			if(steal_from_house)
 				take = burglarize_house();
 			break;
-		// case 2:
-		// 	if(steal_from_purse)
-		// 		take = scam_purse();
-		// 	break;
 	}
 
 	return take;

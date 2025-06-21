@@ -46,7 +46,6 @@ void setup_buttons(){
 }
 
 void setup(){
-	// Serial.begin(115200);
 	randomizer.randomize();
 
 	setup_leds();
@@ -62,8 +61,6 @@ void setup(){
 
 	attachInterrupt(digitalPinToInterrupt(ANY_BUTTON), button_pressed_i, RISING);
 	button_states[ANY_COLOR_ID] = false;
-
-    // send_morse("Infinity Game");
 
 	if(option_sound)
 		beep();

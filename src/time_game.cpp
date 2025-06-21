@@ -97,17 +97,11 @@ bool time_game(){
                     }
                 if(fault)
                     continue;
-                fault_protect = false;
-
-                // per-mode set up before starting timer
+                fault_protect = false;                // per-mode set up before starting timer
                 switch(mode){
                     case MODE_FLASH:
                         panel_leds.begin_flash(false, 0);
                         break;
-                    // case MODE_SOUND:
-                    //     break;
-                    // case MODE_VIBRATION:
-                    //     break;
                 }
 
                 unsigned long start_time = micros();
@@ -125,31 +119,21 @@ bool time_game(){
                         break;
                 }
 
-                while(digitalRead(ANY_BUTTON) == LOW){
-                    // per-mode actions to continue stimulus
+                while(digitalRead(ANY_BUTTON) == LOW){                    // per-mode actions to continue stimulus
                     switch(mode){
                         case MODE_FLASH:
                             panel_leds.step_flash(millis());
                             break;
-                        // case MODE_SOUND:
-                        //     break;
-                        // case MODE_VIBRATION:
-                        //     break;
                     }
                 }
 
                 unsigned long reaction_time = micros() - start_time;
 
-                while(digitalRead(ANY_BUTTON) == HIGH){
-                    // per-mode actions to complete stimulus while button still pressed
+                while(digitalRead(ANY_BUTTON) == HIGH){                    // per-mode actions to complete stimulus while button still pressed
                     switch(mode){
                         case MODE_FLASH:
                             panel_leds.step_flash(millis());
                             break;
-                        // case MODE_SOUND:
-                        //     break;
-                        // case MODE_VIBRATION:
-                        //     break;
                     }
                 }
                 mean += reaction_time;
