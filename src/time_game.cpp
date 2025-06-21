@@ -9,6 +9,7 @@
 #include "play_views.h"
 #include "prompts.h"
 #include "speaker.h"
+#include "string_constants.h"
 #include "utils.h"
 #include "time_game.h"
 #include "timeouts.h"
@@ -33,9 +34,7 @@ unsigned long render_best_time_per_mode(char * buffer, int mode){
 
 bool time_game(){
 	if(title_prompt(FSTR("The TimeGame"), TITLE_SHOW_TIMES, true))
-        return false;
-
-    int mode = MODE_FLASH;
+        return false;    int mode = MODE_FLASH;
 	const char *labels[] = {"LEDS", "BEEP", "BUZZ"};
 	mode = toggle_prompt(FSTR("Choose  %s"), labels, mode, 3, 3);
     if(mode == -1)
@@ -171,26 +170,25 @@ bool time_game(){
         // save the best result per mode
         bool new_best_per_mode = false;
         char label[5];
-        switch(mode){
-            case MODE_FLASH:
+        switch(mode){            case MODE_FLASH:
                 if(mean < best_time1){
                     best_time1 = mean;
                     new_best_per_mode = true;
-                    load_f_string(F("LEDS"), label);
+                    strcpy_P(label, STR_LEDS);
                 }
                 break;
             case MODE_SOUND:
                 if(mean < best_time2){
                     best_time2 = mean;
                     new_best_per_mode = true;
-                    load_f_string(F("BEEP"), label);
+                    strcpy_P(label, STR_BEEP);
                 }
                 break;
             case MODE_VIBRATION:
                 if(mean < best_time3){
                     best_time3 = mean;
                     new_best_per_mode = true;
-                    load_f_string(F("BUZZ"), label);
+                    strcpy_P(label, STR_BUZZ);
                 }
                 break;
         }

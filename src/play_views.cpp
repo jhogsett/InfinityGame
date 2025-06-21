@@ -6,25 +6,25 @@
 #include "play_data.h"
 #include "play_views.h"
 #include "prompts.h"
+#include "string_constants.h"
 #include "utils.h"
 
 bool display_scores(){
     unsigned long score;
     char label[5];
 	char time_display[15];
-    for(int i = 0; i < 3; i++){
-        switch(i){
+    for(int i = 0; i < 3; i++){        switch(i){
             case 0:
                 score = best_time1;
-                load_f_string(F("LEDS"), label);
+                strcpy_P(label, STR_LEDS);
                 break;
             case 1:
                 score = best_time2;
-                load_f_string(F("BEEP"), label);
+                strcpy_P(label, STR_BEEP);
                 break;
             case 2:
                 score = best_time3;
-                load_f_string(F("BUZZ"), label);
+                strcpy_P(label, STR_BUZZ);
                 break;
         }
 		micros_to_ms(time_display, score);
