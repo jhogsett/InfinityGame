@@ -1,5 +1,5 @@
 #include "clock_mode.h"
-#include "code_game.h"
+// #include "code_game.h"
 #include "play_data.h"
 #include "play_views.h"
 #include "prompts.h"
@@ -9,6 +9,8 @@
 #include "utils.h"
 #include "tools_mode.h"
 #include "debug.h"
+
+bool code_game();
 
 bool tools_menu(){
 	switch(button_led_prompt(FSTR("CLOCK    GO "))){
