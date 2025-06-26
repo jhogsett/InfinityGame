@@ -8,39 +8,28 @@
 #include "timeouts.h"
 #include "utils.h"
 #include "clock.h"
+#include "clock_class.h"
 
-unsigned long clock_basis = 0L;
-unsigned long time_basis = DEFAULT_TIME_BASIS;
+// Global clock instance
+Clock system_clock;
 byte clock_hour, clock_minute, clock_second;
 
 void establish_clock_basis(byte seconds, byte minutes, byte hours) {
-	clock_basis = millis();
-	long total_seconds = time_to_seconds(seconds, minutes, hours);
-	time_basis = total_seconds * 1000L;
+	system_clock.setTime(hours, minutes, seconds);
 }
 
 long time_in_seconds() {
-	unsigned long time_in_ms = millis() - clock_basis + time_basis;
-	if (time_in_ms > MAX_MS_PER_DAY) {
-		time_in_ms -= MAX_MS_PER_DAY;
-		clock_basis += MAX_MS_PER_DAY;
-	}
-	return time_in_ms / 1000L;
+	return system_clock.getTimeInSeconds();
 }
 
 void increment_time_basis(byte &second, byte &minute, byte &hour, byte seconds, byte minutes, byte hours) {
-	long total_seconds = time_basis / 1000L;
-	total_seconds += time_to_seconds(seconds, minutes, hours);
-	seconds_to_time(total_seconds, second, minute, hour);
+	system_clock.incrementTime(hours, minutes, seconds);
+	system_clock.getCurrentTime(hour, minute, second);
 
-	if (option_clock_24h) {
-	} else {
+	if (!option_clock_24h) {
 		if (hour == 0)
 			hour = 12;
 	}
-
-	total_seconds = time_to_seconds(second, minute, hour);
-	time_basis = total_seconds * 1000L;
 }
 
 void render_clock_string(byte seconds, byte minutes, byte hours) {
@@ -104,8 +93,8 @@ bool clock_prompt(byte seconds, byte minutes, byte hours, byte settable) {
 							increment_time_basis(clock_second, clock_minute, clock_hour, 0, 1, 0);
 							break;
 						case RED_ID:
-							clock_second = 0;
-							establish_clock_basis(clock_second, clock_minute, clock_hour);
+							system_clock.resetSeconds();
+							system_clock.getCurrentTime(clock_hour, clock_minute, clock_second);
 							break;
 					}
 				} else
