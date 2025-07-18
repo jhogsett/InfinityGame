@@ -47,6 +47,7 @@
 
 // array used to pass the LED intensities to LED handlers
 extern const int led_intensities[];
+extern const int led_pins[];
 
 // LED handler for using all 6 LEDs at once
 extern LEDHandler all_leds;

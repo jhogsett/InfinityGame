@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <Wire.h>
+#include "feature_flags.h"
 #include "buttons.h"
 #include "displays.h"
 #include "hardware.h"
@@ -15,7 +16,9 @@
 #include "speaker.h"
 #include "time_game.h"
 #include "utils.h"
+#ifdef ENABLE_WORD_GAME
 #include "word_game.h"
+#endif
 
 void setup_display(){
 	Wire.begin();
@@ -39,8 +42,13 @@ void setup_leds(){
 }
 
 void setup_buttons(){
+	pinMode(ANY_BUTTON, 0x03); // INPUT_PULLDOWN ?!
+	pinMode(GREEN_BUTTON, 0x03); // INPUT_PULLDOWN ?!
+	pinMode(AMBER_BUTTON, 0x03); // INPUT_PULLDOWN ?!
+	pinMode(RED_BUTTON, 0x03); // INPUT_PULLDOWN ?!
+
 	for(byte i = 0; i < NUM_BUTTONS; i++){
-		pinMode(i + FIRST_BUTTON, 0x03); // INPUT_PULLDOWN ?!
+		// pinMode(i + FIRST_BUTTON, 0x03); // INPUT_PULLDOWN ?!
 		button_states[i] = false;
 	}
 }
@@ -72,7 +80,11 @@ void setup(){
 
 bool main_menu(){
 	bool buttons[] = {false, true, true, true};
+#ifdef ENABLE_WORD_GAME
 	return branch_prompt(FSTR("SlotWordTime"), slots_game, word_game, time_game, NULL, buttons);
+#else
+	return branch_prompt(FSTR("Slot____Time"), slots_game, NULL, time_game, NULL, buttons);
+#endif
 }
 
 void loop()

@@ -1,8 +1,12 @@
 #include <Arduino.h>
 #include "led_handler.h"
 
-LEDHandler::LEDHandler(int first_pin, int num_leds, const int *intensity, int show_time, int blank_time){
-	_first_pin = first_pin;
+// intensity is an array of ints per the set of pins, matching the num_leds count
+// led_pins is an array of pin numbers per the set of pins, matching the num_leds count
+// if mirror style is used the array is treated as the first half, and duplicate behavior for the second
+LEDHandler::LEDHandler(const int *led_pins, int num_leds, const int *intensity, int show_time, int blank_time){
+	_led_pins = led_pins;
+	_first_pin = 0;
 	_num_leds = num_leds;
 	_intensity = intensity;
 	_show_time = show_time;
@@ -60,18 +64,18 @@ void LEDHandler::begin(unsigned long time, int style, int show_time, int blank_t
 }
 
 void LEDHandler::deactivate_led(int virtual_pin, bool mirror){
-	digitalWrite(virtual_pin + _first_pin, LOW);
+	digitalWrite(_led_pins[virtual_pin + _first_pin], LOW);
 	if(mirror)
-		deactivate_led(virtual_pin + (_num_leds / 2));
+		deactivate_led(_led_pins[virtual_pin + (_num_leds / 2)]);
 }
 
 void LEDHandler::activate_led(int virtual_pin, bool mirror){
 	if(_intensity[virtual_pin] == 0)
-		digitalWrite(virtual_pin + _first_pin, HIGH);
+		digitalWrite(_led_pins[virtual_pin + _first_pin], HIGH);
 	else
-		analogWrite(virtual_pin + _first_pin, _intensity[virtual_pin]);
+		analogWrite(_led_pins[virtual_pin + _first_pin], _intensity[virtual_pin]);
 	if(mirror)
-		activate_led(virtual_pin + (_num_leds / 2));
+		activate_led(_led_pins[virtual_pin + (_num_leds / 2)]);
 }
 
 void LEDHandler::step(unsigned long time){
@@ -141,17 +145,17 @@ void LEDHandler::flash_leds(bool mirror, long time){
 	int effective_pins = mirror ? (_num_leds / 2) : _num_leds;
 
 	for(int virtual_pin = 0; virtual_pin < effective_pins; virtual_pin++){
-		digitalWrite(virtual_pin + _first_pin, HIGH);
+		digitalWrite(_led_pins[virtual_pin + _first_pin], HIGH);
 		if(mirror)
-			digitalWrite(virtual_pin + _first_pin + (_num_leds / 2), HIGH);
+			digitalWrite(_led_pins[virtual_pin + _first_pin] + (_num_leds / 2), HIGH);
 	}
 
 	delay(effective_time);
 
 	for(int virtual_pin = 0; virtual_pin < effective_pins; virtual_pin++){
-		digitalWrite(virtual_pin + _first_pin, LOW);
+		digitalWrite(_led_pins[virtual_pin + _first_pin], LOW);
 		if(mirror)
-			digitalWrite(virtual_pin + _first_pin + (_num_leds / 2), LOW);
+			digitalWrite(_led_pins[virtual_pin + _first_pin] + (_num_leds / 2), LOW);
 	}
 }
 
@@ -161,9 +165,9 @@ void LEDHandler::begin_flash(bool mirror, int on_time){
 	_flash_pins = mirror ? (_num_leds / 2) : _num_leds;
 
 	for(int virtual_pin = 0; virtual_pin < _flash_pins; virtual_pin++){
-		digitalWrite(virtual_pin + _first_pin, HIGH);
+		digitalWrite(_led_pins[virtual_pin + _first_pin], HIGH);
 		if(_flash_mirror)
-			digitalWrite(virtual_pin + _first_pin + (_num_leds / 2), HIGH);
+			digitalWrite(_led_pins[virtual_pin + _first_pin] + (_num_leds / 2), HIGH);
 	}
 
 	_flash_on_time = on_time != 0 ? on_time : DEFAULT_FLASH_TIME;
@@ -183,9 +187,9 @@ bool LEDHandler::step_flash(unsigned long time){
 
 	// currently on, turn off
 	for(int virtual_pin = 0; virtual_pin < _flash_pins; virtual_pin++){
-		digitalWrite(virtual_pin + _first_pin, LOW);
+		digitalWrite(_led_pins[virtual_pin + _first_pin], LOW);
 		if(_flash_mirror)
-			digitalWrite(virtual_pin + _first_pin + (_num_leds / 2), LOW);
+			digitalWrite(_led_pins[virtual_pin + _first_pin] + (_num_leds / 2), LOW);
 	}
 	_flash_state = false;
 	return false;

@@ -42,7 +42,9 @@ void format_char_display(char c1, char c2, char c3){
 }
 
 void format_word_display(const char *w1, const char *w2, const char *w3){
-    sprintf_P(display_buffer, PSTR("%s%s%s"), w1, w2, w3);
+    strcpy(display_buffer, w1);
+    strcat(display_buffer, w2);
+    strcat(display_buffer, w3);
 }
 
 // return 1 for win and 0 for loss

@@ -15,7 +15,11 @@
 #define LAST_PANEL_LED 11
 #define GREEN_PANEL_LED 9
 #define AMBER_PANEL_LED 10
+#ifdef NANO_EVERY
+#define RED_PANEL_LED 5
+#else
 #define RED_PANEL_LED 11
+#endif
 
 // Arduino Nano pins for the button LEDs
 // digital pins
@@ -35,7 +39,11 @@
 #define ANY_BUTTON 2
 #define GREEN_BUTTON 3
 #define AMBER_BUTTON 4
+#ifdef NANO_EVERY
+#define RED_BUTTON 11
+#else
 #define RED_BUTTON 5
+#endif
 #define NUM_PLAY_BUTTONS 3
 #define FIRST_PLAY_BUTTON 3
 

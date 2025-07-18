@@ -7,7 +7,7 @@
 class LEDHandler
 {
 public:
-	explicit LEDHandler(int first_pin, int num_leds, const int *intensity, int show_time=0, int blank_time=0);
+	explicit LEDHandler(const int *led_pins, int num_leds, const int *intensity, int show_time=0, int blank_time=0);
 	void begin(unsigned long time, int style, int show_time=0, int blank_time=0, bool *enabled= NULL);
 	void step(unsigned long time);
 
@@ -36,6 +36,7 @@ private:
 	void deactivate_led(int virtual_pin, bool mirror=false);
 	void activate_led(int virtual_pin, bool mirror=false);
 
+	const int *_led_pins;  // array of ints matching led count X 2, with main and mirrored LED pin numbers
 	int _first_pin;
 	int _num_leds;
 	const int *_intensity;  // array of ints matching led count, 0 for digitalWrite, 1-255 for analogWrite

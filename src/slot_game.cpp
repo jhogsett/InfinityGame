@@ -129,7 +129,10 @@ bool slots_game(){
 #endif
 
     title_prompt(" Bonus Word", 1, false, ROUND_DELAY);
-    sprintf_P(display_buffer, PSTR("%s%s%s"), words[bonus_word], words[bonus_word], words[bonus_word]);
+    // More efficient than sprintf_P for simple concatenation
+    strcpy(display_buffer, words[bonus_word]);
+    strcat(display_buffer, words[bonus_word]);
+    strcat(display_buffer, words[bonus_word]);
     title_prompt(display_buffer, 1, true, BONUS_SHOW_TIME);
     display.clear();
     delay(ROUND_DELAY);
