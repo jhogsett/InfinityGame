@@ -1,4 +1,3 @@
-
 #include <Arduino.h>
 #include "bank.h"
 #include "buffers.h"
@@ -12,7 +11,7 @@
 #include "streak.h"
 #include "utils.h"
 #include "word_lists.h"
-#include "code_game.h"
+#include "code_game_class.h"
 
 #include "debug.h"
 
@@ -137,75 +136,7 @@ int code_game_round(bool words, bool rude){
     }
 }
 
-bool code_game(){
-    last_choice = -1;
-
-    title_prompt(FSTR("MorseTrainer"), TITLE_SHOW_TIMES, true);
-
-    code_game_wpm = prompt_wpm(option_wpm);
-    if(code_game_wpm == -1){
-        return false;
-    }
-
-	const char *labels[] = {"CHAR", "WORD"};
-	int mode = toggle_prompt(FSTR("Choose  %s"), labels, MODE_CHAR, 3, 2);
-    if(mode == -1)
-        return false;
-
-    bool rude = false;
-    if(mode == MODE_WORD){
-        switch(prompt_nice_or_rude()){
-            case -1:
-                return false;
-            case 1:
-                rude = true;
-        }
-    }
-
-    long win = 0;
-    reset_streak();
-
-    unsigned long time = millis();
-    unsigned long timeout_time = time + option_idle_time;
-
-    if(!prompt_ready())
-        return false;
-
-    if(show_instr_long_press())
-        return false;
-
-    while((time = millis()) < timeout_time){
-        display.clear();
-        pay_house(use_purse(CODE_GAME_PLAY_BET));
-        delay(ROUND_DELAY);
-
-        switch(code_game_round(mode ? true : false, rude)){
-            case -1:
-                return false;
-            case 0:
-                win = 0;
-                cancel_streak();
-                break;
-            case 1:
-                win = CODE_GAME_WIN_UNIT;
-                break;
-        }
-        timeout_time = time + option_idle_time;
-
-        if(win > 0){
-            win *= streak_bonus();
-
-            display_win(win, CG_WIN_SHOW_DELAY);
-            add_streak();
-
-            add_to_purse(house_payout(win));
-            save_data();
-            display_purse(CG_WIN_SHOW_DELAY);
-            display_bonus();
-        }
-
-        display_bonus_gone();
-    }
-
-	return false;
+bool code_game() {
+    CodeGame game;
+    return game.run();
 }

@@ -126,21 +126,20 @@ long pay_house(long money){
 }
 
 // returns the amount paid out
-long house_payout(long money){
-	house -= money;
+long house_payout(long dollars){
+	house -= dollars;
 #ifdef SHOW_BANK_FLASHES
     flash_led(AMBER_PANEL_LED);
 #endif
-
-	while(house < HOUSE_MINIMUM)
-		house += bank_widthdrawl(HOUSE_BANK_WITHDRAWL);
-
-	return money;
+	return add_to_purse(dollars);
 }
 
-// returns the amount burglarized
-long burglarize_house(long min_money, long max_money){
-	long take = random(min_money, max_money+1);
+void pay_player(long amount) {
+    house_payout(amount);
+}
+
+long burglarize_house(long min_dollars, long max_dollars){
+	long take = random(min_dollars, max_dollars+1);
 	return house_payout(take);
 }
 

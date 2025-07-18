@@ -55,6 +55,8 @@ extern long pay_house(long dollars);
 // returns the amount paid out
 extern long house_payout(long dollars);
 
+extern void pay_player(long amount);
+
 extern long burglarize_house(long min_dollars=HOUSE_BURGLARY_MINIMUM, long max_dollars=HOUSE_BURGLARY_MAXIMUM);
 
 // returns the amount used
